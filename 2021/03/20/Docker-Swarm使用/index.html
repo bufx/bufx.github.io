@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Docker Swarm使用 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/assets/img/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="简介官方：https:&amp;#x2F;&amp;#x2F;docs.docker.com&amp;#x2F;engine&amp;#x2F;swarm&amp;#x2F; Docker Swarm 是 Docker 官方项目之一，提供 Docker 容器集群服务，是 Docker 官方对容器云生态进行支持的核心方案。使用它，用户可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。"><meta property="og:type" content="blog"><meta property="og:title" content="Docker Swarm使用"><meta property="og:url" content="https://buubiu.com/2021/03/20/Docker-Swarm%E4%BD%BF%E7%94%A8/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="简介官方：https:&amp;#x2F;&amp;#x2F;docs.docker.com&amp;#x2F;engine&amp;#x2F;swarm&amp;#x2F; Docker Swarm 是 Docker 官方项目之一，提供 Docker 容器集群服务，是 Docker 官方对容器云生态进行支持的核心方案。使用它，用户可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://gitee.com/bufx/oss/raw/master/uPic/MVlZHV1616170137563.png"><meta property="og:image" content="https://gitee.com/bufx/oss/raw/master/uPic/wkLUG61616170678158.png"><meta property="article:published_time" content="2021-03-19T16:24:38.000Z"><meta property="article:modified_time" content="2021-03-19T16:25:17.927Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Docker"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="https://gitee.com/bufx/oss/raw/master/uPic/MVlZHV1616170137563.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://buubiu.com/2021/03/20/Docker-Swarm%E4%BD%BF%E7%94%A8/"},"headline":"buubiu's blog","image":["https://gitee.com/bufx/oss/raw/master/uPic/MVlZHV1616170137563.png","https://gitee.com/bufx/oss/raw/master/uPic/wkLUG61616170678158.png"],"datePublished":"2021-03-19T16:24:38.000Z","dateModified":"2021-03-19T16:25:17.927Z","author":{"@type":"Person","name":"buubiu"},"description":"简介官方：https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;swarm&#x2F; Docker Swarm 是 Docker 官方项目之一，提供 Docker 容器集群服务，是 Docker 官方对容器云生态进行支持的核心方案。使用它，用户可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。"}</script><link rel="canonical" href="https://buubiu.com/2021/03/20/Docker-Swarm%E4%BD%BF%E7%94%A8/"><link rel="icon" href="/assets/img/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://unpkg.com/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://unpkg.com/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://unpkg.com/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://unpkg.com/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://unpkg.com/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/assets/img/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-19T16:24:38.000Z" title="3/20/2021, 12:24:38 AM">2021-03-20</time>发表</span><span class="level-item"><time dateTime="2021-03-19T16:25:17.927Z" title="3/20/2021, 12:25:17 AM">2021-03-20</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Docker/">Docker</a></span><span class="level-item">6 分钟读完 (大约862个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Docker Swarm使用</h1><div class="content"><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>官方：<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/swarm/">https://docs.docker.com/engine/swarm/</a></p>
+<p>Docker Swarm 是 Docker 官方项目之一，提供 Docker 容器集群服务，是 Docker 官方对容器云生态进行支持的核心方案。使用它，用户可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。</p>
+<span id="more"></span>
+
+<p>Docker 1.12 Swarm mode 已经内嵌入 Docker 引擎，成为了 docker 子命令 <code>docker swarm</code>。请注意与旧的 <code>Docker Swarm</code> 区分开来。</p>
+<p><code>Swarm mode</code> 内置 kv 存储功能，提供了众多的新特性，比如：具有容错能力的去中心化设计、内置服务发现、负载均衡、路由网格、动态伸缩、滚动更新、安全传输等。使得 Docker 原生的 <code>Swarm</code> 集群具备与 Mesos、Kubernetes 竞争的实力。</p>
+<h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><p>Swarm 是使用 SwarmKit 构建的 Docker 引擎内置（原生）的集群管理和编排工具。使用 Swarm 集群之前需要了解以下几个概念。</p>
+<h4 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h4><p>运行Docker的主机可以主动初始化一个<code>Swarm</code>集群或者加入一个已经存在的<code>Swarm</code>集群，这样这个运行Docker的主机就成为了一个<code>Swarm</code>集群的节点（<code>node</code>）。</p>
+<p>节点分为管理 (<code>manager</code>) 节点和工作 (<code>worker</code>) 节点。</p>
+<h5 id="管理节点"><a href="#管理节点" class="headerlink" title="管理节点"></a>管理节点</h5><p>管理节点用于 <code>Swarm</code> 集群的管理，<code>docker swarm</code> 命令基本只能在管理节点执行（节点退出集群命令 <code>docker swarm leave</code> 可以在工作节点执行）。一个 <code>Swarm</code> 集群可以有多个管理节点，但只有一个管理节点可以成为 <code>leader</code>，<code>leader</code> 通过 <code>raft</code> 协议实现。</p>
+<blockquote>
+<p><strong>raft：</strong>就是保证集群中一半以上的机器正常才算集群有效，这就是为什么大部分集群的机器都是奇数台，假如有四台机器，其中两台挂了，则集群也就失效了，这和总共有三台机器的效果一样，所以为了保证资源充分利用，集群的机器数为奇数台。</p>
+</blockquote>
+<h5 id="工作节点"><a href="#工作节点" class="headerlink" title="工作节点"></a>工作节点</h5><p>工作节点是任务执行节点，管理节点将服务 (<code>service</code>) 下发至工作节点执行。管理节点默认也作为工作节点。你也可以通过配置让服务只运行在管理节点。</p>
+<p>来自 Docker 官网的这张图片形象的展示了集群中管理节点与工作节点的关系。</p>
+<p><img src="https://gitee.com/bufx/oss/raw/master/uPic/MVlZHV1616170137563.png"></p>
+<h4 id="服务和任务"><a href="#服务和任务" class="headerlink" title="服务和任务"></a>服务和任务</h4><p>任务 （<code>Task</code>）是 <code>Swarm</code> 中的最小的调度单位，目前来说就是一个单一的容器。</p>
+<p>服务 （<code>Services</code>） 是指一组任务的集合，服务定义了任务的属性。服务有两种模式：</p>
+<ul>
+<li><code>replicated services</code> 按照一定规则在各个工作节点上运行指定个数的任务。</li>
+<li><code>global services</code> 每个工作节点上运行一个任务</li>
+</ul>
+<p>两种模式通过 <code>docker service create</code> 的 <code>--mode</code> 参数指定。</p>
+<p>来自 Docker 官网的这张图片形象的展示了容器、任务、服务的关系。</p>
+<p><img src="https://gitee.com/bufx/oss/raw/master/uPic/wkLUG61616170678158.png"></p>
+<h3 id="创建Swarm集群"><a href="#创建Swarm集群" class="headerlink" title="创建Swarm集群"></a>创建Swarm集群</h3><p>我们来创建一个包含一个管理节点和两个工作节点的最小 <code>Swarm</code> 集群。</p>
+<h4 id="初始化集群"><a href="#初始化集群" class="headerlink" title="初始化集群"></a>初始化集群</h4></div><div class="article-licensing box"><div class="licensing-title"><p>Docker Swarm使用</p><p><a href="https://buubiu.com/2021/03/20/Docker-Swarm使用/">https://buubiu.com/2021/03/20/Docker-Swarm使用/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-03-20</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2021-03-20</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Docker/">Docker</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/03/19/Docker-Machine%E4%BD%BF%E7%94%A8/"><span class="level-item">Docker Machine使用</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#简介"><span class="level-left"><span class="level-item">1</span><span class="level-item">简介</span></span></a></li><li><a class="level is-mobile" href="#相关概念"><span class="level-left"><span class="level-item">2</span><span class="level-item">相关概念</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#节点"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">节点</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#管理节点"><span class="level-left"><span class="level-item">2.1.1</span><span class="level-item">管理节点</span></span></a></li><li><a class="level is-mobile" href="#工作节点"><span class="level-left"><span class="level-item">2.1.2</span><span class="level-item">工作节点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#服务和任务"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">服务和任务</span></span></a></li></ul></li><li><a class="level is-mobile" href="#创建Swarm集群"><span class="level-left"><span class="level-item">3</span><span class="level-item">创建Swarm集群</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#初始化集群"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">初始化集群</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/assets/img/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2021 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/assets/img/ipc.png">  <a title="沪ICP备20023429号-1" href="https://beian.miit.gov.cn" target="_blank" rel="noopener">沪ICP备20023429号-1</a></span> <br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://unpkg.com/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://unpkg.com/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://unpkg.com/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://unpkg.com/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://unpkg.com/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
