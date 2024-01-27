@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序自定义组件-组件间通信与事件 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="组件间通信组件间的基本通信方式有以下几种。  WXML 数据绑定：用于父组件向子组件的指定属性设置数据，仅能设置 JSON 兼容数据（自基础库版本 2.0.9 开始，还可以在数据中包含函数）。具体在 组件模板和样式 章节中介绍。 事件：用于子组件向父组件传递数据，可以传递任意数据。 如果以上两种方式不足以满足需要，父组件还可以通过 this.selectComponent 方法获取子组件实例对象，"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序自定义组件-组件间通信与事件"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B8%8E%E4%BA%8B%E4%BB%B6/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="组件间通信组件间的基本通信方式有以下几种。  WXML 数据绑定：用于父组件向子组件的指定属性设置数据，仅能设置 JSON 兼容数据（自基础库版本 2.0.9 开始，还可以在数据中包含函数）。具体在 组件模板和样式 章节中介绍。 事件：用于子组件向父组件传递数据，可以传递任意数据。 如果以上两种方式不足以满足需要，父组件还可以通过 this.selectComponent 方法获取子组件实例对象，"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/u9H5101637806611114.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/iEFyKk1637809792548.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/VXBApW1637810072256.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/LYYMnZ1637810280345.png"><meta property="article:published_time" content="2021-11-14T11:03:25.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.939Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/u9H5101637806611114.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B8%8E%E4%BA%8B%E4%BB%B6/"},"headline":"微信小程序自定义组件-组件间通信与事件","image":["https://blog.buubiu.com/img/article/u9H5101637806611114.png","https://blog.buubiu.com/img/article/iEFyKk1637809792548.png","https://blog.buubiu.com/img/article/VXBApW1637810072256.png","https://blog.buubiu.com/img/article/LYYMnZ1637810280345.png"],"datePublished":"2021-11-14T11:03:25.000Z","dateModified":"2024-01-25T15:08:05.939Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"组件间通信组件间的基本通信方式有以下几种。  WXML 数据绑定：用于父组件向子组件的指定属性设置数据，仅能设置 JSON 兼容数据（自基础库版本 2.0.9 开始，还可以在数据中包含函数）。具体在 组件模板和样式 章节中介绍。 事件：用于子组件向父组件传递数据，可以传递任意数据。 如果以上两种方式不足以满足需要，父组件还可以通过 this.selectComponent 方法获取子组件实例对象，"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B8%8E%E4%BA%8B%E4%BB%B6/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-14T11:03:25.000Z" title="11/14/2021, 7:03:25 PM">2021-11-14</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.939Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">8 分钟读完 (大约1161个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序自定义组件-组件间通信与事件</h1><div class="content"><h2 id="组件间通信"><a href="#组件间通信" class="headerlink" title="组件间通信"></a>组件间通信</h2><p>组件间的基本通信方式有以下几种。</p>
+<ul>
+<li>WXML 数据绑定：用于父组件向子组件的指定属性设置数据，仅能设置 JSON 兼容数据（自基础库版本 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.9</a> 开始，还可以在数据中包含函数）。具体在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html">组件模板和样式</a> 章节中介绍。</li>
+<li>事件：用于子组件向父组件传递数据，可以传递任意数据。</li>
+<li>如果以上两种方式不足以满足需要，父组件还可以通过 <code>this.selectComponent</code> 方法获取子组件实例对象，这样就可以直接访问组件的任意数据和方法。</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="监听事件"><a href="#监听事件" class="headerlink" title="监听事件"></a>监听事件</h2><p>事件系统是组件间通信的主要方式之一。自定义组件可以触发任意的事件，引用组件的页面可以监听这些事件。关于事件的基本概念和用法，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html">事件</a> 。</p>
+<p>监听自定义组件事件的方法与监听基础组件事件的方法完全一致：</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 当自定义组件触发“myevent”事件时，调用“onMyEvent”方法 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">component-tag-name</span> <span class="attr">bindmyevent</span>=<span class="string">&quot;onMyEvent&quot;</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 或者可以写成 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">component-tag-name</span> <span class="attr">bind:myevent</span>=<span class="string">&quot;onMyEvent&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">onMyEvent</span>: <span class="keyword">function</span>(<span class="params">e</span>)&#123;</span><br><span class="line">    e.<span class="property">detail</span> <span class="comment">// 自定义组件触发事件时提供的detail对象</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="触发事件"><a href="#触发事件" class="headerlink" title="触发事件"></a>触发事件</h2><p>自定义组件触发事件时，需要使用 <code>triggerEvent</code> 方法，指定事件名、detail对象和事件选项：</p>
+<p><strong>代码示例：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/DFfYSKmI6vZD">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/u9H5101637806611114.png"></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 在自定义组件中 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">bindtap</span>=<span class="string">&quot;onTap&quot;</span>&gt;</span>点击这个按钮将触发“myevent”事件<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">properties</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="attr">onTap</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="keyword">var</span> myEventDetail = &#123;&#125; <span class="comment">// detail对象，提供给事件监听函数</span></span><br><span class="line">      <span class="keyword">var</span> myEventOption = &#123;&#125; <span class="comment">// 触发事件的选项</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">triggerEvent</span>(<span class="string">&#x27;myevent&#x27;</span>, myEventDetail, myEventOption)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>触发事件的选项包括：</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项名</th>
+<th align="left">类型</th>
+<th align="left">是否必填</th>
+<th align="left">默认值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">bubbles</td>
+<td align="left">Boolean</td>
+<td align="left">否</td>
+<td align="left">false</td>
+<td align="left">事件是否冒泡</td>
+</tr>
+<tr>
+<td align="left">composed</td>
+<td align="left">Boolean</td>
+<td align="left">否</td>
+<td align="left">false</td>
+<td align="left">事件是否可以穿越组件边界，为false时，事件将只能在引用组件的节点树上触发，不进入其他任何组件内部</td>
+</tr>
+<tr>
+<td align="left">capturePhase</td>
+<td align="left">Boolean</td>
+<td align="left">否</td>
+<td align="left">false</td>
+<td align="left">事件是否拥有捕获阶段</td>
+</tr>
+</tbody></table>
+<p>关于冒泡和捕获阶段的概念，请阅读 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html">事件</a> 章节中的相关说明。</p>
+<p><strong>代码示例：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/UGfljKm66zZ1">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 页面 page.wxml</span><br><span class="line"><span class="tag">&lt;<span class="name">another-component</span> <span class="attr">bindcustomevent</span>=<span class="string">&quot;pageEventListener1&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">my-component</span> <span class="attr">bindcustomevent</span>=<span class="string">&quot;pageEventListener2&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">my-component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">another-component</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 组件 another-component.wxml</span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">bindcustomevent</span>=<span class="string">&quot;anotherEventListener&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">slot</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 组件 my-component.wxml</span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">bindcustomevent</span>=<span class="string">&quot;myEventListener&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">slot</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组件 my-component.js</span></span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="attr">onTap</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">triggerEvent</span>(<span class="string">&#x27;customevent&#x27;</span>, &#123;&#125;) <span class="comment">// 只会触发 pageEventListener2</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">triggerEvent</span>(<span class="string">&#x27;customevent&#x27;</span>, &#123;&#125;, &#123; <span class="attr">bubbles</span>: <span class="literal">true</span> &#125;) <span class="comment">// 会依次触发 pageEventListener2 、 pageEventListener1</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">triggerEvent</span>(<span class="string">&#x27;customevent&#x27;</span>, &#123;&#125;, &#123; <span class="attr">bubbles</span>: <span class="literal">true</span>, <span class="attr">composed</span>: <span class="literal">true</span> &#125;) <span class="comment">// 会依次触发 pageEventListener2 、 anotherEventListener 、 pageEventListener1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/iEFyKk1637809792548.png"></p>
+<h2 id="获取组件实例"><a href="#获取组件实例" class="headerlink" title="获取组件实例"></a>获取组件实例</h2><p>可在父组件里调用 <code>this.selectComponent</code> ，获取子组件的实例对象。</p>
+<p>调用时需要传入一个匹配选择器 <code>selector</code>，如：<code>this.selectComponent(&quot;.my-component&quot;)</code>。</p>
+<p><code>selector</code> 详细语法可查看 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.select.html">selector 语法参考文档</a>。</p>
+<p><strong>代码示例：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/oQ64sFmm7rhD">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/VXBApW1637810072256.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父组件</span></span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">data</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">getChildComponent</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> child = <span class="variable language_">this</span>.<span class="title function_">selectComponent</span>(<span class="string">&#x27;.my-component&#x27;</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(child)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在上例中，父组件将会获取 <code>class</code> 为 <code>my-component</code> 的子组件实例对象，即子组件的 <code>this</code> 。</p>
+<p><strong>注意</strong> ：默认情况下，小程序与插件之间、不同插件之间的组件将无法通过 <code>selectComponent</code> 得到组件实例（将返回 <code>null</code>）。如果想让一个组件在上述条件下依然能被 <code>selectComponent</code> 返回，可以自定义其返回结果（见下）。</p>
+<h3 id="自定义的组件实例获取结果"><a href="#自定义的组件实例获取结果" class="headerlink" title="自定义的组件实例获取结果"></a>自定义的组件实例获取结果</h3><p>若需要自定义 <code>selectComponent</code> 返回的数据，可使用内置 <code>behavior</code>: <code>wx://component-export</code></p>
+<p>从基础库版本 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.3</a> 开始提供支持。</p>
+<p>使用该 behavior 时，自定义组件中的 <code>export</code> 定义段将用于指定组件被 <code>selectComponent</code> 调用时的返回值。</p>
+<p><strong>代码示例：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/ZtosuRmK741Y">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/LYYMnZ1637810280345.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义组件 my-component 内部</span></span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">behaviors</span>: [<span class="string">&#x27;wx://component-export&#x27;</span>],</span><br><span class="line">  <span class="title function_">export</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">myField</span>: <span class="string">&#x27;myValue&#x27;</span> &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 使用自定义组件时 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">my-component</span> <span class="attr">id</span>=<span class="string">&quot;the-id&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父组件调用</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="variable language_">this</span>.<span class="title function_">selectComponent</span>(<span class="string">&#x27;#the-id&#x27;</span>) <span class="comment">// 等于 &#123; myField: &#x27;myValue&#x27; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在上例中，父组件获取 <code>id</code> 为 <code>the-id</code> 的子组件实例的时候，得到的是对象 <code>&#123; myField: &#39;myValue&#39; &#125;</code> 。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序自定义组件-组件间通信与事件</p><p><a href="https://blog.buubiu.com/微信小程序自定义组件-组件间通信与事件/">https://blog.buubiu.com/微信小程序自定义组件-组件间通信与事件/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-14</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序自定义组件-组件生命周期</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-Component-%E6%9E%84%E9%80%A0%E5%99%A8/"><span class="level-item">微信小程序自定义组件-Component 构造器</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#组件间通信"><span class="level-left"><span class="level-item">1</span><span class="level-item">组件间通信</span></span></a></li><li><a class="level is-mobile" href="#监听事件"><span class="level-left"><span class="level-item">2</span><span class="level-item">监听事件</span></span></a></li><li><a class="level is-mobile" href="#触发事件"><span class="level-left"><span class="level-item">3</span><span class="level-item">触发事件</span></span></a></li><li><a class="level is-mobile" href="#获取组件实例"><span class="level-left"><span class="level-item">4</span><span class="level-item">获取组件实例</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#自定义的组件实例获取结果"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">自定义的组件实例获取结果</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

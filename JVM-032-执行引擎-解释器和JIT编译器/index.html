@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-032-执行引擎-解释器和JIT编译器 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="解释器引入JVM设计者们的初衷仅仅只是单纯地为了满足Java程序实现跨平台特性，因此避免采用静态编译的方式由高级语言直接生成本地机器指令，从而诞生了实现解释器在运行时采用逐行解释字节码执行程序的想法。"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-032-执行引擎-解释器和JIT编译器"><meta property="og:url" content="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="解释器引入JVM设计者们的初衷仅仅只是单纯地为了满足Java程序实现跨平台特性，因此避免采用静态编译的方式由高级语言直接生成本地机器指令，从而诞生了实现解释器在运行时采用逐行解释字节码执行程序的想法。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717193423651.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205742053.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205855.png"><meta property="article:published_time" content="2022-07-17T11:29:59.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.459Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="执行引擎"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717193423651.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/"},"headline":"JVM-032-执行引擎-解释器和JIT编译器","image":["https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717193423651.png","https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205742053.png","https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205855.png"],"datePublished":"2022-07-17T11:29:59.000Z","dateModified":"2024-01-25T15:08:05.459Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"解释器引入JVM设计者们的初衷仅仅只是单纯地为了满足Java程序实现跨平台特性，因此避免采用静态编译的方式由高级语言直接生成本地机器指令，从而诞生了实现解释器在运行时采用逐行解释字节码执行程序的想法。"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-07-17T11:29:59.000Z" title="7/17/2022, 7:29:59 PM">2022-07-17</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.459Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">执行引擎</a></span><span class="level-item">12 分钟读完 (大约1809个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-032-执行引擎-解释器和JIT编译器</h1><div class="content"><h2 id="解释器"><a href="#解释器" class="headerlink" title="解释器"></a>解释器</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p>JVM设计者们的初衷仅仅只是单纯地<strong>为了满足Java程序实现跨平台特性</strong>，因此避免采用静态编译的方式由高级语言直接生成本地机器指令，从而诞生了实现解释器在运行时采用逐行解释字节码执行程序的想法。</p>
+<p><img src="/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717193423651.png"></p>
+<span id="more"></span>
+
+<ul>
+<li>解释器真正意义上所承担的角色就是一个运行时“翻译者”，将字节码文件中的内容“翻译”为对应平台的本地机器指令执行。</li>
+<li>当一条字节码指令被解释执行完成后，接着再根据PC寄存器中记录的下一条需要被执行的字节码指令执行解释操作。</li>
+</ul>
+<h3 id="解释器的分类"><a href="#解释器的分类" class="headerlink" title="解释器的分类"></a>解释器的分类</h3><p>在Java的发展历史里，一共有两套解释执行器，即古老的<code>字节码解释器</code>、现在普遍使用的<code>模板解释器</code>。</p>
+<h4 id="字节码解释器"><a href="#字节码解释器" class="headerlink" title="字节码解释器"></a>字节码解释器</h4><p>字节码解释器在执行时通过<strong>纯软件代码</strong>模拟字节码的执行，效率非常低下。</p>
+<h4 id="模板解释器"><a href="#模板解释器" class="headerlink" title="模板解释器"></a>模板解释器</h4><p>而模板解释器将<strong>每一条字节码和一个模板函数相关联</strong>，模板函数中直接产生这条字节码执行时的机器码，从而很大程度上提高了解释器的性能。</p>
+<p>在HotSpot VM中，解释器主要由Interpreter模块和Code模块构成。</p>
+<ul>
+<li>Interpreter模块：实现了解释器的核心功能</li>
+<li>Code模块：用于管理HotSpot VM在运行时生成的本地机器指令</li>
+</ul>
+<h3 id="解释器的现状"><a href="#解释器的现状" class="headerlink" title="解释器的现状"></a>解释器的现状</h3><ul>
+<li><p>由于解释器在设计和实现上非常简单，因此除了Java语言之外，还有许多高级语言同样也是基于解释器执行的，比如Python、Perl、Ruby等。但是在今天，<strong>基于解释器执行已经沦落为低效的代名词</strong>，并且时常被一些C&#x2F;C++程序员所调侃。</p>
+</li>
+<li><p>为了解决这个问题，JVM平台支持一种叫作<code>即时编译的技术</code>。即时编译的目的是避免函数被解释执行，而是<strong>将整个函数体编译成为机器码，每次函数执行时，只执行编译后的机器码即可</strong>，这种方式可以使执行效率大幅度提升。</p>
+</li>
+</ul>
+<p>不过无论如何，基于解释器的执行模式仍然为中间语言的发展做出了不可磨灭的贡献。</p>
+<h2 id="JIT编译器"><a href="#JIT编译器" class="headerlink" title="JIT编译器"></a>JIT编译器</h2><h3 id="引入-1"><a href="#引入-1" class="headerlink" title="引入"></a>引入</h3><p><strong>Java 代码执行的分类</strong></p>
+<ul>
+<li>第一种是将源代码编译成字节码文件，然后在运行时通过解释器将字节码文件转为机器码执行</li>
+<li>第二种是编译执行（直接编译成机器码）。现代虚拟机为了提高执行效率，会使用即时编译技术（JIT，Just In Time）将方法编译成机器码后再执行</li>
+</ul>
+<p>HotSpot VM是目前市面上高性能虚拟机的代表作之一。它<strong>采用解释器与即时编译器并存的架构</strong>。在Java虚拟机运行时，解释器和即时编译器能够相互协作，各自取长补短，尽力去选择最合适的方式来权衡编译本地代码的时间和直接解释执行代码的时间。</p>
+<p>在今天，Java程序的运行性能早已脱胎换骨，已经达到了可以和C&#x2F;C++ 程序一较高下的地步。</p>
+<h3 id="为什么还需要解释器"><a href="#为什么还需要解释器" class="headerlink" title="为什么还需要解释器"></a>为什么还需要解释器</h3><p>有些开发人员会感觉到诧异，<strong>既然HotSpot VM中已经内置JIT编译器了，那么为什么还需要再使用解释器来“拖累”程序的执行性能呢？</strong>比如JRockit VM内部就不包含解释器，字节码全部都依靠即时编译器编译后执行。</p>
+<h4 id="首先明确两点"><a href="#首先明确两点" class="headerlink" title="首先明确两点"></a>首先明确两点</h4><ul>
+<li>当程序启动后，解释器可以马上发挥作用，<strong>响应速度快</strong>，省去编译的时间，立即执行。</li>
+<li>编译器要想发挥作用，把代码编译成本地代码，<strong>需要一定的执行时间</strong>，但编译为本地代码后，执行效率高。</li>
+</ul>
+<h4 id="所以"><a href="#所以" class="headerlink" title="所以"></a>所以</h4><ul>
+<li>尽管JRockit VM中程序的执行性能会非常高效，但程序在启动时必然需要花费更长的时间来进行编译。对于服务端应用来说，启动时间并非是关注重点，但对于那些看中启动时间的应用场景而言，或许就需要采用解释器与即时编译器并存的架构来换取一个平衡点。</li>
+<li>在此模式下，<strong>在Java虚拟器启动时，解释器可以首先发挥作用，而不必等待即时编译器全部编译完成后再执行，这样可以省去许多不必要的编译时间。随着时间的推移，编译器发挥作用，把越来越多的代码编译成本地代码，获得更高的执行效率。–HotSpot JVM的执行方式</strong></li>
+<li>同时，解释执行在编译器进行激进优化不成立的时候，作为编译器的“逃生门”（后备方案）。</li>
+</ul>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><h4 id="理论："><a href="#理论：" class="headerlink" title="理论："></a>理论：</h4><p><strong>注意解释执行与编译执行在线上环境微妙的辩证关系。</strong></p>
+<ul>
+<li><p><strong>机器在热机状态（已经运行了一段时间叫热机状态）可以承受的负载要大于冷机状态（刚启动的时候叫冷机状态）</strong>。如果以热机状态时的流量进行切流，可能使处于冷机状态的服务器因无法承载流量而假死。</p>
+</li>
+<li><p>在生产环境发布过程中，以分批的方式进行发布，根据机器数量划分成多个批次，每个批次的机器数至多占到整个集群的1&#x2F;8。曾经有这样的故障案例：某程序员在发布平台进行分批发布，在输入发布总批数时，误填写成分为两批发布。如果是热机状态，在正常情况下一半的机器可以勉强承载流量，但由于刚启动的JVM均是解释执行，还没有进行热点代码统计和JIT动态编译，导致机器启动之后，当前1&#x2F;2发布成功的服务器马上全部宕机，此故障说明了JIT的存在。—阿里团队</p>
+<p><img src="/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205742053.png"></p>
+</li>
+</ul>
+<h4 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JITTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArrayList&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">            list.add(<span class="string">&quot;让天下没有难学的技术&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 JVisualVM 查看 JIT 编译器执行的编译次数</p>
+<p><img src="/JVM-032-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E8%A7%A3%E9%87%8A%E5%99%A8%E5%92%8CJIT%E7%BC%96%E8%AF%91%E5%99%A8/image-20220717205855.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-032-执行引擎-解释器和JIT编译器</p><p><a href="https://blog.buubiu.com/JVM-032-执行引擎-解释器和JIT编译器/">https://blog.buubiu.com/JVM-032-执行引擎-解释器和JIT编译器/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-07-17</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">执行引擎</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-033-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-JIT%E7%BC%96%E8%AF%91%E5%99%A8%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-033-执行引擎-JIT编译器深入理解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-031-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E-%E6%9C%BA%E5%99%A8%E7%A0%81-%E6%8C%87%E4%BB%A4-%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><span class="level-item">JVM-031-执行引擎-机器码_指令_汇编语言</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#解释器"><span class="level-left"><span class="level-item">1</span><span class="level-item">解释器</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#引入"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">引入</span></span></a></li><li><a class="level is-mobile" href="#解释器的分类"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">解释器的分类</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#字节码解释器"><span class="level-left"><span class="level-item">1.2.1</span><span class="level-item">字节码解释器</span></span></a></li><li><a class="level is-mobile" href="#模板解释器"><span class="level-left"><span class="level-item">1.2.2</span><span class="level-item">模板解释器</span></span></a></li></ul></li><li><a class="level is-mobile" href="#解释器的现状"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">解释器的现状</span></span></a></li></ul></li><li><a class="level is-mobile" href="#JIT编译器"><span class="level-left"><span class="level-item">2</span><span class="level-item">JIT编译器</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#引入-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">引入</span></span></a></li><li><a class="level is-mobile" href="#为什么还需要解释器"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">为什么还需要解释器</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#首先明确两点"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">首先明确两点</span></span></a></li><li><a class="level is-mobile" href="#所以"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">所以</span></span></a></li></ul></li><li><a class="level is-mobile" href="#案例"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">案例</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#理论："><span class="level-left"><span class="level-item">2.3.1</span><span class="level-item">理论：</span></span></a></li><li><a class="level is-mobile" href="#举例"><span class="level-left"><span class="level-item">2.3.2</span><span class="level-item">举例</span></span></a></li></ul></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

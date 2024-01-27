@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Kubernetes(K8S)简介 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Kubernetes (K8S) 是什么它是一个为 容器化 应用提供集群部署和管理的开源工具，由 Google 开发。Kubernetes 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Google 在 2014 年开源了 Kubernetes 项目 主要特性：  高可用，不宕机，自动灾难恢复 灰度更新，不影响业务正常运转 一键回滚到历史"><meta property="og:type" content="blog"><meta property="og:title" content="Kubernetes(K8S)简介"><meta property="og:url" content="https://blog.buubiu.com/Kubernetes-K8S-%E7%AE%80%E4%BB%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="Kubernetes (K8S) 是什么它是一个为 容器化 应用提供集群部署和管理的开源工具，由 Google 开发。Kubernetes 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Google 在 2014 年开源了 Kubernetes 项目 主要特性：  高可用，不宕机，自动灾难恢复 灰度更新，不影响业务正常运转 一键回滚到历史"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/UkQWOj1641367705683.jpg"><meta property="article:published_time" content="2022-01-05T07:20:47.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.863Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Kubernetes"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/UkQWOj1641367705683.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Kubernetes-K8S-%E7%AE%80%E4%BB%8B/"},"headline":"Kubernetes(K8S)简介","image":["https://blog.buubiu.com/img/article/UkQWOj1641367705683.jpg"],"datePublished":"2022-01-05T07:20:47.000Z","dateModified":"2024-01-25T15:08:05.863Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"Kubernetes (K8S) 是什么它是一个为 容器化 应用提供集群部署和管理的开源工具，由 Google 开发。Kubernetes 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Google 在 2014 年开源了 Kubernetes 项目 主要特性：  高可用，不宕机，自动灾难恢复 灰度更新，不影响业务正常运转 一键回滚到历史"}</script><link rel="canonical" href="https://blog.buubiu.com/Kubernetes-K8S-%E7%AE%80%E4%BB%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/../img/article/UkQWOj1641367705683.jpg" alt="Kubernetes(K8S)简介"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-01-05T07:20:47.000Z" title="1/5/2022, 3:20:47 PM">2022-01-05</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.863Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kubernetes/">Kubernetes</a><span> / </span><a class="link-muted" href="/categories/Kubernetes/Kubernetes%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/">Kubernetes快速上手</a></span><span class="level-item">7 分钟读完 (大约984个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Kubernetes(K8S)简介</h1><div class="content"><h2 id="Kubernetes-K8S-是什么"><a href="#Kubernetes-K8S-是什么" class="headerlink" title="Kubernetes (K8S) 是什么"></a>Kubernetes (K8S) 是什么</h2><p>它是一个为 <strong>容器化</strong> 应用提供集群部署和管理的开源工具，由 Google 开发。<br><strong>Kubernetes</strong> 这个名字源于希腊语，意为“舵手”或“飞行员”。k8s 这个缩写是因为 k 和 s 之间有八个字符的关系。 Google 在 2014 年开源了 Kubernetes 项目</p>
+<p><strong>主要特性：</strong></p>
+<ul>
+<li>高可用，不宕机，自动灾难恢复</li>
+<li>灰度更新，不影响业务正常运转</li>
+<li>一键回滚到历史版本</li>
+<li>方便的伸缩扩展（应用伸缩，机器加减）、提供负载均衡</li>
+<li>有一个完善的生态</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="不同的应用部署方案"><a href="#不同的应用部署方案" class="headerlink" title="不同的应用部署方案"></a>不同的应用部署方案</h2><p><img src="/../img/article/ugidLu1641368100355.svg"></p>
+<h3 id="传统部署方式："><a href="#传统部署方式：" class="headerlink" title="传统部署方式："></a>传统部署方式：</h3><p>应用直接在物理机上部署，机器资源分配不好控制，出现Bug时，可能机器的大部分资源被某个应用占用，导致其他应用无法正常运行，无法做到应用隔离。</p>
+<h3 id="虚拟机部署"><a href="#虚拟机部署" class="headerlink" title="虚拟机部署"></a>虚拟机部署</h3><p>在单个物理机上运行多个虚拟机，每个虚拟机都是完整独立的系统，性能损耗大。</p>
+<h3 id="容器部署"><a href="#容器部署" class="headerlink" title="容器部署"></a>容器部署</h3><p>所有容器共享主机的系统，轻量级的虚拟机，性能损耗小，资源隔离，CPU和内存可按需分配</p>
+<h2 id="什么时候需要-Kubernetes"><a href="#什么时候需要-Kubernetes" class="headerlink" title="什么时候需要 Kubernetes"></a>什么时候需要 Kubernetes</h2><p>当你的应用只是跑在一台机器，直接一个 docker + docker-compose 就够了，方便轻松；<br>当你的应用需要跑在 3，4 台机器上，你依旧可以每台机器单独配置运行环境 + 负载均衡器；<br>当你应用访问数不断增加，机器逐渐增加到十几台、上百台、上千台时，每次加机器、软件更新、版本回滚，都会变得非常麻烦、痛不欲生，再也不能好好的摸鱼了，人生浪费在那些没技术含量的重复性工作上。</p>
+<p>这时候，Kubernetes 就可以一展身手了，让你轻松管理百万千万台机器的集群。“谈笑间，樯橹灰飞烟灭”，享受着一手掌控所有，年薪百万指日可待。</p>
+<p>Kubernates 可以为你提供集中式的管理集群机器和应用，加机器、版本升级、版本回滚，那都是一个命令就搞定的事，不停机的灰度更新，确保高可用、高性能、高扩展。</p>
+<h2 id="Kubernetes-集群架构"><a href="#Kubernetes-集群架构" class="headerlink" title="Kubernetes 集群架构"></a>Kubernetes 集群架构</h2><p><img src="/../img/article/rEnOhm1641368415763.png"></p>
+<h3 id="master"><a href="#master" class="headerlink" title="master"></a>master</h3><p>主节点，控制平台，不需要很高性能，不跑任务，通常一个就行了，也可以开多个主节点来提高集群可用度。</p>
+<h3 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h3><p>工作节点，可以是虚拟机或物理计算机，任务都在这里跑，机器性能需要好点；通常都有很多个，可以不断加机器扩大集群；每个工作节点由主节点管理</p>
+<h3 id="重要概念-Pod"><a href="#重要概念-Pod" class="headerlink" title="重要概念 Pod"></a>重要概念 Pod</h3><p>豆荚，K8S 调度、管理的最小单位，一个 Pod 可以包含一个或多个容器，每个 Pod 有自己的虚拟IP。一个工作节点可以有多个 pod，主节点会考量负载自动调度 pod 到哪个节点运行。</p>
+<p><img src="/../img/article/agMCzd1641368462028.jpeg"></p>
+<h3 id="Kubernetes-组件"><a href="#Kubernetes-组件" class="headerlink" title="Kubernetes 组件"></a>Kubernetes 组件</h3><p><code>kube-apiserver</code> API 服务器，公开了 Kubernetes API<br><code>etcd</code> 键值数据库，可以作为保存 Kubernetes 所有集群数据的后台数据库<br><code>kube-scheduler</code> 调度 Pod 到哪个节点运行<br><code>kube-controller</code> 集群控制器<br><code>cloud-controller</code> 与云服务商交互<br><img src="/../img/article/2WltkL1641368512568.png"></p>
+<blockquote>
+<p>如果你想要了解更多 K8S 组成细节，主节点、工作节点分别有哪些程序，各有什么作用，可以查看 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/overview/components/">官网详细介绍</a></p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Kubernetes(K8S)简介</p><p><a href="https://blog.buubiu.com/Kubernetes-K8S-简介/">https://blog.buubiu.com/Kubernetes-K8S-简介/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-01-05</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Kubernetes/">Kubernetes</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Kubernetes%E9%9B%86%E7%BE%A4%E7%9A%84%E5%AE%89%E8%A3%85/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Kubernetes集群的安装</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Jenkins-%E5%9C%A8Pipeline%E4%B8%AD%E4%BD%BF%E7%94%A8Docker/"><span class="level-item">Jenkins 在Pipeline中使用Docker</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Kubernetes-K8S-是什么"><span class="level-left"><span class="level-item">1</span><span class="level-item">Kubernetes (K8S) 是什么</span></span></a></li><li><a class="level is-mobile" href="#不同的应用部署方案"><span class="level-left"><span class="level-item">2</span><span class="level-item">不同的应用部署方案</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#传统部署方式："><span class="level-left"><span class="level-item">2.1</span><span class="level-item">传统部署方式：</span></span></a></li><li><a class="level is-mobile" href="#虚拟机部署"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">虚拟机部署</span></span></a></li><li><a class="level is-mobile" href="#容器部署"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">容器部署</span></span></a></li></ul></li><li><a class="level is-mobile" href="#什么时候需要-Kubernetes"><span class="level-left"><span class="level-item">3</span><span class="level-item">什么时候需要 Kubernetes</span></span></a></li><li><a class="level is-mobile" href="#Kubernetes-集群架构"><span class="level-left"><span class="level-item">4</span><span class="level-item">Kubernetes 集群架构</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#master"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">master</span></span></a></li><li><a class="level is-mobile" href="#worker"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">worker</span></span></a></li><li><a class="level is-mobile" href="#重要概念-Pod"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">重要概念 Pod</span></span></a></li><li><a class="level is-mobile" href="#Kubernetes-组件"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">Kubernetes 组件</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

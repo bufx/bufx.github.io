@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>TypeScript 运算符 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="运算符用于执行程序代码运算，会针对一个以上操作数项目来进行运算。 考虑以下计算： 17 + 5 &amp;#x3D; 12  以上实例中 7、5 和 12 是操作数。 运算符 + 用于加值。 运算符 &amp;#x3D; 用于赋值。 TypeScript 主要包含以下几种运算：  算术运算符 关系运算符 逻辑运算符 短路运算符 按位运算符 赋值运算符 三元&amp;#x2F;条件运算符 类型运算符 其他运算符(负号运算符与字符串运算符）"><meta property="og:type" content="blog"><meta property="og:title" content="TypeScript 运算符"><meta property="og:url" content="https://blog.buubiu.com/TypeScript-%E8%BF%90%E7%AE%97%E7%AC%A6/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="运算符用于执行程序代码运算，会针对一个以上操作数项目来进行运算。 考虑以下计算： 17 + 5 &amp;#x3D; 12  以上实例中 7、5 和 12 是操作数。 运算符 + 用于加值。 运算符 &amp;#x3D; 用于赋值。 TypeScript 主要包含以下几种运算：  算术运算符 关系运算符 逻辑运算符 短路运算符 按位运算符 赋值运算符 三元&amp;#x2F;条件运算符 类型运算符 其他运算符(负号运算符与字符串运算符）"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/og_image.png"><meta property="article:published_time" content="2021-08-19T07:12:39.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.904Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="TypeScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/TypeScript-%E8%BF%90%E7%AE%97%E7%AC%A6/"},"headline":"TypeScript 运算符","image":["https://blog.buubiu.com/img/og_image.png"],"datePublished":"2021-08-19T07:12:39.000Z","dateModified":"2024-01-25T15:08:05.904Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"运算符用于执行程序代码运算，会针对一个以上操作数项目来进行运算。 考虑以下计算： 17 + 5 &#x3D; 12  以上实例中 7、5 和 12 是操作数。 运算符 + 用于加值。 运算符 &#x3D; 用于赋值。 TypeScript 主要包含以下几种运算：  算术运算符 关系运算符 逻辑运算符 短路运算符 按位运算符 赋值运算符 三元&#x2F;条件运算符 类型运算符 其他运算符(负号运算符与字符串运算符）"}</script><link rel="canonical" href="https://blog.buubiu.com/TypeScript-%E8%BF%90%E7%AE%97%E7%AC%A6/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-19T07:12:39.000Z" title="8/19/2021, 3:12:39 PM">2021-08-19</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.904Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span> / </span><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/TypeScript/">TypeScript</a></span><span class="level-item">17 分钟读完 (大约2585个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">TypeScript 运算符</h1><div class="content"><p>运算符用于执行程序代码运算，会针对一个以上操作数项目来进行运算。</p>
+<p>考虑以下计算：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">7</span> + <span class="number">5</span> = <span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<p>以上实例中 7、5 和 12 是操作数。</p>
+<p>运算符 <code>+</code> 用于加值。</p>
+<p>运算符 <code>=</code> 用于赋值。</p>
+<p>TypeScript 主要包含以下几种运算：</p>
+<ul>
+<li>算术运算符</li>
+<li>关系运算符</li>
+<li>逻辑运算符</li>
+<li>短路运算符</li>
+<li>按位运算符</li>
+<li>赋值运算符</li>
+<li>三元&#x2F;条件运算符</li>
+<li>类型运算符</li>
+<li>其他运算符(负号运算符与字符串运算符）</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h2 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h2><p>假定 <strong>y&#x3D;5</strong>，下面的表格解释了这些算术运算符的操作：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+<th align="left">x 运算结果</th>
+<th align="left">y 运算结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加法</td>
+<td align="left">x&#x3D;y+2</td>
+<td align="left">7</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减法</td>
+<td align="left">x&#x3D;y-2</td>
+<td align="left">3</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘法</td>
+<td align="left">x&#x3D;y*2</td>
+<td align="left">10</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">&#x2F;</td>
+<td align="left">除法</td>
+<td align="left">x&#x3D;y&#x2F;2</td>
+<td align="left">2.5</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">取模（余数）</td>
+<td align="left">x&#x3D;y%2</td>
+<td align="left">1</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">++</td>
+<td align="left">自增</td>
+<td align="left">x&#x3D;++y</td>
+<td align="left">6</td>
+<td align="left">6</td>
+</tr>
+<tr>
+<td align="left">++</td>
+<td align="left">自增</td>
+<td align="left">x&#x3D;y++</td>
+<td align="left">5</td>
+<td align="left">6</td>
+</tr>
+<tr>
+<td align="left">–</td>
+<td align="left">自减</td>
+<td align="left">x&#x3D;–y</td>
+<td align="left">4</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">–</td>
+<td align="left">自减</td>
+<td align="left">x&#x3D;y–</td>
+<td align="left">5</td>
+<td align="left">4</td>
+</tr>
+</tbody></table>
+<p> <strong>实例</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num1</span>:<span class="built_in">number</span> = <span class="number">10</span></span><br><span class="line"><span class="keyword">var</span> <span class="attr">num2</span>:<span class="built_in">number</span> = <span class="number">2</span></span><br><span class="line"><span class="keyword">var</span> <span class="attr">res</span>:<span class="built_in">number</span> = <span class="number">0</span></span><br><span class="line">   </span><br><span class="line">res = num1 + num2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;加:        &quot;</span>+res);</span><br><span class="line"></span><br><span class="line">res = num1 - num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;减: &quot;</span>+res)</span><br><span class="line"></span><br><span class="line">res = num1*num2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;乘:    &quot;</span>+res)</span><br><span class="line"></span><br><span class="line">res = num1/num2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;除:   &quot;</span>+res)</span><br><span class="line">   </span><br><span class="line">res = num1%num2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;余数:   &quot;</span>+res)</span><br><span class="line"></span><br><span class="line">num1++</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 自增运算: &quot;</span>+num1)</span><br><span class="line"></span><br><span class="line">num2--</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num2 自减运算: &quot;</span>+num2)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">var</span> res = <span class="number">0</span>;</span><br><span class="line">res = num1 + num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;加:        &quot;</span> + res);</span><br><span class="line">res = num1 - num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;减: &quot;</span> + res);</span><br><span class="line">res = num1 * num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;乘:    &quot;</span> + res);</span><br><span class="line">res = num1 / num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;除:   &quot;</span> + res);</span><br><span class="line">res = num1 % num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;余数:   &quot;</span> + res);</span><br><span class="line">num1++;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 自增运算: &quot;</span> + num1);</span><br><span class="line">num2--;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num2 自减运算: &quot;</span> + num2);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">加:        12</span><br><span class="line">减: 8</span><br><span class="line">乘:    20</span><br><span class="line">除:   5</span><br><span class="line">余数:   0</span><br><span class="line">num1 自增运算: 11</span><br><span class="line">num2 自减运算: 1</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h2><p>关系运算符用于计算结果是否为 true 或者 false。</p>
+<p>x&#x3D;5，下面的表格解释了关系运算符的操作：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">比较</th>
+<th align="left">返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x3D;&#x3D;</td>
+<td align="left">等于</td>
+<td align="left">x&#x3D;&#x3D;8</td>
+<td align="left"><em>false</em></td>
+</tr>
+<tr>
+<td align="left">&#x3D;&#x3D;</td>
+<td align="left">等于</td>
+<td align="left">x&#x3D;&#x3D;5</td>
+<td align="left"><em>true</em></td>
+</tr>
+<tr>
+<td align="left">!&#x3D;</td>
+<td align="left">不等于</td>
+<td align="left">x!&#x3D;8</td>
+<td align="left"><em>true</em></td>
+</tr>
+<tr>
+<td align="left">&gt;</td>
+<td align="left">大于</td>
+<td align="left">x&gt;8</td>
+<td align="left"><em>false</em></td>
+</tr>
+<tr>
+<td align="left">&lt;</td>
+<td align="left">小于</td>
+<td align="left">x&lt;8</td>
+<td align="left"><em>true</em></td>
+</tr>
+<tr>
+<td align="left">&gt;&#x3D;</td>
+<td align="left">大于或等于</td>
+<td align="left">x&gt;&#x3D;8</td>
+<td align="left"><em>false</em></td>
+</tr>
+<tr>
+<td align="left">&lt;&#x3D;</td>
+<td align="left">小于或等于</td>
+<td align="left">x&lt;&#x3D;8</td>
+<td align="left"><em>true</em></td>
+</tr>
+</tbody></table>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num1</span>:<span class="built_in">number</span> = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="attr">num2</span>:<span class="built_in">number</span> = <span class="number">9</span>;</span><br><span class="line"> </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 的值为: &quot;</span>+num1); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num2 的值为:&quot;</span>+num2);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> res = num1&gt;num2 </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 大于n num2: &quot;</span>+res)</span><br><span class="line"> </span><br><span class="line">res = num1&lt;num2 </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 小于 num2: &quot;</span>+res)  </span><br><span class="line"> </span><br><span class="line">res = num1&gt;=num2 </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 大于或等于  num2: &quot;</span>+res)</span><br><span class="line"> </span><br><span class="line">res = num1&lt;=num2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 小于或等于 num2: &quot;</span>+res)  </span><br><span class="line"> </span><br><span class="line">res = num1==num2 </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 等于 num2: &quot;</span>+res)  </span><br><span class="line"> </span><br><span class="line">res = num1!=num2  </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 不等于 num2: &quot;</span>+res)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">9</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 的值为: &quot;</span> + num1);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num2 的值为:&quot;</span> + num2);</span><br><span class="line"><span class="keyword">var</span> res = num1 &gt; num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 大于n num2: &quot;</span> + res);</span><br><span class="line">res = num1 &lt; num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 小于 num2: &quot;</span> + res);</span><br><span class="line">res = num1 &gt;= num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 大于或等于  num2: &quot;</span> + res);</span><br><span class="line">res = num1 &lt;= num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 小于或等于 num2: &quot;</span> + res);</span><br><span class="line">res = num1 == num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 等于 num2: &quot;</span> + res);</span><br><span class="line">res = num1 != num2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num1 不等于 num2: &quot;</span> + res);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">num1 的值为: 5</span><br><span class="line">num2 的值为:9</span><br><span class="line">num1 大于n num2: false</span><br><span class="line">num1 小于 num2: true</span><br><span class="line">num1 大于或等于  num2: false</span><br><span class="line">num1 小于或等于 num2: true</span><br><span class="line">num1 等于 num2: false</span><br><span class="line">num1 不等于 num2: true</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><p>逻辑运算符用于测定变量或值之间的逻辑。</p>
+<p>给定 x&#x3D;6 以及 y&#x3D;3，下表解释了逻辑运算符：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;&amp;</td>
+<td align="left">and</td>
+<td align="left">(x &lt; 10 &amp;&amp; y &gt; 1) 为 true</td>
+</tr>
+<tr>
+<td align="left">||</td>
+<td align="left">or</td>
+<td align="left">(x=&#x3D;5 || y=&#x3D;5) 为 false</td>
+</tr>
+<tr>
+<td align="left">!</td>
+<td align="left">not</td>
+<td align="left">!(x&#x3D;&#x3D;y) 为 true</td>
+</tr>
+</tbody></table>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">avg</span>:<span class="built_in">number</span> = <span class="number">20</span>; </span><br><span class="line"><span class="keyword">var</span> <span class="attr">percentage</span>:<span class="built_in">number</span> = <span class="number">90</span>; </span><br><span class="line"> </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;avg 值为: &quot;</span>+avg+<span class="string">&quot; ,percentage 值为: &quot;</span>+percentage);</span><br><span class="line">    </span><br><span class="line"><span class="keyword">var</span> <span class="attr">res</span>:<span class="built_in">boolean</span> = ((avg&gt;<span class="number">50</span>)&amp;&amp;(percentage&gt;<span class="number">80</span>)); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(avg&gt;50)&amp;&amp;(percentage&gt;80): &quot;</span>,res);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> <span class="attr">res</span>:<span class="built_in">boolean</span> = ((avg&gt;<span class="number">50</span>)||(percentage&gt;<span class="number">80</span>)); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(avg&gt;50)||(percentage&gt;80): &quot;</span>,res);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> <span class="attr">res</span>:<span class="built_in">boolean</span>=!((avg&gt;<span class="number">50</span>)&amp;&amp;(percentage&gt;<span class="number">80</span>)); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;!((avg&gt;50)&amp;&amp;(percentage&gt;80)): &quot;</span>,res);</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> avg = <span class="number">20</span>;</span><br><span class="line"><span class="keyword">var</span> percentage = <span class="number">90</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;avg 值为: &quot;</span> + avg + <span class="string">&quot; ,percentage 值为: &quot;</span> + percentage);</span><br><span class="line"><span class="keyword">var</span> res = ((avg &gt; <span class="number">50</span>) &amp;&amp; (percentage &gt; <span class="number">80</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(avg&gt;50)&amp;&amp;(percentage&gt;80): &quot;</span>, res);</span><br><span class="line"><span class="keyword">var</span> res = ((avg &gt; <span class="number">50</span>) || (percentage &gt; <span class="number">80</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(avg&gt;50)||(percentage&gt;80): &quot;</span>, res);</span><br><span class="line"><span class="keyword">var</span> res = !((avg &gt; <span class="number">50</span>) &amp;&amp; (percentage &gt; <span class="number">80</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;!((avg&gt;50)&amp;&amp;(percentage&gt;80)): &quot;</span>, res);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">avg 值为: <span class="number">20</span> ,percentage 值为: <span class="number">90</span></span><br><span class="line">(avg&gt;<span class="number">50</span>)&amp;&amp;(percentage&gt;<span class="number">80</span>):  <span class="literal">false</span></span><br><span class="line">(avg&gt;<span class="number">50</span>)||(percentage&gt;<span class="number">80</span>):  <span class="literal">true</span></span><br><span class="line">!((avg&gt;<span class="number">50</span>)&amp;&amp;(percentage&gt;<span class="number">80</span>)):  <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="短路运算符-amp-amp-与"><a href="#短路运算符-amp-amp-与" class="headerlink" title="短路运算符(&amp;&amp; 与 ||)"></a>短路运算符(&amp;&amp; 与 ||)</h2><p>&amp;&amp; 与 || 运算符可用于组合表达式。</p>
+<p><strong>&amp;&amp; 运算符只有在左右两个表达式都为 true 时才返回 true。</strong></p>
+<p>考虑以下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span> </span><br><span class="line"><span class="keyword">var</span> result = ( a&lt;<span class="number">10</span> &amp;&amp; a&gt;<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以上实例中 a &lt; 10 与 a &gt; 5 是使用了 &amp;&amp; 运算符的组合表达式，第一个表达式返回了 false，由于 &amp;&amp; 运算需要两个表达式都为 true，所以如果第一个为 false，就不再执行后面的判断(a &gt; 5 跳过计算)，直接返回 false。</p>
+<p><strong>|| 运算符只要其中一个表达式为 true ，则该组合表达式就会返回 true。</strong></p>
+<p>考虑以下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span> </span><br><span class="line"><span class="keyword">var</span> result = ( a&gt;<span class="number">5</span> || a&lt;<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以上实例中 a &gt; 5 与 a &lt; 10 是使用了 || 运算符的组合表达式，第一个表达式返回了 true，由于 || 组合运算只需要一个表达式为 true，所以如果第一个为 true，就不再执行后面的判断(a &lt; 10 跳过计算)，直接返回 true。</p>
+<hr>
+<h2 id="按位运算符"><a href="#按位运算符" class="headerlink" title="按位运算符"></a>按位运算符</h2><p>位操作是程序设计中对位模式按位或二进制数的一元和二元操作。</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">例子</th>
+<th align="left">类似于</th>
+<th align="left">结果</th>
+<th align="left">十进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;</td>
+<td align="left">AND，按位与处理两个长度相同的二进制数，两个相应的二进位都为 1，该位的结果值才为 1，否则为 0。</td>
+<td align="left">x &#x3D; 5 &amp; 1</td>
+<td align="left">0101 &amp; 0001</td>
+<td align="left">0001</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">OR，按位或处理两个长度相同的二进制数，两个相应的二进位中只要有一个为 1，该位的结果值为 1。</td>
+<td align="left">x &#x3D; 5 | 1</td>
+<td align="left">0101 | 0001</td>
+<td align="left">0101</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">取反，取反是一元运算符，对一个二进制数的每一位执行逻辑反操作。使数字 1 成为 0，0 成为 1。</td>
+<td align="left">x &#x3D; ~ 5</td>
+<td align="left">~0101</td>
+<td align="left">1010</td>
+<td align="left">-6</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">异或，按位异或运算，对等长二进制模式按位或二进制数的每一位执行逻辑异按位或操作。操作的结果是如果某位不同则该位为 1，否则该位为 0。</td>
+<td align="left">x &#x3D; 5 ^ 1</td>
+<td align="left">0101 ^ 0001</td>
+<td align="left">0100</td>
+<td align="left">4</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;</td>
+<td align="left">有符号左移，把 &lt;&lt; 左边的运算数的各二进位全部左移若干位，由 &lt;&lt; 右边的数指定移动的位数，高位丢弃，低位补 0。</td>
+<td align="left">x &#x3D; 5 &lt;&lt; 1</td>
+<td align="left">0101 &lt;&lt; 1</td>
+<td align="left">1010</td>
+<td align="left">10</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;</td>
+<td align="left">有符号右移，把 &gt;&gt; 左边的运算数的各二进位全部右移若干位，&gt;&gt; 右边的数指定移动的位数，低位丢弃，高位补0。</td>
+<td align="left">x &#x3D; 5 &gt;&gt; 1</td>
+<td align="left">0101 &gt;&gt; 1</td>
+<td align="left">0010</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;&gt;</td>
+<td align="left">无符号右移，与有符号右移位类似（对于正数来说相同，对于负数来说不同），除了左边一律使用0 补位。</td>
+<td align="left">x &#x3D; 2 &gt;&gt;&gt; 1</td>
+<td align="left">0010 &gt;&gt;&gt; 1</td>
+<td align="left">0001</td>
+<td align="left">1</td>
+</tr>
+</tbody></table>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">a</span>:<span class="built_in">number</span> = <span class="number">2</span>;   <span class="comment">// 二进制 10 </span></span><br><span class="line"><span class="keyword">var</span> <span class="attr">b</span>:<span class="built_in">number</span> = <span class="number">3</span>;   <span class="comment">// 二进制 11</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">var</span> result; </span><br><span class="line">        </span><br><span class="line">result = (a &amp; b);     </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &amp; b) =&gt; &quot;</span>,result)</span><br><span class="line">            </span><br><span class="line">result = (a | b);          </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a | b) =&gt; &quot;</span>,result)  </span><br><span class="line">        </span><br><span class="line">result = (a ^ b);  </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a ^ b) =&gt; &quot;</span>,result);</span><br><span class="line">    </span><br><span class="line">result = (~b); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(~b) =&gt; &quot;</span>,result);</span><br><span class="line"> </span><br><span class="line">result = (a &lt;&lt; b); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &lt;&lt; b) =&gt; &quot;</span>,result); </span><br><span class="line"> </span><br><span class="line">result = (a &gt;&gt; b); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &gt;&gt; b) =&gt; &quot;</span>,result);</span><br><span class="line"> </span><br><span class="line">result = (a &gt;&gt;&gt; <span class="number">1</span>); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &gt;&gt;&gt; 1) =&gt; &quot;</span>,result);</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">2</span>; <span class="comment">// 二进制 10 </span></span><br><span class="line"><span class="keyword">var</span> b = <span class="number">3</span>; <span class="comment">// 二进制 11</span></span><br><span class="line"><span class="keyword">var</span> result;</span><br><span class="line">result = (a &amp; b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &amp; b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (a | b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a | b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (a ^ b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a ^ b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (~b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(~b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (a &lt;&lt; b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &lt;&lt; b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (a &gt;&gt; b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &gt;&gt; b) =&gt; &quot;</span>, result);</span><br><span class="line">result = (a &gt;&gt;&gt; <span class="number">1</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;(a &gt;&gt;&gt; 1) =&gt; &quot;</span>, result);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(a &amp; b) =&gt;  <span class="number">2</span></span><br><span class="line">(a | b) =&gt;  <span class="number">3</span></span><br><span class="line">(a ^ b) =&gt;  <span class="number">1</span></span><br><span class="line">(~b) =&gt;  -<span class="number">4</span></span><br><span class="line">(a &lt;&lt; b) =&gt;  <span class="number">16</span></span><br><span class="line">(a &gt;&gt; b) =&gt;  <span class="number">0</span></span><br><span class="line">(a &gt;&gt;&gt; <span class="number">1</span>) =&gt;  <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h2><p>赋值运算符用于给变量赋值。</p>
+<p>给定 <strong>x&#x3D;10</strong> 和 <strong>y&#x3D;5</strong>，下面的表格解释了赋值运算符：</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">例子</th>
+<th align="left">实例</th>
+<th align="left">x 值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x3D; (赋值)</td>
+<td align="left">x &#x3D; y</td>
+<td align="left">x &#x3D; y</td>
+<td align="left">x &#x3D; 5</td>
+</tr>
+<tr>
+<td align="left">+&#x3D; (先进行加运算后赋值)</td>
+<td align="left">x +&#x3D; y</td>
+<td align="left">x &#x3D; x + y</td>
+<td align="left">x &#x3D; 15</td>
+</tr>
+<tr>
+<td align="left">-&#x3D; (先进行减运算后赋值)</td>
+<td align="left">x -&#x3D; y</td>
+<td align="left">x &#x3D; x - y</td>
+<td align="left">x &#x3D; 5</td>
+</tr>
+<tr>
+<td align="left">*&#x3D; (先进行乘运算后赋值)</td>
+<td align="left">x *&#x3D; y</td>
+<td align="left">x &#x3D; x * y</td>
+<td align="left">x &#x3D; 50</td>
+</tr>
+<tr>
+<td align="left">&#x2F;&#x3D; (先进行除运算后赋值)</td>
+<td align="left">x &#x2F;&#x3D; y</td>
+<td align="left">x &#x3D; x &#x2F; y</td>
+<td align="left">x &#x3D; 2</td>
+</tr>
+<tr>
+<td align="left">%&#x3D; (先进行取模（余数）运算后赋值)</td>
+<td align="left">x %&#x3D; y</td>
+<td align="left">x &#x3D; x % y</td>
+<td align="left">x &#x3D; 0</td>
+</tr>
+</tbody></table>
+<p>类似的逻辑运算符也可以与赋值运算符联合使用：&lt;&lt;&#x3D;, &gt;&gt;&#x3D;, &gt;&gt;&gt;&#x3D;, &amp;&#x3D;, |&#x3D; 与 ^&#x3D;。</p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">a</span>: <span class="built_in">number</span> = <span class="number">12</span> </span><br><span class="line"><span class="keyword">var</span> <span class="attr">b</span>:<span class="built_in">number</span> = <span class="number">10</span>  </span><br><span class="line"> </span><br><span class="line">a = b </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a = b: &quot;</span>+a)</span><br><span class="line"> </span><br><span class="line">a += b</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a+=b: &quot;</span>+a)</span><br><span class="line"> </span><br><span class="line">a -= b </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a-=b: &quot;</span>+a)</span><br><span class="line"> </span><br><span class="line">a *= b </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a*=b: &quot;</span>+a)</span><br><span class="line"> </span><br><span class="line">a /= b </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a/=b: &quot;</span>+a)    </span><br><span class="line"> </span><br><span class="line">a %= b </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a%=b: &quot;</span>+a)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">12</span>;</span><br><span class="line"><span class="keyword">var</span> b = <span class="number">10</span>;</span><br><span class="line">a = b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a = b: &quot;</span> + a);</span><br><span class="line">a += b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a+=b: &quot;</span> + a);</span><br><span class="line">a -= b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a-=b: &quot;</span> + a);</span><br><span class="line">a *= b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a*=b: &quot;</span> + a);</span><br><span class="line">a /= b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a/=b: &quot;</span> + a);</span><br><span class="line">a %= b;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;a%=b: &quot;</span> + a);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="attr">b</span>: <span class="number">10</span></span><br><span class="line">a+=<span class="attr">b</span>: <span class="number">20</span></span><br><span class="line">a-=<span class="attr">b</span>: <span class="number">10</span></span><br><span class="line">a*=<span class="attr">b</span>: <span class="number">100</span></span><br><span class="line">a/=<span class="attr">b</span>: <span class="number">10</span></span><br><span class="line">a%=<span class="attr">b</span>: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符 (?)"></a>三元运算符 (?)</h2><p>三元运算有 3 个操作数，并且需要判断布尔表达式的值。该运算符的主要是决定哪个值应该赋值给变量。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Test</span> ? expr1 : expr2</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Test − 指定的条件语句</li>
+<li>expr1 − 如果条件语句 Test 返回 true 则返回该值</li>
+<li>expr2 − 如果条件语句 Test 返回 false 则返回该值</li>
+</ul>
+<p>让我们看下以下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num</span>:<span class="built_in">number</span> = -<span class="number">2</span> </span><br><span class="line"><span class="keyword">var</span> result = num &gt; <span class="number">0</span> ? <span class="string">&quot;大于 0&quot;</span> : <span class="string">&quot;小于 0，或等于 0&quot;</span> </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>实例中用于判断变量是否大于 0。</p>
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = -<span class="number">2</span>;</span><br><span class="line"><span class="keyword">var</span> result = num &gt; <span class="number">0</span> ? <span class="string">&quot;大于 0&quot;</span> : <span class="string">&quot;小于 0，或等于 0&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br></pre></td></tr></table></figure>
+
+<p>以上实例输出结果如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">小于 <span class="number">0</span>，或等于 <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="类型运算符"><a href="#类型运算符" class="headerlink" title="类型运算符"></a>类型运算符</h2><h3 id="typeof-运算符"><a href="#typeof-运算符" class="headerlink" title="typeof 运算符"></a>typeof 运算符</h3><p>typeof 是一元运算符，返回操作数的数据类型。</p>
+<p>查看以下实例:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">12</span> </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> num);   <span class="comment">//输出结果: number</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">12</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">typeof</span> num); <span class="comment">//输出结果: number</span></span><br></pre></td></tr></table></figure>
+
+<p>以上实例输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number</span><br></pre></td></tr></table></figure>
+
+<h3 id="instanceof-运算符"><a href="#instanceof-运算符" class="headerlink" title="instanceof 运算符"></a>instanceof 运算符</h3><p>instanceof 运算符用于判断对象是否为指定的类型，后面章节我们会具体介绍它。</p>
+<hr>
+<h2 id="其他运算符"><a href="#其他运算符" class="headerlink" title="其他运算符"></a>其他运算符</h2><h3 id="负号运算符"><a href="#负号运算符" class="headerlink" title="负号运算符(-)"></a>负号运算符(-)</h3><p>更改操作数的符号，查看以下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">x</span>:<span class="built_in">number</span> = <span class="number">4</span> </span><br><span class="line"><span class="keyword">var</span> y = -x; </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;x 值为: &quot;</span>,x);   <span class="comment">// 输出结果 4 </span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;y 值为: &quot;</span>,y);   <span class="comment">// 输出结果 -4</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">var</span> y = -x;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;x 值为: &quot;</span>, x); <span class="comment">// 输出结果 4 </span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;y 值为: &quot;</span>, y); <span class="comment">// 输出结果 -4</span></span><br></pre></td></tr></table></figure>
+
+<p>以上实例输出结果如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x 值为:  <span class="number">4</span></span><br><span class="line">y 值为:  -<span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="字符串运算符-连接运算符"><a href="#字符串运算符-连接运算符" class="headerlink" title="字符串运算符:连接运算符 (+)"></a>字符串运算符:连接运算符 (+)</h3><p>+ 运算符可以拼接两个字符串，查看以下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">msg</span>:<span class="built_in">string</span> = <span class="string">&quot;buubiu&quot;</span>+<span class="string">&quot;.com&quot;</span> </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(msg)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>tsc</code> 命令编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> msg = <span class="string">&quot;buubiu&quot;</span> + <span class="string">&quot;.com&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(msg);</span><br></pre></td></tr></table></figure>
+
+<p>以上实例输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buubiu.com</span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>TypeScript 运算符</p><p><a href="https://blog.buubiu.com/TypeScript-运算符/">https://blog.buubiu.com/TypeScript-运算符/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-08-19</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/TypeScript/">TypeScript</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/TypeScript-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">TypeScript 条件语句</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/TypeScript-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E/"><span class="level-item">TypeScript 变量声明</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#算术运算符"><span class="level-left"><span class="level-item">1</span><span class="level-item">算术运算符</span></span></a></li><li><a class="level is-mobile" href="#关系运算符"><span class="level-left"><span class="level-item">2</span><span class="level-item">关系运算符</span></span></a></li><li><a class="level is-mobile" href="#逻辑运算符"><span class="level-left"><span class="level-item">3</span><span class="level-item">逻辑运算符</span></span></a></li><li><a class="level is-mobile" href="#短路运算符-amp-amp-与"><span class="level-left"><span class="level-item">4</span><span class="level-item">短路运算符(&amp;&amp; 与 ||)</span></span></a></li><li><a class="level is-mobile" href="#按位运算符"><span class="level-left"><span class="level-item">5</span><span class="level-item">按位运算符</span></span></a></li><li><a class="level is-mobile" href="#赋值运算符"><span class="level-left"><span class="level-item">6</span><span class="level-item">赋值运算符</span></span></a></li><li><a class="level is-mobile" href="#三元运算符"><span class="level-left"><span class="level-item">7</span><span class="level-item">三元运算符 (?)</span></span></a></li><li><a class="level is-mobile" href="#类型运算符"><span class="level-left"><span class="level-item">8</span><span class="level-item">类型运算符</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#typeof-运算符"><span class="level-left"><span class="level-item">8.1</span><span class="level-item">typeof 运算符</span></span></a></li><li><a class="level is-mobile" href="#instanceof-运算符"><span class="level-left"><span class="level-item">8.2</span><span class="level-item">instanceof 运算符</span></span></a></li></ul></li><li><a class="level is-mobile" href="#其他运算符"><span class="level-left"><span class="level-item">9</span><span class="level-item">其他运算符</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#负号运算符"><span class="level-left"><span class="level-item">9.1</span><span class="level-item">负号运算符(-)</span></span></a></li><li><a class="level is-mobile" href="#字符串运算符-连接运算符"><span class="level-left"><span class="level-item">9.2</span><span class="level-item">字符串运算符:连接运算符 (+)</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Docker的基本概念 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="官方文档地址:https:&amp;#x2F;&amp;#x2F;www.docker.com&amp;#x2F;get-started 中文参考手册:https:&amp;#x2F;&amp;#x2F;yeasy.gitbook.io&amp;#x2F;docker_practice  什么是Docker官方定义  We have a complete container solution for you - no matter who you are and where you are on yo"><meta property="og:type" content="blog"><meta property="og:title" content="Docker的基本概念"><meta property="og:url" content="https://blog.buubiu.com/Docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="官方文档地址:https:&amp;#x2F;&amp;#x2F;www.docker.com&amp;#x2F;get-started 中文参考手册:https:&amp;#x2F;&amp;#x2F;yeasy.gitbook.io&amp;#x2F;docker_practice  什么是Docker官方定义  We have a complete container solution for you - no matter who you are and where you are on yo"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/H8xYDz1612161798196.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/jdedli1612162344143.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/XguX5S1612162487872.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/j3b4011612171597384.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/lemnU91612171356046.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/83YlSE1613717985077.png"><meta property="article:published_time" content="2021-02-01T06:32:14.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:04.801Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Docker"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/H8xYDz1612161798196.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"},"headline":"Docker的基本概念","image":["https://blog.buubiu.com/img/article/H8xYDz1612161798196.png","https://blog.buubiu.com/img/article/jdedli1612162344143.png","https://blog.buubiu.com/img/article/XguX5S1612162487872.png","https://blog.buubiu.com/img/article/j3b4011612171597384.png","https://blog.buubiu.com/img/article/lemnU91612171356046.png","https://blog.buubiu.com/img/article/83YlSE1613717985077.png"],"datePublished":"2021-02-01T06:32:14.000Z","dateModified":"2024-01-25T15:08:04.801Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"官方文档地址:https:&#x2F;&#x2F;www.docker.com&#x2F;get-started 中文参考手册:https:&#x2F;&#x2F;yeasy.gitbook.io&#x2F;docker_practice  什么是Docker官方定义  We have a complete container solution for you - no matter who you are and where you are on yo"}</script><link rel="canonical" href="https://blog.buubiu.com/Docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-02-01T06:32:14.000Z" title="2/1/2021, 2:32:14 PM">2021-02-01</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:04.801Z" title="1/25/2024, 11:08:04 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Docker/">Docker</a></span><span class="level-item">18 分钟读完 (大约2741个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Docker的基本概念</h1><div class="content"><ul>
+<li>官方文档地址:<a target="_blank" rel="noopener" href="https://www.docker.com/get-started">https://www.docker.com/get-started</a></li>
+<li>中文参考手册:<a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice">https://yeasy.gitbook.io/docker_practice</a></li>
+</ul>
+<h2 id="什么是Docker"><a href="#什么是Docker" class="headerlink" title="什么是Docker"></a>什么是Docker</h2><h3 id="官方定义"><a href="#官方定义" class="headerlink" title="官方定义"></a>官方定义</h3><p><img src="/../img/article/H8xYDz1612161798196.png"></p>
+<ul>
+<li>We have a complete container solution for you - no matter who you are and where you are on your containerization journey.</li>
+<li>我们为您提供完整的容器解决方案-不管你是谁,不管你在哪,你都可以开始容器的的旅程。</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="Docker的起源"><a href="#Docker的起源" class="headerlink" title="Docker的起源"></a>Docker的起源</h3><ul>
+<li><p>Docker 最初是 dotCloud 公司创始人 Solomon Hykes 在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于 2013 年 3 月以 Apache 2.0 授权协议开源，主要项目代码在 GitHub 上进行维护。Docker 项目后来还加入了 Linux 基金会，并成立推动 开放容器联盟（OCI）。</p>
+</li>
+<li><p>Docker 自开源后受到广泛的关注和讨论，至今其 GitHub 项目 已经超过 5 万 7 千个星标和一万多个 fork。甚至由于 Docker 项目的火爆，在 2013 年底，dotCloud 公司决定改名为 Docker。Docker 最初是在 Ubuntu 12.04 上开发实现的；Red Hat 则从 RHEL 6.5 开始对 Docker 进行支持；Google 也在其 PaaS 产品中广泛应用 Docker。</p>
+</li>
+<li><p>Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，对进程进行封装隔离，属于操作系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容器。</p>
+</li>
+</ul>
+<h2 id="为什么要用Docker"><a href="#为什么要用Docker" class="headerlink" title="为什么要用Docker"></a>为什么要用Docker</h2><ul>
+<li><p><code>在开发的时候，在本机测试环境可以跑，生产环境跑不起来</code></p>
+<p>这里我们拿java Web应用程序举例，我们一个java Web应用程序涉及很多东西，比如jdk、tomcat、mysql等软件环境。当这些其中某一项版本不一致的时候，可能就会导致应用程序跑不起来这种情况。Docker则将程序以及使用软件环境直接打包在一起，无论在那个机器上保证了环境一致。</p>
+<p><strong>优势1:  一致的运行环境,更轻松的迁移</strong></p>
+</li>
+<li><p><code>服务器自己的程序挂了，结果发现是别人程序出了问题把内存吃完了，自己程序因为内存不够就挂了</code></p>
+<p>这种也是一种比较常见的情况，如果你的程序重要性不是特别高的话，公司基本上不可能让你的程序独享一台服务器的，这时候你的服务器就会跟公司其他人的程序共享一台服务器，所以不可避免地就会受到其他程序的干扰，导致自己的程序出现问题。Docker就很好解决了环境隔离的问题，别人程序不会影响到自己的程序。</p>
+<p><strong>优势2：对进程进行封装隔离,容器与容器之间互不影响,更高效的利用系统资源</strong></p>
+</li>
+<li><p><code>公司要弄一个活动，可能会有大量的流量进来，公司需要再多部署几十台服务器</code></p>
+<p>在没有Docker的情况下，要在几天内部署几十台服务器，这对运维来说是一件非常折磨人的事，而且每台服务器的环境还不一定一样，就会出现各种问题，最后部署地头皮发麻。用Docker的话，我只需要将程序打包到镜像，你要多少台服务，我就给力跑多少容器，极大地提高了部署效率。</p>
+<p><strong>优势3: 通过镜像复制N多个环境一致容器</strong></p>
+</li>
+</ul>
+<h2 id="Docker和虚拟机区别"><a href="#Docker和虚拟机区别" class="headerlink" title="Docker和虚拟机区别"></a>Docker和虚拟机区别</h2><p><img src="/../img/article/jdedli1612162344143.png"></p>
+<p><img src="/../img/article/XguX5S1612162487872.png"></p>
+<p><code>比较上面两张图，我们发现虚拟机是携带操作系统，本身很小的应用程序却因为携带了操作系统而变得非常大，很笨重</code>。Docker是不携带操作系统的，所以Docker的应用就非常的轻巧。另外在调用宿主机的CPU、磁盘等等这些资源的时候，拿内存举例，虚拟机是利用Hypervisor去虚拟化内存，整个调用过程是虚拟内存-&gt;虚拟物理内存-&gt;真正物理内存，但是Docker是利用Docker Engine去调用宿主的的资源，这时候过程是虚拟内存-&gt;真正物理内存。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>传统虚拟机</th>
+<th>Docker容器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>磁盘占用</td>
+<td>几个GB到几十个GB左右</td>
+<td>几十MB到几百MB左右</td>
+</tr>
+<tr>
+<td>CPU内存占用</td>
+<td>虚拟操作系统非常占用CPU和内存</td>
+<td>Docker引擎占用极低</td>
+</tr>
+<tr>
+<td>启动速度</td>
+<td>（从开机到运行项目）几分钟</td>
+<td>（从开启容器到运行项目）几秒</td>
+</tr>
+<tr>
+<td>安装管理</td>
+<td>需要专门的运维技术</td>
+<td>安装、管理方便</td>
+</tr>
+<tr>
+<td>应用部署</td>
+<td>每次部署都费时费力</td>
+<td>从第二次部署开始轻松简捷</td>
+</tr>
+<tr>
+<td>耦合性</td>
+<td>多个应用服务安装到一起，容易互相影响</td>
+<td>每个应用服务一个容器，达成隔离</td>
+</tr>
+<tr>
+<td>系统依赖</td>
+<td>无</td>
+<td>需求相同或相似的内核，目前推荐是Linux</td>
+</tr>
+</tbody></table>
+<h2 id="Docker的安装"><a href="#Docker的安装" class="headerlink" title="Docker的安装"></a>Docker的安装</h2><p><strong>注意：docker引擎支持主流操作系统 Windows macOS Linux unix</strong></p>
+<h3 id="Docker在Windows系统安装"><a href="#Docker在Windows系统安装" class="headerlink" title="Docker在Windows系统安装"></a>Docker在Windows系统安装</h3><p>下载：<a target="_blank" rel="noopener" href="https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe">https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe</a></p>
+<p>安装：直接点击.exe进行安装</p>
+<p>windows10安装时要开启Hyper-V（若版本为 v1903 及以上则无需开启 Hyper-V）</p>
+<p>方法：控制面板-&gt;程序-&gt;卸载程序-&gt;启用和关闭window功能-&gt;Hyper-V 勾选-&gt;完成后重启</p>
+<h3 id="Docker在Linux系统安装"><a href="#Docker在Linux系统安装" class="headerlink" title="Docker在Linux系统安装"></a>Docker在Linux系统安装</h3><h4 id="通用方式安装"><a href="#通用方式安装" class="headerlink" title="通用方式安装"></a>通用方式安装</h4><ol>
+<li><p>在测试或开发环境中 Docker 官方为了简化安装流程，提供了一套便捷的安装脚本，Raspberry Pi OS 系统上可以使用这套脚本安装，另外可以通过 <code>--mirror</code> 选项使用国内源进行安装：</p>
+<blockquote>
+<p>若你想安装测试版的 Docker, 请从 test.docker.com 获取脚本</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># $ curl -fsSL https://test.docker.com -o get-docker.sh</span></span><br><span class="line">$ curl -fsSL https://get.docker.com -o get-docker.sh</span><br><span class="line">$ sudo sh get-docker.sh --mirror Aliyun</span><br><span class="line"><span class="comment"># $ sudo sh get-docker.sh --mirror AzureChinaCloud</span></span><br></pre></td></tr></table></figure>
+
+<p>执行这个命令后，脚本就会自动的将一切准备工作做好，并且把 Docker 的稳定(stable)版本安装在系统中。</p>
+</li>
+<li><p>启动docker</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl <span class="built_in">enable</span> docker</span><br><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建<code>docker</code>用户组</p>
+<p>默认情况下，<code>docker</code> 命令会使用 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unix_domain_socket">Unix socket</a> 与 Docker 引擎通讯。而只有 <code>root</code> 用户和 <code>docker</code> 组的用户才可以访问 Docker 引擎的 Unix socket。出于安全考虑，一般 Linux 系统上不会直接使用 <code>root</code> 用户。因此，更好地做法是将需要使用 <code>docker</code> 的用户加入 <code>docker</code> 用户组。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将当前用户加入 <code>docker</code> 组：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试<code>docker</code>安装是否正确</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run hello-world</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="根据系统类型安装"><a href="#根据系统类型安装" class="headerlink" title="根据系统类型安装"></a>根据系统类型安装</h4><h5 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h5><p>系统要求</p>
+<p>Docker 支持 64 位版本 CentOS 7&#x2F;8，并且要求内核版本不低于 3.10。 CentOS 7 满足最低内核的要求，但由于内核版本比较低，部分功能（如 <code>overlay2</code> 存储层驱动）无法使用，并且部分功能可能不太稳定。</p>
+<ul>
+<li><p>卸载原始docker</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-engine</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装docker依赖</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo yum install -y yum-utils</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置docker的yum源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装最新版的docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum install -y docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定版本安装docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ yum list docker-ce --showduplicates | <span class="built_in">sort</span> -r</span><br><span class="line">$ sudo yum install docker-ce-&lt;VERSION_STRING&gt; docker-ce-cli-&lt;VERSION_STRING&gt; containerd.io</span><br><span class="line">$ sudo yum install docker-ce-18.09.5-3.el7 docker-ce-cli-18.09.5-3.el7 containerd.io</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl <span class="built_in">enable</span> docker</span><br><span class="line">$ sudo systemctl start docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl stop docker</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试docker安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo docker run hello-world</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="CentOS8-额外设置"><a href="#CentOS8-额外设置" class="headerlink" title="CentOS8 额外设置"></a>CentOS8 额外设置</h6><p>由于 CentOS8 防火墙使用了 <code>nftables</code>，但 Docker 尚未支持 <code>nftables</code>， 我们可以使用如下设置使用 <code>iptables</code>：</p>
+<p>更改 <code>/etc/firewalld/firewalld.conf</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">FirewallBackend=nftables</span></span><br><span class="line">FirewallBackend=iptables</span><br></pre></td></tr></table></figure>
+
+<p>或者执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">firewall-cmd --permanent --zone=trusted --add-interface=docker0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">firewall-cmd --reload</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="创建非root用户（可选）"><a href="#创建非root用户（可选）" class="headerlink" title="创建非root用户（可选）"></a>创建非root用户（可选）</h4><ol>
+<li><p>创建用户组：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd docker</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>创建<code>docker</code>用户[可选：创建密码]：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-g参数来制定 所属用户组</span></span><br><span class="line">$ sudo useradd -g docker docker</span><br><span class="line">$ sudo passwd docker</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>将用户加入 <code>docker</code> 组：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo usermod -aG docker docker</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Docker配置阿里镜像加速服务"><a href="#Docker配置阿里镜像加速服务" class="headerlink" title="Docker配置阿里镜像加速服务"></a>Docker配置阿里镜像加速服务</h3><h4 id="docker运行流程"><a href="#docker运行流程" class="headerlink" title="docker运行流程"></a>docker运行流程</h4><p><img src="/../img/article/j3b4011612171597384.png"></p>
+<h4 id="docker配置阿里云镜像加速"><a href="#docker配置阿里云镜像加速" class="headerlink" title="docker配置阿里云镜像加速"></a>docker配置阿里云镜像加速</h4><ul>
+<li><p>访问阿里云登录自己账号查看docker镜像加速服务</p>
+<p>(点击管理控制台 -&gt; 登录账号(淘宝账号) -&gt; 右侧镜像中心 -&gt; 镜像加速器 -&gt; 复制地址)</p>
+</li>
+<li><p>在 <code>/etc/docker/daemon.json</code> 中写入如下内容（如果文件不存在请新建该文件）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;registry-mirrors&quot;: [</span><br><span class="line">  	&quot;https://lz2nib3q.mirror.aliyuncs.com&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，一定要保证该文件符合 json 规范，否则 Docker 将不能启动。</p>
+</blockquote>
+</li>
+<li><p>之后重新启动服务。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo systemctl daemon-reload</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo systemctl restart docker</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证docker的镜像加速是否生效</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# docker info</span><br><span class="line">		..........</span><br><span class="line">    127.0.0.0/8</span><br><span class="line">   Registry Mirrors:</span><br><span class="line">    &#x27;https://lz2nib3q.mirror.aliyuncs.com/&#x27;</span><br><span class="line">   Live Restore Enabled: false</span><br><span class="line">   Product License: Community Engine</span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker的核心架构"><a href="#Docker的核心架构" class="headerlink" title="Docker的核心架构"></a>Docker的核心架构</h2><p><img src="/../img/article/lemnU91612171356046.png"></p>
+<ul>
+<li><code>镜像:</code> 一个镜像代表一个应用环境,他是一个只读的文件,如 mysql镜像,tomcat镜像,nginx镜像等</li>
+<li><code>容器:</code> 镜像每次运行之后就是产生一个容器,就是正在运行的镜像,特点就是可读可写</li>
+<li><code>仓库:</code>用来存放镜像的位置,类似于maven仓库,也是镜像下载和上传的位置</li>
+<li><code>dockerFile:</code>docker生成镜像配置文件,用来书写自定义镜像的一些配置</li>
+<li><code>tar:</code>一个对镜像打包的文件,日后可以还原成镜像</li>
+</ul>
+<h2 id="Docker的入门应用"><a href="#Docker的入门应用" class="headerlink" title="Docker的入门应用"></a>Docker的入门应用</h2><h3 id="docker的第一个程序"><a href="#docker的第一个程序" class="headerlink" title="docker的第一个程序"></a>docker的第一个程序</h3><p><code>docker run hello-world</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# docker run hello-world</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br><span class="line"></span><br><span class="line">To generate this message, Docker took the following steps:</span><br><span class="line"> 1. The Docker client contacted the Docker daemon.</span><br><span class="line"> 2. The Docker daemon pulled the &quot;hello-world&quot; image from the Docker Hub.</span><br><span class="line">    (amd64)</span><br><span class="line"> 3. The Docker daemon created a new container from that image which runs the</span><br><span class="line">    executable that produces the output you are currently reading.</span><br><span class="line"> 4. The Docker daemon streamed that output to the Docker client, which sent it</span><br><span class="line">    to your terminal.</span><br><span class="line"></span><br><span class="line">To try something more ambitious, you can run an Ubuntu container with:</span><br><span class="line"><span class="meta prompt_"> $ </span><span class="language-bash">docker run -it ubuntu bash</span></span><br><span class="line"></span><br><span class="line">Share images, automate workflows, and more with a free Docker ID:</span><br><span class="line"> https://hub.docker.com/</span><br><span class="line"></span><br><span class="line">For more examples and ideas, visit:</span><br><span class="line"> https://docs.docker.com/get-started/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/83YlSE1613717985077.png"></p>
+<h2 id="Docker的卸载"><a href="#Docker的卸载" class="headerlink" title="Docker的卸载"></a>Docker的卸载</h2><h3 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h3><ol>
+<li><p>卸载 Docker Engine、CLI 和 Containerd 包：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo yum remove -y docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>主机上的映像、容器、卷或自定义配置文件不会自动删除。删除所有镜像、容器和卷：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo <span class="built_in">rm</span> -rf /var/lib/docker</span><br><span class="line">$ sudo <span class="built_in">rm</span> -rf /var/lib/containerd</span><br></pre></td></tr></table></figure></li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Docker的基本概念</p><p><a href="https://blog.buubiu.com/Docker的基本概念/">https://blog.buubiu.com/Docker的基本概念/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-02-01</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Docker/">Docker</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Docker%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Docker的常用命令</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/ElasticSearch%E4%B8%AD%E7%9A%84%E9%9B%86%E7%BE%A4/"><span class="level-item">ElasticSearch中的集群</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#什么是Docker"><span class="level-left"><span class="level-item">1</span><span class="level-item">什么是Docker</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#官方定义"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">官方定义</span></span></a></li><li><a class="level is-mobile" href="#Docker的起源"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">Docker的起源</span></span></a></li></ul></li><li><a class="level is-mobile" href="#为什么要用Docker"><span class="level-left"><span class="level-item">2</span><span class="level-item">为什么要用Docker</span></span></a></li><li><a class="level is-mobile" href="#Docker和虚拟机区别"><span class="level-left"><span class="level-item">3</span><span class="level-item">Docker和虚拟机区别</span></span></a></li><li><a class="level is-mobile" href="#Docker的安装"><span class="level-left"><span class="level-item">4</span><span class="level-item">Docker的安装</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Docker在Windows系统安装"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">Docker在Windows系统安装</span></span></a></li><li><a class="level is-mobile" href="#Docker在Linux系统安装"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">Docker在Linux系统安装</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#通用方式安装"><span class="level-left"><span class="level-item">4.2.1</span><span class="level-item">通用方式安装</span></span></a></li><li><a class="level is-mobile" href="#根据系统类型安装"><span class="level-left"><span class="level-item">4.2.2</span><span class="level-item">根据系统类型安装</span></span></a></li><li><a class="level is-mobile" href="#创建非root用户（可选）"><span class="level-left"><span class="level-item">4.2.3</span><span class="level-item">创建非root用户（可选）</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Docker配置阿里镜像加速服务"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">Docker配置阿里镜像加速服务</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#docker运行流程"><span class="level-left"><span class="level-item">4.3.1</span><span class="level-item">docker运行流程</span></span></a></li><li><a class="level is-mobile" href="#docker配置阿里云镜像加速"><span class="level-left"><span class="level-item">4.3.2</span><span class="level-item">docker配置阿里云镜像加速</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#Docker的核心架构"><span class="level-left"><span class="level-item">5</span><span class="level-item">Docker的核心架构</span></span></a></li><li><a class="level is-mobile" href="#Docker的入门应用"><span class="level-left"><span class="level-item">6</span><span class="level-item">Docker的入门应用</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#docker的第一个程序"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">docker的第一个程序</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Docker的卸载"><span class="level-left"><span class="level-item">7</span><span class="level-item">Docker的卸载</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#centos"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">centos</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

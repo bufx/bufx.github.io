@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>基础开发培训 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="开发语言介绍前台 Bootstrap由 Twitter 开源的一个 CSS&amp;#x2F;HTML 框架， Bootstrap 是基于 HTML5 和 CSS3 开发的，它在 jQuery 的基础上进行了更为个性化和人性化的完善。 Bootstrap 自带丰富的 Web 组件，如：下拉菜单、按钮组、按钮下拉菜单、导航、导航条、路径导航、分页、排版、缩略图、警告对话框、进度条、媒体对象等。参见： htt"><meta property="og:type" content="blog"><meta property="og:title" content="基础开发培训"><meta property="og:url" content="https://blog.buubiu.com/%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E5%9F%B9%E8%AE%AD/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="开发语言介绍前台 Bootstrap由 Twitter 开源的一个 CSS&amp;#x2F;HTML 框架， Bootstrap 是基于 HTML5 和 CSS3 开发的，它在 jQuery 的基础上进行了更为个性化和人性化的完善。 Bootstrap 自带丰富的 Web 组件，如：下拉菜单、按钮组、按钮下拉菜单、导航、导航条、路径导航、分页、排版、缩略图、警告对话框、进度条、媒体对象等。参见： htt"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://i.loli.net/2020/07/14/c4kCpRlOjVMnsNF.png"><meta property="og:image" content="https://i.loli.net/2020/07/14/RtUIvyg8EYCNSiG.png"><meta property="og:image" content="https://i.loli.net/2020/07/14/Aw45Nqocz1ls9Fg.png"><meta property="og:image" content="https://i.loli.net/2020/07/14/Pe5UD1rgmufRlvi.png"><meta property="article:published_time" content="2020-07-14T08:58:49.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.916Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Java"><meta property="article:tag" content="开发框架"><meta property="article:tag" content="文档"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://i.loli.net/2020/07/14/c4kCpRlOjVMnsNF.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E5%9F%B9%E8%AE%AD/"},"headline":"基础开发培训","image":["https://i.loli.net/2020/07/14/c4kCpRlOjVMnsNF.png","https://i.loli.net/2020/07/14/RtUIvyg8EYCNSiG.png","https://i.loli.net/2020/07/14/Aw45Nqocz1ls9Fg.png","https://i.loli.net/2020/07/14/Pe5UD1rgmufRlvi.png"],"datePublished":"2020-07-14T08:58:49.000Z","dateModified":"2024-01-25T15:08:05.916Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"开发语言介绍前台 Bootstrap由 Twitter 开源的一个 CSS&#x2F;HTML 框架， Bootstrap 是基于 HTML5 和 CSS3 开发的，它在 jQuery 的基础上进行了更为个性化和人性化的完善。 Bootstrap 自带丰富的 Web 组件，如：下拉菜单、按钮组、按钮下拉菜单、导航、导航条、路径导航、分页、排版、缩略图、警告对话框、进度条、媒体对象等。参见： htt"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E5%9F%B9%E8%AE%AD/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-07-14T08:58:49.000Z" title="7/14/2020, 4:58:49 PM">2020-07-14</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.916Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span><span class="level-item">27 分钟读完 (大约4080个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">基础开发培训</h1><div class="content"><h1 id="开发语言介绍"><a href="#开发语言介绍" class="headerlink" title="开发语言介绍"></a>开发语言介绍</h1><h2 id="前台-Bootstrap"><a href="#前台-Bootstrap" class="headerlink" title="前台 Bootstrap"></a>前台 Bootstrap</h2><p>由 Twitter 开源的一个 CSS&#x2F;HTML 框架， Bootstrap 是基于 HTML5 和 CSS3 开发的，它在 jQuery 的基础上进行了更为个性化和人性化的完善。 Bootstrap 自带丰富的 Web 组件，如：下拉菜单、按钮组、按钮下拉菜单、导航、导航条、路径导航、分页、排版、缩略图、警告对话框、进度条、媒体对象等。<br>参见： <a target="_blank" rel="noopener" href="http://v3.bootcss.com/components/">http://v3.bootcss.com/components/</a></p>
+<h2 id="后台-Java-代码"><a href="#后台-Java-代码" class="headerlink" title="后台 Java 代码"></a>后台 Java 代码</h2><span id="more"></span>
+
+<p>采用 JDK1.7 及其以上版本，下载地址： <a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/java/javase/archive-139210.html">http://www.oracle.com/technetwork/java/javase/archive-139210.html</a></p>
+<h1 id="开发工具介绍"><a href="#开发工具介绍" class="headerlink" title="开发工具介绍"></a>开发工具介绍</h1><h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><p>使用 Eclipse 进行开发。下载地址： <a target="_blank" rel="noopener" href="https://www.eclipse.org/downloads/eclipse-packages/">https://www.eclipse.org/downloads/eclipse-packages/</a></p>
+<h2 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h2><p>使用 Tomcat 作为开发 web 服务器进行开发，使用最新的 7 及其以上版本。下载地址： <a target="_blank" rel="noopener" href="https://tomcat.apache.org/download-80.cgi">https://tomcat.apache.org/download-80.cgi</a></p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>MySQL 和 Oracle 都有兼容。</p>
+<h1 id="SVN-使用介绍"><a href="#SVN-使用介绍" class="headerlink" title="SVN 使用介绍"></a>SVN 使用介绍</h1><p>版本控制工具，代码统一放在公司 SVN 服务器上。</p>
+<p>常用的一些操作：</p>
+<ul>
+<li>检出（ checkout ）</li>
+<li>更新（update）</li>
+<li>提交（ commit）</li>
+<li>同步（sync）</li>
+</ul>
+<h1 id="数据库介绍"><a href="#数据库介绍" class="headerlink" title="数据库介绍"></a>数据库介绍</h1><p>为了使代码要同时兼容 <strong>Oracle</strong> 和 <strong>MySQL</strong> 两种数据库，所以在拼写 SQL 的时候尽量避免大量使用数据库自身特有的函数。为此需要了解哪些函数是 Oracle 的，哪些函数是 MySQL 的，如若避免不了使用这些函数，请在 SQL 的 XML 文件中使用<code>&lt;mysql&gt;</code>和<code>&lt;oracle&gt;</code>标签进行明确标出。这样在工程启动的时候，mybatis 会根据配置文件中指定的方言，解析为指定的 SQL 语句，装入到内存。</p>
+<p>为什么使用 mybatis</p>
+<p>Hibernate 与 Mybatis 都是较为流行的 ORM 框架，且开发社区也相对活跃。 Hibernate 的真正掌握要比 Mybatis 来得难些。Mybatis 框架相对简单很容易上手，Hibernate 入门和优化的门槛较高。Hibernate 适用于中小企业需求变化不多的项目， mybatis 专注 sql 本身，程序员自己写 sql 语句，sql 的修改与优化比较方便，适用于需求变化较多的项目。</p>
+<h1 id="开发框架简介"><a href="#开发框架简介" class="headerlink" title="开发框架简介"></a>开发框架简介</h1><img src='https://i.loli.net/2020/07/14/c4kCpRlOjVMnsNF.png' />
+
+<h1 id="开发组件简介"><a href="#开发组件简介" class="headerlink" title="开发组件简介"></a>开发组件简介</h1><h2 id="后台目录结构"><a href="#后台目录结构" class="headerlink" title="后台目录结构"></a>后台目录结构</h2><img src='https://i.loli.net/2020/07/14/RtUIvyg8EYCNSiG.png' style="zoom:70%;"/>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">|--Java Resource</span><br><span class="line">  |--api：存放所有的接口类</span><br><span class="line">  |--business：存放所有的Service业务逻辑</span><br><span class="line">  |--controller：存放所有的Action类</span><br><span class="line">  |--resources：存放所有的资源文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="前台目录结构"><a href="#前台目录结构" class="headerlink" title="前台目录结构"></a>前台目录结构</h2><img src='https://i.loli.net/2020/07/14/Aw45Nqocz1ls9Fg.png' style="zoom:70%;"/>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">resource：存放所有前台静态文件</span><br><span class="line">  |--css：存放所有样式文件</span><br><span class="line">  |--image：存放所有的图片文件</span><br><span class="line">  |--js：存放所有的JS文件</span><br><span class="line">  |--less：存放所有的less文件</span><br><span class="line">  |--plugin：存放所有的插件</span><br><span class="line">uploadfiles：文件上传附件的目录</span><br><span class="line">WEB-INF：存放页面和配置文件</span><br><span class="line">  |--conf：存放系统配置文件</span><br><span class="line">  |--lib：存放依赖的jar</span><br><span class="line">  |--view：存放业务模块对应的JSP文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件介绍"><a href="#配置文件介绍" class="headerlink" title="配置文件介绍"></a>配置文件介绍</h2><p>修改指定的配置文件，启动工程。修改如下几个重要的配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">resource（资源目录）</span><br><span class="line">  |-- applicationContext.xml（修改数据库的链接方式）</span><br><span class="line">  |-- casFilterConfig.xml（指定使用的认证）</span><br><span class="line">  |-- config.xml（修改具体的配置参数）</span><br><span class="line">  |-- mybatis-config.xml（修改分页使用的方言）</span><br><span class="line">  |-- redis-context.xml（修改使用的缓存服务器信息）</span><br></pre></td></tr></table></figure>
+
+<h2 id="简单的增删改查"><a href="#简单的增删改查" class="headerlink" title="简单的增删改查"></a>简单的增删改查</h2><img src='https://i.loli.net/2020/07/14/Pe5UD1rgmufRlvi.png' />
+
+<p>通过代码生成器可以快速的生成简单的代码样例，根据自己的业务逻辑需求在此基础上进行修改即可。点击 <code>【创建】</code> 按钮之前需要填写部分内容，填写说明如下：</p>
+<ul>
+<li>应用：代码中划分为多个应用，此处填写应用对应的英文简称。</li>
+<li>模块：填写在应用下对应的模块英文简称。</li>
+<li>表名：填写模块对应的数据库中的业务表，填写后会生成简单的 SQL 语句。</li>
+<li>生成前&#x2F;后台代码复选框：选中指定的复选框生成对应的代码。</li>
+</ul>
+<h2 id="代码结构及其分布"><a href="#代码结构及其分布" class="headerlink" title="代码结构及其分布"></a>代码结构及其分布</h2><p>代码生成器究竟做了什么？</p>
+<ol>
+<li><p>生成 javascript 文件，会产生一个 <code>WebContent/resource/js/应用/业务模块/模块名.js</code> 文件。此文件中按照规则自动帮你生成了命名空间和一些 JS 样例代码。</p>
+</li>
+<li><p>生成一个 JSP 文件，会创建一个 <code>WebContent/WEB-INF/view/应用/业务模块/模块名.jsp</code> 文件。此文件中会自动引入 jstl、htmlcompressor 标签、common.jsp 和自身所依赖的 javascript 文件。jstl 是 JSP 的一个标准的标签库，启动能包括迭代和条件判断、数据管理格式化、XML 操作以及数据库访问。 Htmlcompressor 作用是将页面元素进行压缩，进来减少网络的 IO 传输。common.jsp 声明了一些公用的变量。</p>
+</li>
+<li><p>生成一个 Action 类， 创建一个 <code>controller/com/应用/业务模块/action/业务模块 Action.java</code> 的文件。该类中会自动继承 SecurityBaseAction 这个抽象类，为此其自身也就具有了 SecurityBaseAction 中的所有方法的功能。在继承该类的同时需要通过泛型传递两个参数，第一个参数指定自身所依赖的 Service，第二个参数指定查询结果的返回类型（默认是 Map，如果有特殊需要可以使用自定义实体）。</p>
+</li>
+<li><p>生成一个 Service 接口，创建一个 <code>api/com/应用/业务模块/service/业务模块 Service.java</code> 的文件，该 Service 继承 SecurityBaseService 接口。</p>
+</li>
+<li><p>生成 Service 的实现类，创建一个 <code>business/com/应用/业务模块/service/业务模块名 ServiceImpl.java</code> 的文件。该文件继承 BaseServiceImpl 基类并实现了自己的 Service 接口。继承基类的时候需要通过泛型传递两个参数，第一个为改 Service 中所依赖的 Mapper 接口类，第二个为查询的时候返回的类型（默认是 Map，如有特殊需求可以自己定义实体）。实现自己的 Service 接口的时候同样需要通过泛型传查询时返回的数据类型。</p>
+</li>
+<li><p>生成一个 Mapper 的接口，创建一个 <code>business/com/应用/业务模块/mapper/业务模块名 Mapper.java</code> 的文件。</p>
+</li>
+<li><p>生成一个 XML 文件，创建一个 <code>business/com/应用/业务模块/mapper/业务模块名 Mapper.xml</code> 的文件。在该文件中会根据前台输入的数据表自动生成 CRUD 的 SQL 语句。</p>
+</li>
+</ol>
+<h2 id="几个基础的公共类"><a href="#几个基础的公共类" class="headerlink" title="几个基础的公共类"></a>几个基础的公共类</h2><p>开发时为了尽快排除和定位问题，为了使开发人员尽快上手，介绍如下几个基类：</p>
+<ul>
+<li><p>Cas20ProxyReceivingTicketValidationFilter：路径 <code>tp-common-1.0.jar/com/tp/cas/</code> 登录成功之后 cas 回调该类中的 onSuccessfulValidation 方法，该方法会初始化当前登录人员的所有相关信息。</p>
+</li>
+<li><p>CommonAction: 路径 <code>tp-common-1.0.jar/com/tp/base/action/</code> 存放了一些公共的方法，如：首页、404、500、403、注销、上传、下载、截图、获取 token。</p>
+</li>
+<li><p>SecurityBaseAction：路径 <code>controller/com/tp/base/action/</code> 基础的 Action，所有业务模块的 Action 均继承了这个抽象类，该类中实现了公共的分页查询（page）、查询全部（list）、获取指定对象（get）、保存或修改（saveOrUpdate）、添加（add）、批量添加（addBatch）、修改（update）、批量修改（updateBatch）、删除（delete）、判断对象是否存在（exist）、记录的状态切换（toggle）、获取当前用户（getCurrentUser）等。</p>
+</li>
+<li><p>BaseServiceImpl：路径 <code>tp-common-1.0.jar/com/tp/base/service/</code> 基础的 Service 实现类，所有业务模块的 Server 均继承该类，此类中实现了基础的 CRUD。</p>
+</li>
+<li><p>AuthenticationInterceptor：路径 <code>tp-common-1.0.jar/com/tp/interceptor/</code> 判断当前用户是否有权限访问系统资源的一个拦截器（springmvc interceptor）。</p>
+</li>
+<li><p>LoggerInterceptor：路径 <code>tp-common-1.0.jar/com/tp/interceptor/</code> 用于记录用户操作日志的拦截器（springmvc interceptor）。</p>
+</li>
+<li><p>ParameterInterceptor：路径 <code>tp-common-1.0.jar/com/tp/interceptor/</code> 前台传递参数到后台执行 SQL 语句的拦截器（mybatis interceptor）。</p>
+</li>
+<li><p>SqlTimeInterceptor：路径 <code>tp-common-1.0.jar/com/tp/interceptor/</code> 记录 SQL 日志信息的拦截器（mybatis interceptor）。</p>
+</li>
+<li><p>common.js：路径 <code>resource/plugin/</code> 封装了很多公用的 JS 方法，封装的原因好比系统中的提示框，现在用的 layer，如果有一天不再用这个 layer 了，直接修改 common.js 里面的公共方法，则所有业务模块的提示框就全变了，而不用到每个业务模块中到处进行修改。便于统一管理和维护。</p>
+</li>
+</ul>
+<h2 id="前台公共方法简介"><a href="#前台公共方法简介" class="headerlink" title="前台公共方法简介"></a>前台公共方法简介</h2><ol>
+<li>获取 URL 上面的参数：$.getParameter(“参数名”)；</li>
+<li>日志格式化：$.formatDate(“yyyy-MM-dd hh:mm:ss” , new Date())；</li>
+<li>加载右侧页面：Util.load(加载的 URL 地址 , 加载前回调 , 加载后回调)；</li>
+<li>分页获取列表：Util. getPageObjListByForm(参数)；</li>
+<li>发送异步请求：Util. ajax(参数)；</li>
+<li>渲染模板：Util. renderTemplet(参数)；</li>
+<li>获取 token：Util. getToken(参数)；</li>
+<li>删除记录：Util. deleteRecord(参数)；</li>
+<li>渲染列表：Util. dataTables(参数)；</li>
+<li>页面表单弹窗：Util. formModal(参数)；</li>
+<li>字典转换：Util. convertSysDic(字典表名，key)；</li>
+<li>设置浏览器的 hash 值：Util. setHash(hash 值)；</li>
+<li>替换指定的 hash 值：Util. replaceHash(key , value)；</li>
+<li>获取 hash 值：Util. getHash(hash , key , 默认值)；</li>
+<li>判断对象是否为空：Util. isNotEmpty(值)；</li>
+<li>截取字符串：Util. subStr(字符串，长度)；</li>
+<li>联想：Util. autocomplete()；</li>
+<li>设置 cookie：Util. setCookie(键，值，过期时间)；</li>
+<li>获取 cookie：Util. getCookie(键)；</li>
+<li>裁剪图片：Util.crop(回调，模块名字，操作类型，图片路径，宽度，高度，X 轴，Y 轴)；</li>
+<li>系统提示，操作成功：Msg.success(提示信息)；</li>
+<li>系统提示，操作失败：Msg.error(提示信息)；</li>
+<li>系统提示，警告：Msg.warning(提示信息，回调函数)；</li>
+<li>系统提示，信息：Msg.info(提示信息)；</li>
+<li>系统提示，确认：Msg.confirm(提示信息，回调函数)；</li>
+<li>加载条：Msg.load();</li>
+<li>关闭系统提示：Msg.close(提示对象)；</li>
+<li>页面弹出层：Msg.open(配置参数);</li>
+</ol>
+<h2 id="页面中的公共依赖组件"><a href="#页面中的公共依赖组件" class="headerlink" title="页面中的公共依赖组件"></a>页面中的公共依赖组件</h2><ol>
+<li>日期 my97，具体功能参见：<a target="_blank" rel="noopener" href="http://www.my97.net/">http://www.my97.net/</a></li>
+<li>树组件 zTree，具体功能参见：<a target="_blank" rel="noopener" href="http://www.treejs.cn/">http://www.treejs.cn/</a></li>
+<li>系统弹出框 layer，具体功能参见：<a target="_blank" rel="noopener" href="http://layer.layui.com/">http://layer.layui.com/</a></li>
+<li>上传组件 webuploader，具体功能参见：<a target="_blank" rel="noopener" href="http://fex.baidu.com/webuploader/">http://fex.baidu.com/webuploader/</a></li>
+<li>页面图表 echart，具体功能参见：<a target="_blank" rel="noopener" href="http://echarts.baidu.com/">http://echarts.baidu.com/</a></li>
+<li>模板渲染 artTemplate，具体功能参见：<a target="_blank" rel="noopener" href="https://github.com/aui/artTemplate">https://github.com/aui/artTemplate</a></li>
+<li>表格插件 datatables，具体功能参见：<a target="_blank" rel="noopener" href="http://datatables.club/">http://datatables.club/</a></li>
+<li>前台校验 jQuery Validation，具体功能参见：<a target="_blank" rel="noopener" href="http://jqueryvalidation.org/">http://jqueryvalidation.org/</a></li>
+<li>网站使用的响应式布局框架 bootstrap，具体说明参见：<a target="_blank" rel="noopener" href="http://www.bootcss.com/">http://www.bootcss.com/</a></li>
+</ol>
+<h1 id="开发习惯养成"><a href="#开发习惯养成" class="headerlink" title="开发习惯养成"></a>开发习惯养成</h1><h2 id="前台编码注意事项"><a href="#前台编码注意事项" class="headerlink" title="前台编码注意事项"></a>前台编码注意事项</h2><ol>
+<li>尽量减少 HTTP 请求个数：合并图片，CSS，JS，避免没有必要的数据请求；</li>
+<li>避免空的 src 和 href：留意具有这两个属性的标签如 link，script，img，iframe 等；</li>
+<li>使用 gzip 压缩内容：压缩所有可能的文件类型以来减少文件体积；</li>
+<li>把 CSS 放到顶部，把 JS 放到底部：确保用户至少能早一点看到界面，让网站看起来至少反应快一点，所以应该把必须的 js 和 css 放顶部，把不那么重要的 css 和 js 放底部；</li>
+<li>自己写的 JS 里面注意使用命名空间，在使用 hashchange 的时候注意不要产生多余的事件处理。在 JSP 中自定义页面 Id 的时候要尽量不要和其他页面中的 Id 重复。</li>
+</ol>
+<h2 id="后台编码注意事项"><a href="#后台编码注意事项" class="headerlink" title="后台编码注意事项"></a>后台编码注意事项</h2><ol>
+<li>系统级别的配置请使用系统常量进行声明（见： SystemConstant ）；</li>
+<li>如果想加日志的输出请使用 slf4j 按日志级别进行输出；</li>
+<li>在自定义的 Action 当中无需自己重复注入自身所依赖的 Service，直接使用即可；</li>
+<li>同理在自定义的 Service 之中无需自己重复注入自身所依赖的 Mapper，直接使用即可；</li>
+<li>如果需要事务包裹，请在自己的 Service 方法上使用 @Transactional 注解；</li>
+<li>为减少不必要的麻烦，请不要在 XML 文件的 SQL 语句中带有中文；</li>
+<li>为了防止 SQL 注入，前台传递到 SQL 中的参数均进行了 SQL 关键字的特殊处理，如需忽略系统的转换，请在指定的 SQL 语句中使用“&#x2F;<em>ignoreParameter</em>&#x2F;”进行说明。为此出现的 SQL 攻击，请自行解决。</li>
+</ol>
+<h2 id="SQL-语句注意事项"><a href="#SQL-语句注意事项" class="headerlink" title="SQL 语句注意事项"></a>SQL 语句注意事项</h2><ol>
+<li><p>获取唯一 一行时使用 limit 1：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> user_id , user_name <span class="keyword">from</span> sys_uicm_user <span class="keyword">where</span> id_number <span class="operator">=</span>‘<span class="number">09901</span>’</span><br></pre></td></tr></table></figure>
+
+<p>与</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> user_id , user_name <span class="keyword">from</span> sys_uicm_user <span class="keyword">where</span> id_number <span class="operator">=</span>‘<span class="number">09901</span>’ limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>当你已经知道获取的记录只有一行时，请将 limit 1 添加到 where 语句后面。这样数据库引擎在找到第一个符合条件的记录后就停止扫描了，而不是遍历整个表或索引。</p>
+</li>
+<li><p>避免使用 select *：<br>从表中读取的数据越多，查询速度越慢。增加了磁盘操作所需的时间，数据库与 web 服务器分开时，增加了网络传输的 IO，同理 web 服务器和客户端也存在网络的传输。也增加了服务器将查询出来的对象进行 json 序列化所需的时间。</p>
+</li>
+<li><p>数据库中的字段类型与所占空间大小适当（如：使用 INT 来存储 IP 地址）：<br>一般存储一个 IP 字段至少是 varchar(15)，如果用 INT 只需要 4 个字节的空间，而且字段长度固定。</p>
+</li>
+<li><p>大表分页：<br>当起始页较小时，查询没有性能问题。随着起始记录的增加，时间也随着增大。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select * from  user  limit 10, 20   0.016 秒</span><br><span class="line">select * from  user  limit 10000, 20   0.094 秒</span><br><span class="line">select * from  user  limit 400000, 20   3.229 秒</span><br><span class="line">SELECT * FROM  user  a JOIN (select id from  user  limit  400000, 20) b ON a.id = b.id 0.2 秒</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="SQL-语句调优基本原则"><a href="#SQL-语句调优基本原则" class="headerlink" title="SQL 语句调优基本原则"></a>SQL 语句调优基本原则</h2><ol>
+<li>避免全表扫描；</li>
+<li>建立索引（合理使用索引，索引一定不是越多越好）；</li>
+<li>尽量避免大事务操作（事务时间尽可能短），提高系统并发能力；</li>
+<li>尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理；</li>
+<li>语句中字段比较的时候，请使用同类型比较；</li>
+<li>尽量避免在 where 子句中对字段进行表达式操作和函数操作；</li>
+<li>应尽量避免在 where 子句中使用 or 来连接条件,可以考虑使用 union 代替；</li>
+<li>使用 union all 替代 union ，因为 union 有去重开销；</li>
+<li>应尽量避免在 where 子句中使用 !&#x3D; 或 &lt;&gt; 操作符，否则将引擎放弃使用索引而进行全表扫描；</li>
+<li>in 和 not in 也要慎用，对于连续的数值，能用 between 就不要用 in，exists 代替 in；</li>
+<li>不用 select * ， 消耗 cpu，io，内存，带宽；</li>
+<li>尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销；</li>
+<li>尽可能的使用 varchar&#x2F;nvarchar 代替 char&#x2F;nchar ，因为变长字段存储空间小，对于查询来说，在一个相对较小的字段内搜索效率显然要高些；</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>基础开发培训</p><p><a href="https://blog.buubiu.com/基础开发培训/">https://blog.buubiu.com/基础开发培训/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-07-14</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Java/">Java</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/">开发框架</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%96%87%E6%A1%A3/">文档</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-Java%E6%A6%82%E8%BF%B0%E7%AF%87/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Java基础知识 Java概述篇</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/DataGrip%EF%BC%9A%E5%A6%82%E4%BD%95%E4%BB%A5SYSDBA%E8%BA%AB%E4%BB%BD%E8%BF%9E%E6%8E%A5%E5%88%B0Oracle/"><span class="level-item">DataGrip：如何以SYSDBA身份连接到Oracle</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#开发语言介绍"><span class="level-left"><span class="level-item">1</span><span class="level-item">开发语言介绍</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#前台-Bootstrap"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">前台 Bootstrap</span></span></a></li><li><a class="level is-mobile" href="#后台-Java-代码"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">后台 Java 代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#开发工具介绍"><span class="level-left"><span class="level-item">2</span><span class="level-item">开发工具介绍</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#开发工具"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">开发工具</span></span></a></li><li><a class="level is-mobile" href="#中间件"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">中间件</span></span></a></li><li><a class="level is-mobile" href="#数据库"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">数据库</span></span></a></li></ul></li><li><a class="level is-mobile" href="#SVN-使用介绍"><span class="level-left"><span class="level-item">3</span><span class="level-item">SVN 使用介绍</span></span></a></li><li><a class="level is-mobile" href="#数据库介绍"><span class="level-left"><span class="level-item">4</span><span class="level-item">数据库介绍</span></span></a></li><li><a class="level is-mobile" href="#开发框架简介"><span class="level-left"><span class="level-item">5</span><span class="level-item">开发框架简介</span></span></a></li><li><a class="level is-mobile" href="#开发组件简介"><span class="level-left"><span class="level-item">6</span><span class="level-item">开发组件简介</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#后台目录结构"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">后台目录结构</span></span></a></li><li><a class="level is-mobile" href="#前台目录结构"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">前台目录结构</span></span></a></li><li><a class="level is-mobile" href="#配置文件介绍"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">配置文件介绍</span></span></a></li><li><a class="level is-mobile" href="#简单的增删改查"><span class="level-left"><span class="level-item">6.4</span><span class="level-item">简单的增删改查</span></span></a></li><li><a class="level is-mobile" href="#代码结构及其分布"><span class="level-left"><span class="level-item">6.5</span><span class="level-item">代码结构及其分布</span></span></a></li><li><a class="level is-mobile" href="#几个基础的公共类"><span class="level-left"><span class="level-item">6.6</span><span class="level-item">几个基础的公共类</span></span></a></li><li><a class="level is-mobile" href="#前台公共方法简介"><span class="level-left"><span class="level-item">6.7</span><span class="level-item">前台公共方法简介</span></span></a></li><li><a class="level is-mobile" href="#页面中的公共依赖组件"><span class="level-left"><span class="level-item">6.8</span><span class="level-item">页面中的公共依赖组件</span></span></a></li></ul></li><li><a class="level is-mobile" href="#开发习惯养成"><span class="level-left"><span class="level-item">7</span><span class="level-item">开发习惯养成</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#前台编码注意事项"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">前台编码注意事项</span></span></a></li><li><a class="level is-mobile" href="#后台编码注意事项"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">后台编码注意事项</span></span></a></li><li><a class="level is-mobile" href="#SQL-语句注意事项"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">SQL 语句注意事项</span></span></a></li><li><a class="level is-mobile" href="#SQL-语句调优基本原则"><span class="level-left"><span class="level-item">7.4</span><span class="level-item">SQL 语句调优基本原则</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

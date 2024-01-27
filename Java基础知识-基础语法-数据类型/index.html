@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java基础知识 基础语法-数据类型 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Java 有哪些数据类型定义： Java 语言是强类型语言，对于每一种数据都定义了明确的具体的数据类型，在内存中分配了不同大小的内存空间。"><meta property="og:type" content="blog"><meta property="og:title" content="Java基础知识 基础语法-数据类型"><meta property="og:url" content="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="Java 有哪些数据类型定义： Java 语言是强类型语言，对于每一种数据都定义了明确的具体的数据类型，在内存中分配了不同大小的内存空间。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://i.loli.net/2020/07/17/b5hQATuviMD8Xk4.png"><meta property="og:image" content="https://i.loli.net/2020/07/17/c85lMYxei9WKE6L.png"><meta property="article:published_time" content="2020-07-17T01:51:05.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.859Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Java"><meta property="article:tag" content="面试题"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://i.loli.net/2020/07/17/b5hQATuviMD8Xk4.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"},"headline":"Java基础知识 基础语法-数据类型","image":["https://i.loli.net/2020/07/17/b5hQATuviMD8Xk4.png","https://i.loli.net/2020/07/17/c85lMYxei9WKE6L.png"],"datePublished":"2020-07-17T01:51:05.000Z","dateModified":"2024-01-25T15:08:05.859Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"Java 有哪些数据类型定义： Java 语言是强类型语言，对于每一种数据都定义了明确的具体的数据类型，在内存中分配了不同大小的内存空间。"}</script><link rel="canonical" href="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-07-17T01:51:05.000Z" title="7/17/2020, 9:51:05 AM">2020-07-17</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.859Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Java/">Java</a></span><span class="level-item">22 分钟读完 (大约3265个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Java基础知识 基础语法-数据类型</h1><div class="content"><h2 id="Java-有哪些数据类型"><a href="#Java-有哪些数据类型" class="headerlink" title="Java 有哪些数据类型"></a>Java 有哪些数据类型</h2><p><strong>定义：</strong> <code>Java</code> 语言是强类型语言，对于每一种数据都定义了明确的具体的数据类型，在内存中分配了不同大小的内存空间。</p>
+<span id="more"></span>
+
+<p><strong>分类</strong></p>
+<ul>
+<li>基本数据类型<ul>
+<li>数值型<ul>
+<li>整数类型(<code>byte</code>,<code>short</code>,<code>int</code>,<code>long</code>)</li>
+<li>浮点类型(<code>float</code>,<code>double</code>)</li>
+</ul>
+</li>
+<li>字符型(<code>char</code>)</li>
+<li>布尔型(<code>boolean</code>)</li>
+</ul>
+</li>
+<li>引用数据类型</li>
+<li>类(<code>class</code>)</li>
+<li>接口(<code>interface</code>)</li>
+<li>数组(<code>[]</code>)</li>
+</ul>
+<p><strong>Java 基本数据类型图</strong></p>
+<img src='https://i.loli.net/2020/07/17/b5hQATuviMD8Xk4.png'/>
+
+<p><strong>switch 是否能作用在 byte 上，是否能作用在 long 上，是否能作用在 String 上</strong></p>
+<p>在 <code>Java 5</code> 以前，<code>switch(expr)</code>中，<code>expr</code> 只能是 <code>byte、short、char、int</code>。从 <code>Java5</code> 开始，<code>Java</code> 中引入了枚举类型，<code>expr</code> 也可以是 <code>enum</code> 类型，从 <code>Java 7</code> 开始，<code>expr</code> 还可以是字符串（<code>String</code>），但是长整型（<code>long</code>）在目前所有的版本中都是不可以的。</p>
+<p><strong>用最有效率的方法计算 2 乘以 8</strong></p>
+<p><code>2 &lt;&lt; 3</code>（左移 3 位相当于乘以 2 的 3 次方，右移 3 位相当于除以 2 的 3 次方）。</p>
+<p><strong>Math.round(11.5) 等于多少？Math.round(-11.5)等于多少</strong></p>
+<p><code>Math.round(11.5)</code>的返回值是 <code>12</code>，<code>Math.round(-11.5)</code>的返回值是<code>-11</code>。四舍五入的原理是在参数上加 <code>0.5</code> 然后进行下取整。</p>
+<p><strong>float f&#x3D;3.4;是否正确</strong></p>
+<p>不正确。<code>3.4</code> 是双精度数，将双精度型（<code>double</code>）赋值给浮点型（<code>float</code>）属于下转型（<code>down-casting</code>，也称为窄化）会造成精度损失，因此需要强制类型转换 <code>float f =(float)3.4</code>; 或者写成 <code>float f =3.4F</code>;。</p>
+<p><strong>short s1 &#x3D; 1; s1 &#x3D; s1 + 1;有错吗?short s1 &#x3D; 1; s1 +&#x3D; 1;有错吗</strong></p>
+<p>对于 <code>short s1 = 1; s1 = s1 + 1;</code>由于 <code>1</code> 是 <code>int</code> 类型，因此 <code>s1+1</code> 运算结果也是 <code>int</code> 型，需要强制转换类型才能赋值给 <code>short</code> 型。</p>
+<p>而 <code>short s1 = 1; s1 += 1;</code>可以正确编译，因为 <code>s1+= 1;</code>相当于 <code>s1 = (short(s1 + 1);</code>其中有隐含的强制类型转换。</p>
+<h2 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h2><p><strong>Java 语言采用何种编码方案？有何特点？</strong></p>
+<p><code>Java</code> 语言采用 <code>Unicode</code> 编码标准，<code>Unicode</code>（标准码），它为每个字符制订了一个唯一的数值，因此在任何的语言，平台，程序都可以放心的使用。</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p><strong>什么是 Java 注释</strong></p>
+<p><strong>定义：</strong> 用于解释说明程序的文字</p>
+<p><strong>分类</strong></p>
+<ul>
+<li>单行注释<br>格式： <code>// 注释文字</code></li>
+<li>多行注释<br>格式： <code>/* 注释文字 */</code></li>
+<li>文档注释<br>格式：<code>/** 注释文字 */</code></li>
+</ul>
+<p><strong>作用</strong></p>
+<p>在程序中，尤其是复杂的程序中，适当地加入注释可以增加程序的可读性，有利于程序的修改、调试和交流。注释的内容在程序编译的时候会被忽视，不会产生目标代码，注释的部分不会对程序的执行结果产生任何影响。</p>
+<p>注意事项：多行和文档注释都不能嵌套使用。</p>
+<h2 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h2><p><strong>访问修饰符 <code>public,private,protected</code>,以及<code>不写（默认）</code>时的区别</strong></p>
+<p><strong>定义：</strong> <code>Java</code> 中，可以使用访问修饰符来保护对类、变量、方法和构造方法的访问。<code>Java</code> 支持 <code>4</code> 种不同的访问权限。</p>
+<p><strong>分类</strong></p>
+<p><strong><code>private</code> :</strong> 在同一类内可见。使用对象：变量、方法。 注意：不能修饰类（外部类）</p>
+<p><strong><code>default</code> (即缺省，什么也不写，不使用任何关键字）:</strong> 在同一包内可见，不使用任何修饰符。使用对象：类、接口、变量、方法。</p>
+<p><strong><code>protected</code> :</strong> 对同一包内的类和所有子类可见。使用对象： 变量、方法。 注意：不能修饰类（外部类）。</p>
+<p><strong><code>public</code> :</strong> 对所有类可见。使用对象：类、接口、变量、方法</p>
+<p><strong>访问修饰符图</strong></p>
+<img src='https://i.loli.net/2020/07/17/c85lMYxei9WKE6L.png' />
+
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><p><strong><code>&amp;</code>和<code>&amp;&amp;</code>的区别</strong></p>
+<p><code>&amp;</code>运算符有两种用法：(1)按位与；(2)逻辑与。</p>
+<p><code>&amp;&amp;</code>运算符是短路与运算。逻辑与跟短路与的差别是非常巨大的，虽然二者都要求运算符左右两端的布尔值都是 <code>true</code> 整个表达式的值才是 <code>true</code>。<code>&amp;&amp;</code>之所以称为短路运算，是因为如果<code>&amp;&amp;</code>左边的表达式的值是 <code>false</code>，右边的表达式会被直接短路掉，不会进行运算。</p>
+<p>注意：逻辑或运算符（<code>|</code>）和短路或运算符（<code>||</code>）的差别也是如此。</p>
+<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><p><strong>Java 有没有 goto</strong></p>
+<p><code>goto</code> 是 <code>Java</code> 中的保留字，在目前版本的 <code>Java</code> 中没有使用。</p>
+<p><strong>final 有什么用？</strong></p>
+<p>用于修饰<code>类</code>、<code>属性</code>和<code>方法</code>；</p>
+<ul>
+<li>被 <code>final</code> 修饰的类不可以被继承</li>
+<li>被 <code>final</code> 修饰的方法不可以被重写</li>
+<li>被 <code>final</code> 修饰的变量不可以被改变，被 <code>final</code> 修饰不可变的是变量的引用，而不是引用指向的内容，引用指向的内容是可以改变的</li>
+</ul>
+<p><strong>final finally finalize 区别</strong></p>
+<ul>
+<li><code>final</code> 可以修饰类、变量、方法，修饰类表示该类不能被继承、修饰方法表示该方法不能被重写、修饰变量表示该变量是一个常量不能被重新赋值。</li>
+<li><code>finally</code> 一般作用在 <code>try-catch</code> 代码块中，在处理异常的时候，通常我们将一定要执行的代码方法 <code>finally</code> 代码块中，表示不管是否出现异常，该代码块都会执行,一般用来存放一些关闭资源的代码。</li>
+<li><code>finalize</code> 是一个方法，属于 <code>Object</code> 类的一个方法，而 <code>Object</code> 类是所有类的父类，该方法一般由垃圾回收器来调用，当我们调用 <code>System.gc()</code> 方法的时候，由垃圾回收器调用 <code>finalize()</code>回收垃圾，一个对象是否可回收的最后判断。</li>
+</ul>
+<p><strong>this 关键字的用法</strong></p>
+<p><code>this</code> 是自身的一个对象，代表对象本身，可以理解为：指向对象本身的一个指针。</p>
+<p><code>this</code> 的用法在 <code>java</code> 中大体可以分为 <code>3</code> 种：</p>
+<ol>
+<li><p>普通的直接引用，<code>this</code> 相当于是指向当前对象本身。</p>
+</li>
+<li><p>形参与成员名字重名，用 <code>this</code> 来区分：</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.name = name;</span><br><span class="line">    <span class="built_in">this</span>.age = age;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>引用本类的构造函数</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>(name);</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>super 关键字的用法</strong></p>
+<p><code>super</code> 可以理解为是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。</p>
+<p><code>super</code> 也有三种用法：</p>
+<ol>
+<li>普通的直接引用</li>
+</ol>
+<p>与 <code>this</code> 类似，<code>super</code> 相当于是指向当前对象的父类的引用，这样就可以用 <code>super.xxx</code> 来引用父类的成员。</p>
+<ol start="2">
+<li>子类中的成员变量或方法与父类中的成员变量或方法同名时，用 <code>super</code> 进行区分</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span> <span class="keyword">extends</span> <span class="title class_">Person</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">(String name, String name1)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">        <span class="built_in">this</span>.name = name1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getInfo</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="built_in">this</span>.name);      <span class="comment">//Child</span></span><br><span class="line">        System.out.println(<span class="built_in">super</span>.name);     <span class="comment">//Father</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="type">Student</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;Father&quot;</span>,<span class="string">&quot;Child&quot;</span>);</span><br><span class="line">       s1.getInfo();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>引用父类构造函数</li>
+</ol>
+<ul>
+<li><code>super</code>（参数）：调用父类中的某一个构造函数（应该为构造函数中的第一条语句）。</li>
+<li><code>this</code>（参数）：调用本类中另一种形式的构造函数（应该为构造函数中的第一条语句）</li>
+</ul>
+<p><strong>this 与 super 的区别</strong></p>
+<ul>
+<li><code>super:</code>它引用当前对象的直接父类中的成员（用来访问直接父类中被隐藏的父类中成员数据或函数，基类与派生类中有相同成员定义时如：<code>super.变量名</code> <code>super.成员函数数据名（实参）</code></li>
+<li><code>this:</code>它代表当前对象名（在程序中易产生二义性之处，应使用 <code>this</code> 来指明当前对象；如果函数的形参与类中的成员数据同名，这时需用 <code>this</code> 来指明成员变量名）</li>
+<li><code>super()</code>和 <code>this()</code>类似,区别是，<code>super()</code>在子类中调用父类的构造方法，<code>this()</code>在本类内调用本类的其它构造方法。</li>
+<li><code>super()</code>和 <code>this()</code>均需放在构造方法内第一行。</li>
+<li>尽管可以用 <code>this</code> 调用一个构造器，但却不能调用两个。</li>
+<li><code>this</code> 和 <code>super</code> 不能同时出现在一个构造函数里面，因为 <code>this</code> 必然会调用其它的构造函数，其它的构造函数必然也会有 <code>super</code> 语句的存在，所以在同一个构造函数里面有相同的语句，就失去了语句的意义，编译器也不会通过。</li>
+<li><code>this()</code>和 <code>super()</code>都指的是对象，所以，均不可以在 <code>static</code> 环境中使用。包括：<code>static 变量</code>,<code>static 方法</code>，<code>static 语句块</code>。</li>
+<li>从本质上讲，<code>this</code> 是一个指向本对象的指针, 然而 <code>super</code> 是一个 <code>Java</code> 关键字。</li>
+</ul>
+<p><strong>static 存在的主要意义</strong></p>
+<p><code>static</code> 的主要意义是在于创建独立于具体对象的域变量或者方法。以致于即使没有创建对象，也能使用属性和调用方法！</p>
+<p><code>static</code> 关键字还有一个比较关键的作用就是 用来形成静态代码块以优化程序性能。<code>static</code> 块可以置于类中的任何地方，类中可以有多个 <code>static</code> 块。在类初次被加载的时候，会按照 <code>static</code> 块的顺序来执行每个 <code>static</code> 块，并且只会执行一次。</p>
+<p>为什么说 <code>static</code> 块可以用来优化程序性能，是因为它的特性:<strong>只会在类加载的时候执行一次</strong>。因此，很多时候会将一些只需要进行一次的初始化操作都放在 <code>static</code> 代码块中进行。</p>
+<p><strong>static 的独特之处</strong></p>
+<ol>
+<li>被 <code>static</code> 修饰的变量或者方法是独立于该类的任何对象，也就是说，这些变量和方法不属于任何一个实例对象，而是被类的实例对象所共享。</li>
+</ol>
+<blockquote>
+<p>怎么理解 “被类的实例对象所共享” 这句话呢？就是说，一个类的静态成员，它是属于大伙的【大伙指的是这个类的多个对象实例，我们都知道一个类可以创建多个实例！】，所有的类对象共享的，不像成员变量是自个的【自个指的是这个类的单个实例对象】…我觉得我已经讲的很通俗了，你明白了咩？</p>
+</blockquote>
+<ol start="2">
+<li><p>在该类被第一次加载的时候，就会去加载被 <code>static</code> 修饰的部分，而且只在类第一次使用时加载并进行初始化，注意这是第一次用就要初始化，后面根据需要是可以再次赋值的。</p>
+</li>
+<li><p><code>static</code> 变量值在类加载的时候分配空间，以后创建类对象的时候不会重新分配。赋值的话，是可以任意赋值的！</p>
+</li>
+<li><p>被 <code>static</code> 修饰的变量或者方法是优先于对象存在的，也就是说当一个类加载完毕之后，即便没有创建对象，也可以去访问。</p>
+</li>
+</ol>
+<p><strong>static 应用场景</strong></p>
+<p>因为 <code>static</code> 是被类的实例对象所共享，因此如果某个成员变量是被所有对象所共享的，那么这个成员变量就应该定义为静态变量。</p>
+<p>因此比较常见的 <code>static</code> 应用场景有：</p>
+<ol>
+<li>修饰成员变量</li>
+<li>修饰成员方法</li>
+<li>静态代码块</li>
+<li>修饰类【只能修饰内部类也就是静态内部类】</li>
+<li>静态导包</li>
+</ol>
+<p><strong>static 注意事项</strong></p>
+<ol>
+<li>静态只能访问静态。</li>
+<li>非静态既可以访问非静态的，也可以访问静态的。</li>
+</ol>
+<h2 id="流程控制语句"><a href="#流程控制语句" class="headerlink" title="流程控制语句"></a>流程控制语句</h2><p><strong>break ,continue ,return 的区别及作用</strong></p>
+<p><code>break</code> 跳出总上一层循环，不再执行循环(结束当前的循环体)</p>
+<p><code>continue</code> 跳出本次循环，继续执行下次循环(结束正在执行的循环 进入下一个循环条件)</p>
+<p><code>return</code> 程序返回，不再执行下面的代码(结束当前的方法 直接返回)</p>
+<p><strong>在 Java 中，如何跳出当前的多重嵌套循环</strong></p>
+<p>在 <code>Java</code> 中，要想跳出多重循环，可以在外面的循环语句前定义一个标号，然后在里层循环体的代码中使用带有标号的 <code>break</code> 语句，即可跳出外层循环。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    ok:</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">10</span>; j++) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;i=&quot;</span> + i + <span class="string">&quot;,j=&quot;</span> + j);</span><br><span class="line">            <span class="keyword">if</span> (j == <span class="number">5</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span> ok;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color=gray size=2>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ThinkWon">https://blog.csdn.net/ThinkWon</a></font></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Java基础知识 基础语法-数据类型</p><p><a href="https://blog.buubiu.com/Java基础知识-基础语法-数据类型/">https://blog.buubiu.com/Java基础知识-基础语法-数据类型/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-07-17</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Java/">Java</a><a class="link-muted mr-2" rel="tag" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Java基础知识 基础语法-面向对象</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/WebLogic-%E5%AE%89%E8%A3%85%E8%A1%A5%E4%B8%81/"><span class="level-item">WebLogic 安装补丁</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Java-有哪些数据类型"><span class="level-left"><span class="level-item">1</span><span class="level-item">Java 有哪些数据类型</span></span></a></li><li><a class="level is-mobile" href="#编码"><span class="level-left"><span class="level-item">2</span><span class="level-item">编码</span></span></a></li><li><a class="level is-mobile" href="#注释"><span class="level-left"><span class="level-item">3</span><span class="level-item">注释</span></span></a></li><li><a class="level is-mobile" href="#访问修饰符"><span class="level-left"><span class="level-item">4</span><span class="level-item">访问修饰符</span></span></a></li><li><a class="level is-mobile" href="#运算符"><span class="level-left"><span class="level-item">5</span><span class="level-item">运算符</span></span></a></li><li><a class="level is-mobile" href="#关键字"><span class="level-left"><span class="level-item">6</span><span class="level-item">关键字</span></span></a></li><li><a class="level is-mobile" href="#流程控制语句"><span class="level-left"><span class="level-item">7</span><span class="level-item">流程控制语句</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

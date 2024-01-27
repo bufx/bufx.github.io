@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>并发编程-线程池ThreadPoolExecutor实现原理介绍 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="为什么要使用线程池在实际使用中，线程是很占用系统资源的，如果对线程管理不善很容易导致系统问题。因此，在大多数并发框架中都会使用线程池来管理线程，使用线程池管理线程主要有如下好处：  降低资源消耗。通过复用已存在的线程和降低线程关闭的次数来尽可能降低系统性能损耗； 提升系统响应速度。通过复用线程，省去创建线程的过程，因此整体上提升了系统的响应速度； 提高线程的可管理性。线程是稀缺资源，如果无限制的创"><meta property="og:type" content="blog"><meta property="og:title" content="并发编程-线程池ThreadPoolExecutor实现原理介绍"><meta property="og:url" content="https://blog.buubiu.com/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%B1%A0ThreadPoolExecutor%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="为什么要使用线程池在实际使用中，线程是很占用系统资源的，如果对线程管理不善很容易导致系统问题。因此，在大多数并发框架中都会使用线程池来管理线程，使用线程池管理线程主要有如下好处：  降低资源消耗。通过复用已存在的线程和降低线程关闭的次数来尽可能降低系统性能损耗； 提升系统响应速度。通过复用线程，省去创建线程的过程，因此整体上提升了系统的响应速度； 提高线程的可管理性。线程是稀缺资源，如果无限制的创"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/YArYJE1600852770988.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/4gBULW1600853117500.png"><meta property="article:published_time" content="2020-09-23T09:15:13.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.926Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Executor体系"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/YArYJE1600852770988.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%B1%A0ThreadPoolExecutor%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D/"},"headline":"并发编程-线程池ThreadPoolExecutor实现原理介绍","image":["https://blog.buubiu.com/img/article/YArYJE1600852770988.jpg","https://blog.buubiu.com/img/article/4gBULW1600853117500.png"],"datePublished":"2020-09-23T09:15:13.000Z","dateModified":"2024-01-25T15:08:05.926Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"为什么要使用线程池在实际使用中，线程是很占用系统资源的，如果对线程管理不善很容易导致系统问题。因此，在大多数并发框架中都会使用线程池来管理线程，使用线程池管理线程主要有如下好处：  降低资源消耗。通过复用已存在的线程和降低线程关闭的次数来尽可能降低系统性能损耗； 提升系统响应速度。通过复用线程，省去创建线程的过程，因此整体上提升了系统的响应速度； 提高线程的可管理性。线程是稀缺资源，如果无限制的创"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E6%B1%A0ThreadPoolExecutor%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%BB%8B%E7%BB%8D/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-23T09:15:13.000Z" title="9/23/2020, 5:15:13 PM">2020-09-23</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.926Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a><span> / </span><a class="link-muted" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Executor%E4%BD%93%E7%B3%BB/">Executor体系</a></span><span class="level-item">21 分钟读完 (大约3154个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">并发编程-线程池ThreadPoolExecutor实现原理介绍</h1><div class="content"><h2 id="为什么要使用线程池"><a href="#为什么要使用线程池" class="headerlink" title="为什么要使用线程池"></a>为什么要使用线程池</h2><p>在实际使用中，线程是很占用系统资源的，如果对线程管理不善很容易导致系统问题。因此，在大多数并发框架中都会使用<strong>线程池</strong>来管理线程，使用线程池管理线程主要有如下好处：</p>
+<ol>
+<li><strong>降低资源消耗</strong>。通过复用已存在的线程和降低线程关闭的次数来尽可能降低系统性能损耗；</li>
+<li><strong>提升系统响应速度</strong>。通过复用线程，省去创建线程的过程，因此整体上提升了系统的响应速度；</li>
+<li><strong>提高线程的可管理性</strong>。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，因此，需要使用线程池来管理线程。</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="线程池的工作原理"><a href="#线程池的工作原理" class="headerlink" title="线程池的工作原理"></a>线程池的工作原理</h2><p>当一个并发任务提交给线程池，线程池分配线程去执行任务的过程如下图所示：</p>
+<p><img src="/../img/article/YArYJE1600852770988.jpg"></p>
+<p>从图可以看出，线程池执行所提交的任务过程主要有这样几个阶段：</p>
+<ol>
+<li>先判断线程池中<strong>核心线程池</strong>所有的线程是否都在执行任务。如果不是，则新创建一个线程执行刚提交的任务，否则，核心线程池中所有的线程都在执行任务，则进入第2步；</li>
+<li>判断当前<strong>阻塞队列</strong>是否已满，如果未满，则将提交的任务放置在阻塞队列中；否则，则进入第3步；</li>
+<li>判断<strong>线程池中所有的线程</strong>是否都在执行任务，如果没有，则创建一个新的线程来执行任务，否则，则交给饱和策略进行处理</li>
+</ol>
+<h2 id="线程池的创建"><a href="#线程池的创建" class="headerlink" title="线程池的创建"></a>线程池的创建</h2><p>创建线程池主要是<strong>ThreadPoolExecutor</strong>类来完成，ThreadPoolExecutor的有许多重载的构造方法，通过参数最多的构造方法来理解创建线程池有哪些需要配置的参数。ThreadPoolExecutor的构造方法为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor(<span class="type">int</span> corePoolSize,</span><br><span class="line">                   <span class="type">int</span> maximumPoolSize,</span><br><span class="line">                   <span class="type">long</span> keepAliveTime,</span><br><span class="line">                   TimeUnit unit,</span><br><span class="line">                   BlockingQueue&lt;Runnable&gt; workQueue,</span><br><span class="line">                   ThreadFactory threadFactory,</span><br><span class="line">                   RejectedExecutionHandler handler)</span><br></pre></td></tr></table></figure>
+
+<p>下面对参数进行说明：</p>
+<ol>
+<li><p>corePoolSize：表示核心线程池的大小。当提交一个任务时，如果当前核心线程池的线程个数没有达到corePoolSize，<strong>即使当前核心线程池有空闲的线程</strong>，也会创建新的线程来执行所提交的任务。如果当前核心线程池的线程个数已经达到了corePoolSize，则不再重新创建线程。如果调用了<code>prestartCoreThread()</code>或者 <code>prestartAllCoreThreads()</code>，线程池创建的时候所有的核心线程都会被创建并且启动。</p>
+</li>
+<li><p>maximumPoolSize：表示线程池能创建线程的最大个数。如果当阻塞队列已满时，并且当前线程池线程个数没有超过maximumPoolSize的话，就会创建新的线程来执行任务。</p>
+</li>
+<li><p>keepAliveTime：空闲线程存活时间。如果当前线程池的线程个数已经超过了corePoolSize，并且线程空闲时间超过了keepAliveTime的话，就会将这些空闲线程销毁，这样可以尽可能降低系统资源消耗。</p>
+</li>
+<li><p>unit：时间单位。为keepAliveTime指定时间单位。</p>
+</li>
+<li><p>workQueue：阻塞队列。用于保存任务的阻塞队列，关于阻塞队列<a target="_blank" rel="noopener" href="https://www.buubiu.com/2020/09/23/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-BlockingQueue%E4%BB%8B%E7%BB%8D/">可以看这篇文章</a>。可以使用<strong>ArrayBlockingQueue, LinkedBlockingQueue, SynchronousQueue, PriorityBlockingQueue</strong>。</p>
+<ul>
+<li><p>ArrayBlockingQueue：一个用数组实现的有界阻塞队列，按照先入先出(FIFO)的原则对元素进行排序。<br>不保证线程公平访问队列，使用较少</p>
+</li>
+<li><p>LinkedBlockingQueue：一个用链表实现的有界阻塞队列，队列默认和最长长度为Integer.MAX_VALUE。<br>队列按照先入先出的原则对元素进行排序，使用较多</p>
+<ul>
+<li>吞吐量通常要高于 ArrayBlockingQueue</li>
+<li>Executors.newFixedThreadPool() 使用了这个队列</li>
+</ul>
+</li>
+<li><p>SynchronousQueue：不储存元素(无容量)的阻塞队列，每个put操作必须等待一个take操作，<br>否则不能继续添加元素。支持公平访问队列，常用于生产者，消费者模型，吞吐量较高，使用较多</p>
+<ul>
+<li>每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态</li>
+<li>吞吐量通常要高于 LinkedBlockingQueue</li>
+<li>Executors.newCachedThreadPool使用了这个队列</li>
+</ul>
+</li>
+<li><p>PriorityBlockingQueue：支持优先级的无界阻塞队列，使用较少</p>
+</li>
+</ul>
+</li>
+<li><p>threadFactory：创建线程的工厂类。可以通过指定线程工厂为每个创建出来的线程设置更有意义的名字，如果出现并发问题，也方便查找问题原因。</p>
+</li>
+<li><p>handler：饱和策略。当线程池的阻塞队列已满和指定的线程都已经开启，说明当前线程池已经处于饱和状态了，那么就需要采用一种策略来处理这种情况。采用的策略有这几种：</p>
+<ol>
+<li>AbortPolicy： 直接拒绝所提交的任务，并抛出<strong>RejectedExecutionException</strong>异常；</li>
+<li>CallerRunsPolicy：只用调用者所在的线程来执行任务；</li>
+<li>DiscardPolicy：不处理直接丢弃掉任务；</li>
+<li>DiscardOldestPolicy：丢弃掉阻塞队列中存放时间最久的任务，执行当前任务</li>
+<li>自定义策略</li>
+</ol>
+</li>
+</ol>
+<h2 id="线程池执行逻辑"><a href="#线程池执行逻辑" class="headerlink" title="线程池执行逻辑"></a>线程池执行逻辑</h2><p>通过ThreadPoolExecutor创建线程池后，提交任务后执行过程是怎样的，下面来通过源码来看一看。execute方法源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(Runnable command)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Proceed in 3 steps:</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 1. If fewer than corePoolSize threads are running, try to</span></span><br><span class="line"><span class="comment">     * start a new thread with the given command as its first</span></span><br><span class="line"><span class="comment">     * task.  The call to addWorker atomically checks runState and</span></span><br><span class="line"><span class="comment">     * workerCount, and so prevents false alarms that would add</span></span><br><span class="line"><span class="comment">     * threads when it shouldn&#x27;t, by returning false.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 2. If a task can be successfully queued, then we still need</span></span><br><span class="line"><span class="comment">     * to double-check whether we should have added a thread</span></span><br><span class="line"><span class="comment">     * (because existing ones died since last checking) or that</span></span><br><span class="line"><span class="comment">     * the pool shut down since entry into this method. So we</span></span><br><span class="line"><span class="comment">     * recheck state and if necessary roll back the enqueuing if</span></span><br><span class="line"><span class="comment">     * stopped, or start a new thread if there are none.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * 3. If we cannot queue task, then we try to add a new</span></span><br><span class="line"><span class="comment">     * thread.  If it fails, we know we are shut down or saturated</span></span><br><span class="line"><span class="comment">     * and so reject the task.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> ctl.get();</span><br><span class="line">	<span class="comment">//如果线程池的线程个数少于corePoolSize则创建新线程执行当前任务</span></span><br><span class="line">    <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">        <span class="keyword">if</span> (addWorker(command, <span class="literal">true</span>))</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        c = ctl.get();</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//如果线程个数大于corePoolSize或者创建线程失败，则将任务存放在阻塞队列workQueue中</span></span><br><span class="line">    <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">recheck</span> <span class="operator">=</span> ctl.get();</span><br><span class="line">        <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            reject(command);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</span><br><span class="line">            addWorker(<span class="literal">null</span>, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="comment">//如果当前任务无法放进阻塞队列中，则创建新的线程来执行任务</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="literal">false</span>))</span><br><span class="line">        reject(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ThreadPoolExecutor的execute方法执行逻辑请见注释。下图为ThreadPoolExecutor的execute方法的执行示意图：</p>
+<p><img src="/../img/article/4gBULW1600853117500.png"></p>
+<p>execute方法执行逻辑有这样几种情况：</p>
+<ol>
+<li>如果当前运行的线程少于corePoolSize，则会创建新的线程来执行新的任务；</li>
+<li>如果运行的线程个数等于或者大于corePoolSize，则会将提交的任务存放到阻塞队列workQueue中；</li>
+<li>如果当前workQueue队列已满的话，则会创建新的线程来执行任务；</li>
+<li>如果线程个数已经超过了maximumPoolSize，则会使用饱和策略RejectedExecutionHandler来进行处理。</li>
+</ol>
+<p>需要注意的是，线程池的设计思想就是使用了<strong>核心线程池corePoolSize，阻塞队列workQueue和线程池线程最大个数maximumPoolSize</strong>，这样的缓存策略来处理任务，实际上这样的设计思想在需要框架中都会使用。</p>
+<h2 id="线程池的关闭"><a href="#线程池的关闭" class="headerlink" title="线程池的关闭"></a>线程池的关闭</h2><p>关闭线程池，可以通过<code>shutdown</code>和<code>shutdownNow</code>这两个方法。它们的原理都是遍历线程池中所有的线程，然后依次中断线程。<code>shutdown</code>和<code>shutdownNow</code>还是有不一样的地方：</p>
+<ol>
+<li><code>shutdownNow</code>首先将线程池的状态设置为<strong>STOP</strong>，然后尝试<strong>停止所有的正在执行和未执行任务</strong>的线程，并返回等待执行任务的列表；</li>
+<li><code>shutdown</code>只是将线程池的状态设置为<strong>SHUTDOWN</strong>状态，然后中断所有没有正在执行任务的线程</li>
+</ol>
+<p>可以看出shutdown方法会将正在执行的任务继续执行完，而shutdownNow会直接中断正在执行的任务。调用了这两个方法的任意一个，<code>isShutdown</code>方法都会返回true，当所有的线程都关闭成功，才表示线程池成功关闭，这时调用<code>isTerminated</code>方法才会返回true。</p>
+<h2 id="如何合理配置线程池参数？"><a href="#如何合理配置线程池参数？" class="headerlink" title="如何合理配置线程池参数？"></a>如何合理配置线程池参数？</h2><p>要想合理的配置线程池，就必须首先分析任务特性，可以从以下几个角度来进行分析：</p>
+<ol>
+<li>任务的性质：CPU密集型任务，IO密集型任务和混合型任务。</li>
+<li>任务的优先级：高，中和低。</li>
+<li>任务的执行时间：长，中和短。</li>
+<li>任务的依赖性：是否依赖其他系统资源，如数据库连接。</li>
+</ol>
+<p>任务性质不同的任务可以用不同规模的线程池分开处理。CPU密集型任务配置尽可能少的线程数量，如配置<strong>CPU个数+1</strong>的线程数的线程池。IO密集型任务则由于需要等待IO操作，线程并不是一直在执行任务，则配置尽可能多的线程，如配置两倍CPU个数+1。混合型的任务，如果可以拆分，则将其拆分成一个CPU密集型任务和一个IO密集型任务，只要这两个任务执行的时间相差不是太大，那么分解后执行的吞吐率要高于串行执行的吞吐率，如果这两个任务执行时间相差太大，则没必要进行分解。我们可以通过<code>Runtime.getRuntime().availableProcessors()</code>方法获得当前设备的CPU个数。</p>
+<p>优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理。它可以让优先级高的任务先得到执行，需要注意的是如果一直有优先级高的任务提交到队列里，那么优先级低的任务可能永远不能执行。</p>
+<p>执行时间不同的任务可以交给不同规模的线程池来处理，或者也可以使用优先级队列，让执行时间短的任务先执行。</p>
+<p>依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。</p>
+<p>并且，阻塞队列<strong>最好是使用有界队列</strong>，如果采用无界队列的话，一旦任务积压在阻塞队列中的话就会占用过多的内存资源，甚至会使得系统崩溃。</p>
+<p>当然具体合理线程池值大小，需要结合系统实际情况，在大量的尝试下比较才能得出，以上只是前人总结的规律。</p>
+<p><strong>最佳线程数目</strong> &#x3D; （（线程等待时间+线程CPU运行时间）&#x2F;线程CPU运行时间 ）* CPU数目</p>
+<p>比如平均每个线程CPU运行时间为0.5s，而线程等待时间（非CPU运行时间，比如IO）为1.5s，CPU核心数为8，那么根据上面这个公式估算得到：((1.5+0.5)&#x2F;0.5)*8&#x3D;32。这个公式进一步转化为：</p>
+<p><strong>最佳线程数目</strong> &#x3D; （线程等待时间与线程CPU运行时间之比 + 1）* CPU数目</p>
+<p><strong>可以得出一个结论</strong>：<br><strong>线程等待时间所占比例越高，需要越多线程。线程CPU运行时间所占比例越高，需要越少线程。</strong><br>以上公式与之前的CPU和IO密集型任务设置线程数基本吻合。</p>
+<blockquote>
+<p>参考文献 《Java并发编程的艺术》</p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>并发编程-线程池ThreadPoolExecutor实现原理介绍</p><p><a href="https://blog.buubiu.com/并发编程-线程池ThreadPoolExecutor实现原理介绍/">https://blog.buubiu.com/并发编程-线程池ThreadPoolExecutor实现原理介绍/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-09-23</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Executor%E4%BD%93%E7%B3%BB/">Executor体系</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-Executors%E7%B1%BB%E5%88%9B%E5%BB%BA%E5%9B%9B%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%BA%BF%E7%A8%8B%E6%B1%A0/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">并发编程-Executors类创建四种常见线程池</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-ArrayBlockingQueue%E4%B8%8ELinkedBlockingQueue%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"><span class="level-item">并发编程-ArrayBlockingQueue与LinkedBlockingQueue实现原理 </span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#为什么要使用线程池"><span class="level-left"><span class="level-item">1</span><span class="level-item">为什么要使用线程池</span></span></a></li><li><a class="level is-mobile" href="#线程池的工作原理"><span class="level-left"><span class="level-item">2</span><span class="level-item">线程池的工作原理</span></span></a></li><li><a class="level is-mobile" href="#线程池的创建"><span class="level-left"><span class="level-item">3</span><span class="level-item">线程池的创建</span></span></a></li><li><a class="level is-mobile" href="#线程池执行逻辑"><span class="level-left"><span class="level-item">4</span><span class="level-item">线程池执行逻辑</span></span></a></li><li><a class="level is-mobile" href="#线程池的关闭"><span class="level-left"><span class="level-item">5</span><span class="level-item">线程池的关闭</span></span></a></li><li><a class="level is-mobile" href="#如何合理配置线程池参数？"><span class="level-left"><span class="level-item">6</span><span class="level-item">如何合理配置线程池参数？</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

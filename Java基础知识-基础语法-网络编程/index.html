@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java基础知识 基础语法-网络编程 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="计算机网络体系结构在计算机网络的基本概念中，分层次的体系结构是最基本的。计算机网络体系结构的抽象概念较多，在学习时要多思考。这些概念对后面的学习很有帮助。"><meta property="og:type" content="blog"><meta property="og:title" content="Java基础知识 基础语法-网络编程"><meta property="og:url" content="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="计算机网络体系结构在计算机网络的基本概念中，分层次的体系结构是最基本的。计算机网络体系结构的抽象概念较多，在学习时要多思考。这些概念对后面的学习很有帮助。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/F2sV2Q.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/8oAInT.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/Rpl7Ea.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/C8pvUP.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/AFh63R.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/2iOuHc.jpg"><meta property="article:published_time" content="2020-07-20T07:24:23.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.859Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Java"><meta property="article:tag" content="面试题"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/F2sV2Q.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"},"headline":"Java基础知识 基础语法-网络编程","image":["https://blog.buubiu.com/img/article/F2sV2Q.png","https://blog.buubiu.com/img/article/8oAInT.jpg","https://blog.buubiu.com/img/article/Rpl7Ea.png","https://blog.buubiu.com/img/article/C8pvUP.png","https://blog.buubiu.com/img/article/AFh63R.png","https://blog.buubiu.com/img/article/2iOuHc.jpg"],"datePublished":"2020-07-20T07:24:23.000Z","dateModified":"2024-01-25T15:08:05.859Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"计算机网络体系结构在计算机网络的基本概念中，分层次的体系结构是最基本的。计算机网络体系结构的抽象概念较多，在学习时要多思考。这些概念对后面的学习很有帮助。"}</script><link rel="canonical" href="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-07-20T07:24:23.000Z" title="7/20/2020, 3:24:23 PM">2020-07-20</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.859Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Java/">Java</a></span><span class="level-item">1 小时读完 (大约8664个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Java基础知识 基础语法-网络编程</h1><div class="content"><h2 id="计算机网络体系结构"><a href="#计算机网络体系结构" class="headerlink" title="计算机网络体系结构"></a>计算机网络体系结构</h2><p>在计算机网络的基本概念中，分层次的体系结构是最基本的。计算机网络体系结构的抽象概念较多，在学习时要多思考。这些概念对后面的学习很有帮助。</p>
+<span id="more"></span>
+
+<h2 id="网络协议是什么？"><a href="#网络协议是什么？" class="headerlink" title="网络协议是什么？"></a>网络协议是什么？</h2><p>在计算机网络要做到有条不紊地交换数据，就必须遵守一些事先约定好的规则，比如交换数据的格式、是否需要发送一个应答信息。这些规则被称为网络协议。</p>
+<h2 id="为什么要对网络协议分层？"><a href="#为什么要对网络协议分层？" class="headerlink" title="为什么要对网络协议分层？"></a>为什么要对网络协议分层？</h2><ul>
+<li>简化问题难度和复杂度。由于各层之间独立，我们可以分割大问题为小问题。</li>
+<li>灵活性好。当其中一层的技术变化时，只要层间接口关系保持不变，其他层不受影响。</li>
+<li>易于实现和维护。</li>
+<li>促进标准化工作。分开后，每层功能可以相对简单地被描述。</li>
+</ul>
+<p>网络协议分层的缺点： 功能可能出现在多个层里，产生了额外开销。</p>
+<p>为了使不同体系结构的计算机网络都能互联，国际标准化组织 <code>ISO</code> 于 <code>1977</code> 年提出了一个试图使各种计算机在世界范围内互联成网的标准框架，即著名的开放系统互联基本参考模型 <code>OSI/RM</code>，简称为 O<code>SI</code>。</p>
+<p><code>OSI</code> 的七层协议体系结构的概念清楚，理论也较完整，但它既复杂又不实用，<code>TCP/IP</code> 体系结构则不同，但它现在却得到了非常广泛的应用。<code>TCP/IP</code> 是一个四层体系结构，它包含应用层，运输层，网际层和网络接口层（用网际层这个名字是强调这一层是为了解决不同网络的互连问题），不过从实质上讲，<code>TCP/IP</code> 只有最上面的三层，因为最下面的网络接口层并没有什么具体内容，因此在学习计算机网络的原理时往往采用折中的办法，即综合 <code>OSI</code> 和 <code>TCP/IP</code> 的优点，采用一种只有五层协议的体系结构，这样既简洁又能将概念阐述清楚，有时为了方便，也可把最底下两层称为网络接口层。</p>
+<p>四层协议，五层协议和七层协议的关系如下：</p>
+<ul>
+<li><code>TCP/IP</code> 是一个四层的体系结构，主要包括：<strong>应用层、运输层、网际层和网络接口层</strong>。</li>
+<li>五层协议的体系结构主要包括：<strong>应用层、运输层、网络层，数据链路层和物理层</strong>。</li>
+<li><code>OSI</code> 七层协议模型主要包括是：<strong>应用层（<code>Application</code>）、表示层（<code>Presentation</code>）、会话层（<code>Session</code>）、运输层（<code>Transport</code>）、网络层（<code>Network</code>）、数据链路层（<code>Data Link</code>）、物理层（<code>Physical</code>）</strong>。</li>
+</ul>
+<img src='../img/article/F2sV2Q.png' style="zoom:50%"/>
+
+<p>注：五层协议的体系结构只是为了介绍网络原理而设计的，实际应用还是 <code>TCP/IP</code> 四层体系结构。</p>
+<h2 id="TCP-x2F-IP-协议族"><a href="#TCP-x2F-IP-协议族" class="headerlink" title="TCP&#x2F;IP 协议族"></a>TCP&#x2F;IP 协议族</h2><h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>应用层( <code>application layer</code>）的任务是通过应用进程间的交互来完成特定网络应用。应用层协议定义的是应用进程（进程：主机中正在运行的程序）间的通信和交互的规则。</p>
+<p>对于不同的网络应用需要不同的应用层协议。在互联网中应用层协议很多，如域名系统 <code>DNS</code>，支持万维网应用的 <code>HTTP</code> 协议，支持电子邮件的 <code>SMTP</code> 协议等等。</p>
+<h3 id="运输层"><a href="#运输层" class="headerlink" title="运输层"></a>运输层</h3><p>运输层(<code>transport layer</code>)的主要任务就是负责向两台主机进程之间的通信提供通用的数据传输服务。应用进程利用该服务传送应用层报文。</p>
+<p>运输层主要使用一下两种协议</p>
+<ol>
+<li>传输控制协议-<code>TCP</code>：提供面向连接的，可靠的数据传输服务。</li>
+<li>用户数据协议-<code>UDP</code>：提供无连接的，尽最大努力的数据传输服务（不保证数据传输的可靠性）。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>UDP</th>
+<th>TCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否连接</td>
+<td>无连接</td>
+<td>面向连接</td>
+</tr>
+<tr>
+<td>是否可靠</td>
+<td>不可靠传输，不使用流量控制和拥塞控制</td>
+<td>可靠传输，使用流量控制和拥塞控制</td>
+</tr>
+<tr>
+<td>连接对象个数</td>
+<td>支持一对一，一对多，多对一和多对多交互通信</td>
+<td>只能是一对一通信</td>
+</tr>
+<tr>
+<td>传输方式</td>
+<td>面向报文</td>
+<td>面向字节流</td>
+</tr>
+<tr>
+<td>首部开销</td>
+<td>首部开销小，仅 8 字节</td>
+<td>首部最小 20 字节，最大 60 字节</td>
+</tr>
+<tr>
+<td>场景</td>
+<td>适用于实时应用（IP 电话、视频会议、直播等）</td>
+<td>适用于要求可靠传输的应用，例如文件传输</td>
+</tr>
+</tbody></table>
+<p><strong>每一个应用层（TCP&#x2F;IP 参考模型的最高层）协议一般都会使用到两个传输层协议之一：</strong></p>
+<p>运行在 <code>TCP</code> 协议上的协议：</p>
+<ul>
+<li><code>HTTP</code>（<code>Hypertext Transfer Protocol</code>，超文本传输协议），主要用于普通浏览。</li>
+<li><code>HTTPS</code>（<code>HTTP over SSL</code>，安全超文本传输协议）,<code>HTTP</code> 协议的安全版本。</li>
+<li><code>FTP</code>（<code>File Transfer Protocol</code>，文件传输协议），用于文件传输。</li>
+<li><code>POP3</code>（<code>Post Office Protocol, version 3</code>，邮局协议），收邮件用。</li>
+<li><code>SMTP</code>（<code>Simple Mail Transfer Protocol</code>，简单邮件传输协议），用来发送电子邮件。</li>
+<li><code>TELNET</code>（<code>Teletype over the Network</code>，网络电传），通过一个终端（<code>terminal</code>）登陆到网络。</li>
+<li><code>SSH</code>（<code>Secure Shell</code>，用于替代安全性差的 <code>TELNET</code>），用于加密安全登陆用。</li>
+</ul>
+<p>运行在 <code>UDP</code> 协议上的协议：</p>
+<ul>
+<li><code>BOOTP</code>（<code>Boot Protocol</code>，启动协议），应用于无盘设备。</li>
+<li><code>NTP</code>（<code>Network Time Protocol</code>，网络时间协议），用于网络同步。</li>
+<li><code>DHCP</code>（<code>Dynamic Host Configuration Protocol</code>，动态主机配置协议），动态配置 <code>IP</code> 地址。</li>
+</ul>
+<p>运行在 <code>TCP</code> 和 <code>UDP</code> 协议上：</p>
+<ul>
+<li><code>DNS</code>（<code>Domain Name Service</code>，域名服务），用于完成地址查找，邮件转发等工作。</li>
+</ul>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>网络层的任务就是选择合适的网间路由和交换结点，确保计算机通信的数据及时传送。在发送数据时，网络层把运输层产生的报文段或用户数据报封装成分组和包进行传送。在 <code>TCP/IP</code> 体系结构中，由于网络层使用 <code>IP</code> 协议，因此分组也叫 <code>IP</code> 数据报 ，简称数据报。</p>
+<p>互联网是由大量的异构（<code>heterogeneous</code>）网络通过路由器（<code>router</code>）相互连接起来的。互联网使用的网络层协议是无连接的网际协议（<code>Intert Prococol</code>）和许多路由选择协议，因此互联网的网络层也叫做网际层或 <code>IP</code> 层。</p>
+<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3><p>数据链路层(<code>data link layer</code>)通常简称为链路层。两台主机之间的数据传输，总是在一段一段的链路上传送的，这就需要使用专门的链路层的协议。</p>
+<p>在两个相邻节点之间传送数据时，数据链路层将网络层交下来的 <code>IP</code> 数据报组装成帧，在两个相邻节点间的链路上传送帧。每一帧包括数据和必要的控制信息（如同步信息，地址信息，差错控制等）。</p>
+<p>在接收数据时，控制信息使接收端能够知道一个帧从哪个比特开始和到哪个比特结束。</p>
+<p>一般的 <code>web</code> 应用的通信传输流是这样的：</p>
+<img src='../img/article/8oAInT.jpg'/>
+
+<p>发送端在层与层之间传输数据时，每经过一层时会被打上一个该层所属的首部信息。反之，接收端在层与层之间传输数据时，每经过一层时会把对应的首部信息去除。</p>
+<h3 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h3><p>在物理层上所传送的数据单位是比特。 物理层(<code>physical layer</code>)的作用是实现相邻计算机节点之间比特流的透明传送，尽可能屏蔽掉具体传输介质和物理设备的差异。使其上面的数据链路层不必考虑网络的具体传输介质是什么。“透明传送比特流”表示经实际电路传送后的比特流没有发生变化，对传送的比特流来说，这个电路好像是看不见的。</p>
+<h3 id="TCP-x2F-IP-协议族-1"><a href="#TCP-x2F-IP-协议族-1" class="headerlink" title="TCP&#x2F;IP 协议族"></a>TCP&#x2F;IP 协议族</h3><p>在互联网使用的各种协议中最重要和最著名的就是 <code>TCP/IP</code> 两个协议。现在人们经常提到的 <code>TCP/IP</code> 并不一定是单指 <code>TCP</code> 和 <code>IP</code> 这两个具体的协议，而往往是表示互联网所使用的整个 <code>TCP/IP</code> 协议族。</p>
+<img src='../img/article/Rpl7Ea.png'/>
+
+<blockquote>
+<p>互联网协议套件（英语：<code>Internet Protocol Suite</code>，缩写 <code>IPS</code>）是一个网络通讯模型，以及一整个网络传输协议家族，为网际网络的基础通讯架构。它常被通称为 <code>TCP/IP</code> 协议族（英语：<code>TCP/IP Protocol Suite</code>，或 <code>TCP/IP Protocols</code>），简称 <code>TCP/IP</code>。因为该协定家族的两个核心协定：<code>TCP（传输控制协议）</code>和 <code>IP（网际协议）</code>，为该家族中最早通过的标准。</p>
+</blockquote>
+<p>划重点：</p>
+<p><code>TCP（传输控制协议）和 IP（网际协议）</code> 是最先定义的两个核心协议，所以才统称为 <code>TCP/IP</code> 协议族</p>
+<h2 id="TCP-的三次握手四次挥手"><a href="#TCP-的三次握手四次挥手" class="headerlink" title="TCP 的三次握手四次挥手"></a>TCP 的三次握手四次挥手</h2><p><code>TCP</code> 是一种面向连接的、可靠的、基于字节流的传输层通信协议，在发送数据前，通信双方必须在彼此间建立一条连接。所谓的“连接”，其实是客户端和服务端保存的一份关于对方的信息，如 <code>ip</code> 地址、端口号等。</p>
+<p><code>TCP</code> 可以看成是一种字节流，它会处理 <code>IP</code> 层或以下的层的丢包、重复以及错误问题。在连接的建立过程中，双方需要交换一些连接的参数。这些参数可以放在 <code>TCP</code> 头部。</p>
+<p>一个 <code>TCP</code> 连接由一个 <code>4</code> 元组构成，分别是两个 <code>IP</code> 地址和两个端口号。一个 <code>TCP</code> 连接通常分为三个阶段：<strong>连接</strong>、<strong>数据传输</strong>、<strong>退出（关闭）</strong>。</p>
+<p><strong>通过三次握手建立一个链接，通过四次挥手来关闭一个连接。</strong></p>
+<p><strong>当一个连接被建立或被终止时，交换的报文段只包含 <code>TCP</code> 头部，而没有数据。</strong></p>
+<h3 id="TCP-报文的头部结构"><a href="#TCP-报文的头部结构" class="headerlink" title="TCP 报文的头部结构"></a>TCP 报文的头部结构</h3><p>在了解 <code>TCP</code> 连接之前先来了解一下 <code>TCP</code> 报文的头部结构。</p>
+<img src='../img/article/C8pvUP.png'/>
+
+<p>上图中有几个字段需要重点介绍下：</p>
+<ol>
+<li><p>序号：<code>seq</code> 序号，占 <code>32</code> 位，用来标识从 <code>TCP</code> 源端向目的端发送的字节流，发起方发送数据时对此进行标记。</p>
+</li>
+<li><p>确认序号：<code>ack</code> 序号，占 <code>32</code> 位，只有 <code>ACK</code> 标志位为 <code>1</code> 时，确认序号字段才有效，<code>ack=seq+1</code>。</p>
+</li>
+<li><p>标志位：共 <code>6</code> 个，即 <code>URG、ACK、PSH、RST、SYN、FIN</code> 等，具体含义如下：</p>
+<ul>
+<li><code>ACK</code>：确认序号有效。</li>
+<li><code>FIN</code>：释放一个连接。</li>
+<li><code>PSH</code>：接收方应该尽快将这个报文交给应用层。</li>
+<li><code>RST</code>：重置连接。</li>
+<li><code>SYN</code>：发起一个新连接。</li>
+<li><code>URG</code>：紧急指针（<code>urgent pointer</code>）有效。</li>
+</ul>
+</li>
+</ol>
+<p>需要注意的是：</p>
+<ul>
+<li>不要将确认序号 <code>ack</code> 与标志位中的 <code>ACK</code> 搞混了。</li>
+<li>确认方 <code>ack=发起方seq+1</code>，两端配对。</li>
+</ul>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><blockquote>
+<p>三次握手的本质是确认通信双方收发数据的能力</p>
+</blockquote>
+<p>首先，我让信使运输一份信件给对方，<strong>对方收到了，那么他就知道了我的发件能力和他的收件能力是可以的。</strong></p>
+<p>于是他给我回信，<strong>我若收到了，我便知我的发件能力和他的收件能力是可以的，并且他的发件能力和我的收件能力是可以。</strong></p>
+<p>然而此时他还不知道他的发件能力和我的收件能力到底可不可以，于是我最后回馈一次，<strong>他若收到了，他便清楚了他的发件能力和我的收件能力是可以的。</strong></p>
+<p>这，就是三次握手，这样说，你理解了吗？</p>
+<img src='../img/article/AFh63R.png'/>
+
+<ul>
+<li><strong>第一次握手：</strong> 客户端要向服务端发起连接请求，首先客户端随机生成一个起始序列号 <code>ISN</code>(比如是 <code>100</code>)，那客户端向服务端发送的报文段包含 <code>SYN</code> 标志位(也就是 <code>SYN=1</code>)，序列号 <code>seq=100</code>。</li>
+</ul>
+<ul>
+<li><strong>第二次握手：</strong> 服务端收到客户端发过来的报文后，发现 <code>SYN=1</code>，知道这是一个连接请求，于是将客户端的起始序列号 <code>100</code> 存起来，并且随机生成一个服务端的起始序列号(比如是 <code>300</code>)。然后给客户端回复一段报文，回复报文包含 <code>SYN</code> 和 <code>ACK</code> 标志(也就是 <code>SYN=1</code>,<code>ACK=1</code>)、序列号 <code>seq=300</code>、确认号 <code>ack=101</code>(客户端发过来的序列号+1)。</li>
+</ul>
+<ul>
+<li><strong>第三次握手：</strong> 客户端收到服务端的回复后发现 <code>ACK=1</code> 并且 <code>ack=101</code>,于是知道服务端已经收到了序列号为 <code>100</code> 的那段报文；同时发现 <code>SYN=1</code>，知道了服务端同意了这次连接，于是就将服务端的序列号 <code>300</code> 给存下来。然后客户端再回复一段报文给服务端，报文包含 <code>ACK</code> 标志位(<code>ACK=1</code>)、<code>ack=301</code>(服务端序列号+1)、<code>seq=101</code>(第一次握手时发送报文是占据一个序列号的，所以这次 <code>seq</code> 就从 <code>101</code> 开始，需要注意的是不携带数据的 <code>ACK</code> 报文是不占据序列号的，所以后面第一次正式发送数据时 <code>seq</code> 还是 <code>101</code>)。当服务端收到报文后发现 <code>ACK=1</code> 并且 <code>ack=301</code>，就知道客户端收到序列号为 <code>300</code> 的报文了，就这样客户端和服务端通过 <code>TCP</code> 建立了连接。</li>
+</ul>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><blockquote>
+<p>四次挥手的目的是关闭一个连接</p>
+</blockquote>
+<img src='../img/article/2iOuHc.jpg'/>
+
+<p>比如客户端初始化的序列号 <code>ISA=100</code>，服务端初始化的序列号 <code>ISA=300</code>。<code>TCP</code> 连接成功后客户端总共发送了 <code>1000</code> 个字节的数据，服务端在客户端发 <code>FIN</code> 报文前总共回复了 <code>2000</code> 个字节的数据。</p>
+<ul>
+<li><p><strong>第一次挥手：</strong> 当客户端的数据都传输完成后，客户端向服务端发出连接释放报文(当然数据没发完时也可以发送连接释放报文并停止发送数据)，释放连接报文包含 <code>FIN</code> 标志位(<code>FIN=1</code>)、序列号 <code>seq=1101</code>(<code>100+1+1000</code>，其中的 <code>1</code> 是建立连接时占的一个序列号)。需要注意的是客户端发出 <code>FIN</code> 报文段后只是不能发数据了，但是还可以正常收数据；另外 <code>FIN</code> 报文段即使不携带数据也要占据一个序列号。</p>
+</li>
+<li><p><strong>第二次挥手：</strong> 服务端收到客户端发的 <code>FIN</code> 报文后给客户端回复确认报文，确认报文包含 <code>ACK</code> 标志位(<code>ACK=1</code>)、确认号 <code>ack=1102</code>(客户端 <code>FIN</code> 报文序列号 <code>1101+1</code>)、序列号 <code>seq=2300</code>(<code>300+2000</code>)。此时服务端处于关闭等待状态，而不是立马给客户端发 <code>FIN</code> 报文，这个状态还要持续一段时间，因为服务端可能还有数据没发完。</p>
+</li>
+<li><p><strong>第三次挥手：</strong> 服务端将最后数据(比如 <code>50</code> 个字节)发送完毕后就向客户端发出连接释放报文，报文包含 <code>FIN</code> 和 <code>ACK</code> 标志位(<code>FIN=1,ACK=1</code>)、确认号和第二次挥手一样 <code>ack=1102</code>、序列号 <code>seq=2350</code>(<code>2300+50</code>)。</p>
+</li>
+</ul>
+<ul>
+<li><strong>第四次挥手：</strong> 客户端收到服务端发的 <code>FIN</code> 报文后，向服务端发出确认报文，确认报文包含 <code>ACK</code> 标志位(<code>ACK=1</code>)、确认号 <code>ack=2351</code>、序列号 <code>seq=1102</code>。注意客户端发出确认报文后不是立马释放 <code>TCP</code> 连接，而是要经过 <code>2MSL</code>(最长报文段寿命的 <code>2</code> 倍时长)后才释放 <code>TCP</code> 连接。而服务端一旦收到客户端发出的确认报文就会立马释放 <code>TCP</code> 连接，所以服务端结束 <code>TCP</code> 连接的时间要比客户端早一些。</li>
+</ul>
+<hr>
+<h2 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h2><h3 id="为什么-TCP-连接的时候是-3-次？2-次不可以吗？"><a href="#为什么-TCP-连接的时候是-3-次？2-次不可以吗？" class="headerlink" title="为什么 TCP 连接的时候是 3 次？2 次不可以吗？"></a>为什么 TCP 连接的时候是 3 次？2 次不可以吗？</h3><p>因为需要考虑连接时丢包的问题，如果只握手 <code>2</code> 次，第二次握手时如果服务端发给客户端的确认报文段丢失，此时服务端已经准备好了收发数(可以理解服务端已经连接成功)据，而客户端一直没收到服务端的确认报文，所以客户端就不知道服务端是否已经准备好了(可以理解为客户端未连接成功)，这种情况下客户端不会给服务端发数据，也会忽略服务端发过来的数据。</p>
+<p>如果是三次握手，即便发生丢包也不会有问题，比如如果第三次握手客户端发的确认 <code>ack</code> 报文丢失，服务端在一段时间内没有收到确认 <code>ack</code> 报文的话就会重新进行第二次握手，也就是服务端会重发 <code>SYN</code> 报文段，客户端收到重发的报文段后会再次给服务端发送确认 <code>ack</code> 报文。</p>
+<hr>
+<h3 id="为什么-TCP-连接的时候是-3-次，关闭的时候却是-4-次？"><a href="#为什么-TCP-连接的时候是-3-次，关闭的时候却是-4-次？" class="headerlink" title="为什么 TCP 连接的时候是 3 次，关闭的时候却是 4 次？"></a>为什么 TCP 连接的时候是 3 次，关闭的时候却是 4 次？</h3><p>因为只有在客户端和服务端都没有数据要发送的时候才能断开 <code>TCP</code>。而客户端发出 <code>FIN</code> 报文时只能保证客户端没有数据发了，服务端还有没有数据发客户端是不知道的。而服务端收到客户端的 <code>FIN</code> 报文后只能先回复客户端一个确认报文来告诉客户端我服务端已经收到你的 <code>FIN</code> 报文了，但我服务端还有一些数据没发完，等这些数据发完了服务端才能给客户端发 <code>FIN</code> 报文(所以不能一次性将确认报文和 <code>FIN</code> 报文发给客户端，就是这里多出来了一次)。</p>
+<hr>
+<h3 id="为什么客户端发出第四次挥手的确认报文后要等-2MSL-的时间才能释放-TCP-连接？"><a href="#为什么客户端发出第四次挥手的确认报文后要等-2MSL-的时间才能释放-TCP-连接？" class="headerlink" title="为什么客户端发出第四次挥手的确认报文后要等 2MSL 的时间才能释放 TCP 连接？"></a>为什么客户端发出第四次挥手的确认报文后要等 2MSL 的时间才能释放 TCP 连接？</h3><p>这里同样是要考虑丢包的问题，如果第四次挥手的报文丢失，服务端没收到确认 <code>ack</code> 报文就会重发第三次挥手的报文，这样报文一去一回最长时间就是 <code>2MSL</code>，所以需要等这么长时间来确认服务端确实已经收到了。</p>
+<hr>
+<h3 id="如果已经建立了连接，但是客户端突然出现故障了怎么办？"><a href="#如果已经建立了连接，但是客户端突然出现故障了怎么办？" class="headerlink" title="如果已经建立了连接，但是客户端突然出现故障了怎么办？"></a>如果已经建立了连接，但是客户端突然出现故障了怎么办？</h3><p><code>TCP</code> 设有一个保活计时器，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为 <code>2 小时</code>，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔 <code>75 秒钟</code>发送一次。若一连发送 <code>10 个</code>探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+<hr>
+<h3 id="什么是-HTTP，HTTP-与-HTTPS-的区别"><a href="#什么是-HTTP，HTTP-与-HTTPS-的区别" class="headerlink" title="什么是 HTTP，HTTP 与 HTTPS 的区别"></a>什么是 HTTP，HTTP 与 HTTPS 的区别</h3><p><code>HTTP</code> 是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范</p>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th align="center">HTTP</th>
+<th align="center">HTTPS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议</td>
+<td align="center">运行在 TCP 之上，明文传输，<strong>客户端与服务器端都无法验证对方的身份</strong></td>
+<td align="center">身披 SSL( Secure Socket Layer )外壳的 HTTP，运行于 SSL 上，SSL 运行于 TCP 之上， <strong>是添加了加密和认证机制的 HTTP</strong>。</td>
+</tr>
+<tr>
+<td>端口</td>
+<td align="center">80</td>
+<td align="center">443</td>
+</tr>
+<tr>
+<td>资源消耗</td>
+<td align="center">较少</td>
+<td align="center">由于加解密处理，会消耗更多的 CPU 和内存资源</td>
+</tr>
+<tr>
+<td>开销</td>
+<td align="center">无需证书</td>
+<td align="center">需要证书，而证书一般需要向认证机构购买</td>
+</tr>
+<tr>
+<td>加密机制</td>
+<td align="center">无</td>
+<td align="center">共享密钥加密和公开密钥加密并用的混合加密机制</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td align="center">弱</td>
+<td align="center">由于加密机制，安全性强</td>
+</tr>
+</tbody></table>
+<h3 id="常用-HTTP-状态码"><a href="#常用-HTTP-状态码" class="headerlink" title="常用 HTTP 状态码"></a>常用 HTTP 状态码</h3><p><code>HTTP</code> 状态码表示客户端 <code>HTTP</code> 请求的返回结果、标识服务器处理是否正常、表明请求出现的错误等。</p>
+<p>状态码的类别：</p>
+<table>
+<thead>
+<tr>
+<th align="center">类别</th>
+<th align="center">原因短语</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1XX</td>
+<td align="center">Informational（信息性状态码） 接受的请求正在处理</td>
+</tr>
+<tr>
+<td align="center">2XX</td>
+<td align="center">Success（成功状态码） 请求正常处理完毕</td>
+</tr>
+<tr>
+<td align="center">3XX</td>
+<td align="center">Redirection（重定向状态码） 需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td align="center">4XX</td>
+<td align="center">Client Error（客户端错误状态码） 服务器无法处理请求</td>
+</tr>
+<tr>
+<td align="center">5XX</td>
+<td align="center">Server Error（服务器错误状态码） 服务器处理请求出错</td>
+</tr>
+</tbody></table>
+<p>常用 <code>HTTP</code> 状态码：</p>
+<table>
+<thead>
+<tr>
+<th align="center">2XX</th>
+<th align="center">成功（这系列表明请求被正常处理了）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">200</td>
+<td align="center">OK，表示从客户端发来的请求在服务器端被正确处理</td>
+</tr>
+<tr>
+<td align="center">204</td>
+<td align="center">No content，表示请求成功，但响应报文不含实体的主体部分</td>
+</tr>
+<tr>
+<td align="center">206</td>
+<td align="center">Partial Content，进行范围请求成功</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">3XX</th>
+<th align="center">重定向（表明浏览器要执行特殊处理）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">301</td>
+<td align="center">moved permanently，永久性重定向，表示资源已被分配了新的 URL</td>
+</tr>
+<tr>
+<td align="center">302</td>
+<td align="center">found，临时性重定向，表示资源临时被分配了新的 URL</td>
+</tr>
+<tr>
+<td align="center">303</td>
+<td align="center">see other，表示资源存在着另一个 URL，应使用 GET 方法获取资源（对于 301&#x2F;302&#x2F;303 响应，几乎所有浏览器都会删除报文主体并自动用 GET 重新请求）</td>
+</tr>
+<tr>
+<td align="center">304</td>
+<td align="center">not modified，表示服务器允许访问资源，但请求未满足条件的情况（与重定向无关）</td>
+</tr>
+<tr>
+<td align="center">307</td>
+<td align="center">temporary redirect，临时重定向，和 302 含义类似，但是期望客户端保持请求方法不变向新的地址发出请求</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">4XX</th>
+<th align="center">客户端错误</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">400</td>
+<td align="center">bad request，请求报文存在语法错误</td>
+</tr>
+<tr>
+<td align="center">401</td>
+<td align="center">unauthorized，表示发送的请求需要有通过 HTTP 认证的认证信息</td>
+</tr>
+<tr>
+<td align="center">403</td>
+<td align="center">forbidden，表示对请求资源的访问被服务器拒绝，可在实体主体部分返回原因描述</td>
+</tr>
+<tr>
+<td align="center">404</td>
+<td align="center">not found，表示在服务器上没有找到请求的资源</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">5XX</th>
+<th align="center">服务器错误</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">500</td>
+<td align="center">internal sever error，表示服务器端在执行请求时发生了错误</td>
+</tr>
+<tr>
+<td align="center">501</td>
+<td align="center">Not Implemented，表示服务器不支持当前请求所需要的某个功能</td>
+</tr>
+<tr>
+<td align="center">503</td>
+<td align="center">service unavailable，表明服务器暂时处于超负载或正在停机维护，无法处理请求</td>
+</tr>
+</tbody></table>
+<h3 id="GET-和-POST-区别"><a href="#GET-和-POST-区别" class="headerlink" title="GET 和 POST 区别"></a>GET 和 POST 区别</h3><p>说到 <code>GET</code> 和 <code>POST</code>，就不得不提 <code>HTTP</code> 协议，因为浏览器和服务器的交互是通过 <code>HTTP</code> 协议执行的，而 <code>GET</code> 和 <code>POST</code> 也是 <code>HTTP</code> 协议中的两种方法。</p>
+<p><code>HTTP</code> 全称为 <code>Hyper Text Transfer Protocol</code>，中文翻译为超文本传输协议，目的是保证浏览器与服务器之间的通信。<code>HTTP</code> 的工作方式是客户端与服务器之间的请求-应答协议。</p>
+<p><code>HTTP</code> 协议中定义了浏览器和服务器进行交互的不同方法，基本方法有 <code>4</code> 种，分别是 <code>GET</code>，<code>POST</code>，<code>PUT</code>，<code>DELETE</code>。这四种方法可以理解为，对服务器资源的<code>查，改，增，删</code>。</p>
+<ul>
+<li><strong>GET：</strong> 从服务器上获取数据，也就是所谓的查，仅仅是获取服务器资源，不进行修改。</li>
+<li><strong>POST：</strong> 向服务器提交数据，这就涉及到了数据的更新，也就是更改服务器的数据。</li>
+<li><strong>PUT：</strong> 英文含义是放置，也就是向服务器新添加数据，就是所谓的增。</li>
+<li><strong>DELETE：</strong> 从字面意思也能看出，这种方式就是删除服务器数据的过程。</li>
+</ul>
+<hr>
+<p><strong>GET 和 POST 区别</strong></p>
+<ol>
+<li><p><code>Get</code> 是不安全的，因为在传输过程，数据被放在请求的 <code>URL</code> 中；<code>Post</code> 的所有操作对用户来说都是不可见的。 但是这种做法也不是绝对的，大部分人的做法也是按照上面的说法来的，但是也可以在 <code>get</code> 请求加上 <code>request body</code>，给 <code>post</code> 请求带上 <code>URL</code> 参数。</p>
+</li>
+<li><p><code>Get</code> 请求提交的 <code>url</code> 中的数据最多只能是 <code>2048 字节</code>，这个限制是浏览器或者服务器给添加的，<code>http</code> 协议并没有对 <code>url</code> 长度进行限制，目的是为了保证服务器和浏览器能够正常运行，防止有人恶意发送请求。<code>Post</code> 请求则没有大小限制。</p>
+</li>
+<li><p><code>Get</code> 限制 <code>Form</code> 表单的数据集的值必须为 <code>ASCII</code> 字符；而 <code>Post</code> 支持整个 <code>ISO10646</code> 字符集。</p>
+</li>
+<li><p><code>Get</code> 执行效率却比 <code>Post</code> 方法好。<code>Get</code> 是 <code>form</code> 提交的默认方法。</p>
+</li>
+<li><p><code>GET</code> 产生一个 <code>TCP</code> 数据包；<code>POST</code> 产生两个 <code>TCP</code> 数据包。</p>
+<ul>
+<li><p>对于 <code>GET</code> 方式的请求，浏览器会把 <code>http header</code> 和 <code>data</code> 一并发送出去，服务器响应 <code>200</code>（返回数据）；</p>
+</li>
+<li><p>而对于 <code>POST</code>，浏览器先发送 <code>header</code>，服务器响应 <code>100 continue</code>，浏览器再发送 <code>data</code>，服务器响应 <code>200 ok</code>（返回数据）。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="什么是对称加密与非对称加密"><a href="#什么是对称加密与非对称加密" class="headerlink" title="什么是对称加密与非对称加密"></a>什么是对称加密与非对称加密</h3><p>对称密钥加密是指加密和解密使用同一个密钥的方式，<strong>这种方式存在的最大问题就是密钥发送问题，即如何安全地将密钥发给对方；</strong></p>
+<p>而非对称加密是指使用一对非对称密钥，即公钥和私钥，公钥可以随意发布，但私钥只有自己知道。发送密文的一方使用对方的公钥进行加密处理，对方接收到加密信息后，使用自己的私钥进行解密。<br>由于非对称加密的方式不需要发送用来解密的私钥，所以可以保证安全性；但是和对称加密比起来，非常的慢</p>
+<hr>
+<h3 id="什么是-HTTP2"><a href="#什么是-HTTP2" class="headerlink" title="什么是 HTTP2"></a>什么是 HTTP2</h3><p><code>HTTP2</code> 可以提高了网页的性能。</p>
+<p>在 <code>HTTP1</code> 中浏览器限制了同一个域名下的请求数量（<code>Chrome</code> 下一般是<code>六</code>个），当在请求很多资源的时候，由于队头阻塞当浏览器达到最大请求数量时，剩余的资源需等待当前的六个请求完成后才能发起请求。</p>
+<p><code>HTTP2</code> 中引入了多路复用的技术，这个技术可以只通过一个 <code>TCP</code> 连接就可以传输所有的请求数据。多路复用可以绕过浏览器限制同一个域名下的请求数量的问题，进而提高了网页的性能。</p>
+<hr>
+<h3 id="Session、Cookie-和-Token-的主要区别"><a href="#Session、Cookie-和-Token-的主要区别" class="headerlink" title="Session、Cookie 和 Token 的主要区别"></a>Session、Cookie 和 Token 的主要区别</h3><p><code>HTTP</code> 协议本身是无状态的。什么是无状态呢，即服务器无法判断用户身份。</p>
+<p><strong>什么是 cookie</strong></p>
+<p><code>cookie</code> 是由 <code>Web</code> 服务器保存在用户浏览器上的小文件（<code>key-value</code> 格式），包含用户相关的信息。客户端向服务器发起请求，如果服务器需要记录该用户状态，就使用 <code>response</code> 向客户端浏览器颁发一个 <code>Cookie</code>。客户端浏览器会把 <code>Cookie</code> 保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该 <code>Cookie</code> 一同提交给服务器。服务器检查该 <code>Cookie</code>，以此来辨认用户身份。</p>
+<p><strong>什么是 session</strong></p>
+<p><code>session</code> 是依赖 <code>Cookie</code> 实现的。<code>session</code> 是服务器端对象</p>
+<p><code>session</code> 是浏览器和服务器会话过程中，服务器分配的一块储存空间。服务器默认为浏览器在 <code>cookie</code> 中设置 <code>sessionid</code>，浏览器在向服务器请求过程中传输 <code>cookie</code> 包含 <code>sessionid</code> ，服务器根据 <code>sessionid</code> 获取出会话中存储的信息，然后确定会话的身份信息。</p>
+<p><strong>cookie 与 session 区别</strong></p>
+<ul>
+<li><strong>存储位置与安全性：</strong> <code>cookie</code> 数据存放在客户端上，安全性较差，<code>session</code> 数据放在服务器上，安全性相对更高；</li>
+<li><strong>存储空间：</strong> 单个 <code>cookie</code> 保存的数据不能超过 <code>4K</code>，很多浏览器都限制一个站点最多保存 <code>20</code> 个 <code>cookie</code>，<code>session</code> 无此限制</li>
+<li><strong>占用服务器资源：</strong> <code>session</code> 一定时间内保存在服务器上，当访问增多，占用服务器性能，考虑到服务器性能方面，应当使用 <code>cookie</code>。</li>
+</ul>
+<p><strong>什么是 Token</strong></p>
+<p><strong>Token 的引入：</strong> <code>Token</code> 是在客户端频繁向服务端请求数据，服务端频繁的去数据库查询用户名和密码并进行对比，判断用户名和密码正确与否，并作出相应提示，在这样的背景下，<code>Token</code> 便应运而生。</p>
+<p><strong>Token 的定义：</strong> <code>Token</code> 是服务端生成的一串字符串，以作客户端进行请求的一个令牌，当第一次登录后，服务器生成一个 <code>Token</code> 便将此 <code>Token</code> 返回给客户端，以后客户端只需带上这个 <code>Token</code> 前来请求数据即可，无需再次带上用户名和密码。</p>
+<p><strong>使用 Token 的目的：</strong> <code>Token</code> 的目的是为了减轻服务器的压力，减少频繁的查询数据库，使服务器更加健壮。</p>
+<p><code>Token</code> 是在服务端产生的。如果前端使用用户名&#x2F;密码向服务端请求认证，服务端认证成功，那么在服务端会返回 <code>Token</code> 给前端。前端可以在每次请求的时候带上 <code>Token</code> 证明自己的合法地位</p>
+<p><strong>session 与 token 区别</strong></p>
+<ul>
+<li><code>session</code> 机制存在服务器压力增大，<code>CSRF</code> 跨站伪造请求攻击，扩展性不强等问题；</li>
+<li><code>session</code> 存储在服务器端，<code>token</code> 存储在客户端</li>
+<li><code>token</code> 提供认证和授权功能，作为身份认证，<code>token</code> 安全性比 <code>session</code> 好；</li>
+<li><code>session</code> 这种会话存储方式方式只适用于客户端代码和服务端代码运行在同一台服务器上，<code>token</code> 适用于项目级的前后端分离（前后端代码运行在不同的服务器下）</li>
+</ul>
+<hr>
+<h3 id="Servlet-是线程安全的吗"><a href="#Servlet-是线程安全的吗" class="headerlink" title="Servlet 是线程安全的吗"></a>Servlet 是线程安全的吗</h3><p><strong>Servlet 不是线程安全的，多线程并发的读写会导致数据不同步的问题。</strong></p>
+<p>解决的办法是尽量不要定义 <code>name</code> 属性，而是要把 <code>name</code> 变量分别定义在 <code>doGet()</code>和 <code>doPost()</code>方法内。虽然使用 s<code>ynchronized(name)&#123;&#125;</code>语句块可以解决问题，但是会造成线程的等待，不是很科学的办法。</p>
+<p>注意：多线程的并发的读写 <code>Servlet</code> 类属性会导致数据不同步。但是如果只是并发地读取属性而不写入，则不存在数据不同步的问题。因此 <code>Servlet</code> 里的只读属性最好定义为 <code>final</code> 类型的。</p>
+<hr>
+<h3 id="Servlet-接口中有哪些方法及-Servlet-生命周期探秘"><a href="#Servlet-接口中有哪些方法及-Servlet-生命周期探秘" class="headerlink" title="Servlet 接口中有哪些方法及 Servlet 生命周期探秘"></a>Servlet 接口中有哪些方法及 Servlet 生命周期探秘</h3><p>在 <code>Java Web</code> 程序中，<code>Servlet</code> 主要负责接收用户请求 <code>HttpServletRequest</code>，在 <code>doGet()</code>，<code>doPost()</code>中做相应的处理，并将回应 <code>HttpServletResponse</code> 反馈给用户。<code>Servlet</code> 可以设置初始化参数，供 <code>Servlet</code> 内部使用。</p>
+<p><code>Servlet</code> 接口定义了 <code>5</code> 个方法，其中前三个方法与 <code>Servlet</code> 生命周期相关：</p>
+<ul>
+<li><strong>void init(ServletConfig config) throws ServletException</strong></li>
+<li><strong>void service(ServletRequest req, ServletResponse resp) throws ServletException, java.io.IOException</strong></li>
+<li><strong>void destory()</strong></li>
+<li>java.lang.String getServletInfo()</li>
+<li>ServletConfig getServletConfig()</li>
+</ul>
+<p><strong>生命周期：</strong></p>
+<p><strong>Web 容器加载 Servlet 并将其实例化后，Servlet 生命周期开始，</strong> 容器运行其 <code>init()</code>方法进行 <code>Servlet</code> 的初始化；</p>
+<p>请求到达时调用 Servlet 的 <code>service()</code>方法，service()方法会根据需要调用与请求对应的 <code>doGet</code> 或 <code>doPost</code> 等方法；</p>
+<p>当服务器关闭或项目被卸载时服务器会将 Servlet 实例销毁，此时会调用 Servlet 的 <code>destroy()</code>方法。</p>
+<p><strong>init 方法和 destory 方法只会执行一次，service 方法客户端每次请求 Servlet 都会执行。</strong> Servlet 中有时会用到一些需要初始化与销毁的资源，因此可以把初始化资源的代码放入 init 方法中，销毁资源的代码放入 destroy 方法中，这样就不需要每次处理客户端的请求都要初始化与销毁资源。</p>
+<h3 id="如果客户端禁止-cookie-能实现-session-还能用吗？"><a href="#如果客户端禁止-cookie-能实现-session-还能用吗？" class="headerlink" title="如果客户端禁止 cookie 能实现 session 还能用吗？"></a>如果客户端禁止 cookie 能实现 session 还能用吗？</h3><p><code>Cookie</code> 与 <code>Session</code>，一般认为是两个独立的东西，<code>Session</code> 采用的是在服务器端保持状态的方案，而 <code>Cookie</code> 采用的是在客户端保持状态的方案。</p>
+<p>但为什么禁用 <code>Cookie</code> 就不能得到 <code>Session</code> 呢？因为 <code>Session</code> 是用 <code>Session ID</code> 来确定当前对话所对应的服务器 <code>Session</code>，而 <code>Session ID</code> 是通过 <code>Cookie</code> 来传递的，禁用 <code>Cookie</code> 相当于失去了 <code>Session ID</code>，也就得不到 <code>Session</code> 了。</p>
+<p>假定用户关闭 <code>Cookie</code> 的情况下使用 <code>Session</code>，其实现途径有以下几种：</p>
+<ol>
+<li>手动通过 <code>URL</code> 传值、隐藏表单传递 <code>Session ID</code>。</li>
+<li>用文件、数据库等形式保存 <code>Session ID</code>，在跨页过程中手动调用。</li>
+</ol>
+<p><font color=gray size=2>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ThinkWon">https://blog.csdn.net/ThinkWon</a></font></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Java基础知识 基础语法-网络编程</p><p><a href="https://blog.buubiu.com/Java基础知识-基础语法-网络编程/">https://blog.buubiu.com/Java基础知识-基础语法-网络编程/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-07-20</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Java/">Java</a><a class="link-muted mr-2" rel="tag" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E5%B8%B8%E7%94%A8API/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Java基础知识 基础语法-常用API</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E5%8F%8D%E5%B0%84/"><span class="level-item">Java基础知识 基础语法-反射</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#计算机网络体系结构"><span class="level-left"><span class="level-item">1</span><span class="level-item">计算机网络体系结构</span></span></a></li><li><a class="level is-mobile" href="#网络协议是什么？"><span class="level-left"><span class="level-item">2</span><span class="level-item">网络协议是什么？</span></span></a></li><li><a class="level is-mobile" href="#为什么要对网络协议分层？"><span class="level-left"><span class="level-item">3</span><span class="level-item">为什么要对网络协议分层？</span></span></a></li><li><a class="level is-mobile" href="#TCP-x2F-IP-协议族"><span class="level-left"><span class="level-item">4</span><span class="level-item">TCP/IP 协议族</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#应用层"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">应用层</span></span></a></li><li><a class="level is-mobile" href="#运输层"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">运输层</span></span></a></li><li><a class="level is-mobile" href="#网络层"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">网络层</span></span></a></li><li><a class="level is-mobile" href="#数据链路层"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">数据链路层</span></span></a></li><li><a class="level is-mobile" href="#物理层"><span class="level-left"><span class="level-item">4.5</span><span class="level-item">物理层</span></span></a></li><li><a class="level is-mobile" href="#TCP-x2F-IP-协议族-1"><span class="level-left"><span class="level-item">4.6</span><span class="level-item">TCP/IP 协议族</span></span></a></li></ul></li><li><a class="level is-mobile" href="#TCP-的三次握手四次挥手"><span class="level-left"><span class="level-item">5</span><span class="level-item">TCP 的三次握手四次挥手</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#TCP-报文的头部结构"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">TCP 报文的头部结构</span></span></a></li><li><a class="level is-mobile" href="#三次握手"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">三次握手</span></span></a></li><li><a class="level is-mobile" href="#四次挥手"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">四次挥手</span></span></a></li></ul></li><li><a class="level is-mobile" href="#常见面试题"><span class="level-left"><span class="level-item">6</span><span class="level-item">常见面试题</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#为什么-TCP-连接的时候是-3-次？2-次不可以吗？"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">为什么 TCP 连接的时候是 3 次？2 次不可以吗？</span></span></a></li><li><a class="level is-mobile" href="#为什么-TCP-连接的时候是-3-次，关闭的时候却是-4-次？"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">为什么 TCP 连接的时候是 3 次，关闭的时候却是 4 次？</span></span></a></li><li><a class="level is-mobile" href="#为什么客户端发出第四次挥手的确认报文后要等-2MSL-的时间才能释放-TCP-连接？"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">为什么客户端发出第四次挥手的确认报文后要等 2MSL 的时间才能释放 TCP 连接？</span></span></a></li><li><a class="level is-mobile" href="#如果已经建立了连接，但是客户端突然出现故障了怎么办？"><span class="level-left"><span class="level-item">6.4</span><span class="level-item">如果已经建立了连接，但是客户端突然出现故障了怎么办？</span></span></a></li><li><a class="level is-mobile" href="#什么是-HTTP，HTTP-与-HTTPS-的区别"><span class="level-left"><span class="level-item">6.5</span><span class="level-item">什么是 HTTP，HTTP 与 HTTPS 的区别</span></span></a></li><li><a class="level is-mobile" href="#常用-HTTP-状态码"><span class="level-left"><span class="level-item">6.6</span><span class="level-item">常用 HTTP 状态码</span></span></a></li><li><a class="level is-mobile" href="#GET-和-POST-区别"><span class="level-left"><span class="level-item">6.7</span><span class="level-item">GET 和 POST 区别</span></span></a></li><li><a class="level is-mobile" href="#什么是对称加密与非对称加密"><span class="level-left"><span class="level-item">6.8</span><span class="level-item">什么是对称加密与非对称加密</span></span></a></li><li><a class="level is-mobile" href="#什么是-HTTP2"><span class="level-left"><span class="level-item">6.9</span><span class="level-item">什么是 HTTP2</span></span></a></li><li><a class="level is-mobile" href="#Session、Cookie-和-Token-的主要区别"><span class="level-left"><span class="level-item">6.10</span><span class="level-item">Session、Cookie 和 Token 的主要区别</span></span></a></li><li><a class="level is-mobile" href="#Servlet-是线程安全的吗"><span class="level-left"><span class="level-item">6.11</span><span class="level-item">Servlet 是线程安全的吗</span></span></a></li><li><a class="level is-mobile" href="#Servlet-接口中有哪些方法及-Servlet-生命周期探秘"><span class="level-left"><span class="level-item">6.12</span><span class="level-item">Servlet 接口中有哪些方法及 Servlet 生命周期探秘</span></span></a></li><li><a class="level is-mobile" href="#如果客户端禁止-cookie-能实现-session-还能用吗？"><span class="level-left"><span class="level-item">6.13</span><span class="level-item">如果客户端禁止 cookie 能实现 session 还能用吗？</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

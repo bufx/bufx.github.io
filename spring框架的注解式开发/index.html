@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>spring框架的注解式开发 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="注解（Annotation）式开发 定义：通过Spring框架提供的一系列相关注解完成项目中快速开发 注解：Annotation 是Java中一种特殊类，类似于interface 使用：@注解类名(属性&amp;#x3D;参数)"><meta property="og:type" content="blog"><meta property="og:title" content="spring框架的注解式开发"><meta property="og:url" content="https://blog.buubiu.com/spring%E6%A1%86%E6%9E%B6%E7%9A%84%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="注解（Annotation）式开发 定义：通过Spring框架提供的一系列相关注解完成项目中快速开发 注解：Annotation 是Java中一种特殊类，类似于interface 使用：@注解类名(属性&amp;#x3D;参数)"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/og_image.png"><meta property="article:published_time" content="2020-08-08T16:17:04.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.913Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Spring"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/spring%E6%A1%86%E6%9E%B6%E7%9A%84%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/"},"headline":"spring框架的注解式开发","image":["https://blog.buubiu.com/img/og_image.png"],"datePublished":"2020-08-08T16:17:04.000Z","dateModified":"2024-01-25T15:08:05.913Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"注解（Annotation）式开发 定义：通过Spring框架提供的一系列相关注解完成项目中快速开发 注解：Annotation 是Java中一种特殊类，类似于interface 使用：@注解类名(属性&#x3D;参数)"}</script><link rel="canonical" href="https://blog.buubiu.com/spring%E6%A1%86%E6%9E%B6%E7%9A%84%E6%B3%A8%E8%A7%A3%E5%BC%8F%E5%BC%80%E5%8F%91/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-08-08T16:17:04.000Z" title="8/9/2020, 12:17:04 AM">2020-08-09</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.913Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Spring/">Spring</a></span><span class="level-item">6 分钟读完 (大约922个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">spring框架的注解式开发</h1><div class="content"><h3 id="注解（Annotation）式开发"><a href="#注解（Annotation）式开发" class="headerlink" title="注解（Annotation）式开发"></a>注解（<code>Annotation</code>）式开发</h3><ul>
+<li><strong>定义：通过Spring框架提供的一系列</strong><code>相关注解</code>完成项目中快速开发</li>
+<li><strong>注解：Annotation 是Java中一种特殊类，类似于interface</strong></li>
+<li><strong>使用：<code>@注解类名(属性=参数)</code></strong></li>
+</ul>
+<span id="more"></span>
+
+<h3 id="Spring中注解"><a href="#Spring中注解" class="headerlink" title="Spring中注解"></a>Spring中注解</h3><p><code>前置条件：必须在工厂配置文件中完成注解扫描</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:componet-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.buubiu&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="创建对象相关注解"><a href="#创建对象相关注解" class="headerlink" title="创建对象相关注解"></a>创建对象相关注解</h4><p> <code>@Componet</code>注解（通用组件创建注解或者最顶层的父注解）</p>
+<ul>
+<li><p>作用：用来负责创建对象（相当于	<code>&lt;bean id=&quot;&quot; class=&quot;&quot; /&gt;</code> ）</p>
+</li>
+<li><p>修饰范围：只能用在类上</p>
+</li>
+<li><p><strong>注意：默认使用这个注解在工厂中创建的对象的唯一标识为 <code>类名首字母小写</code>，比如UserDAOImpl&#x3D;&#x3D;&gt;userDAOImpl</strong></p>
+</li>
+<li><p><code>value</code>属性作用：用来指定创建的对象在工厂中唯一标识 <code>推荐：如果存在实现接口，则设置为接口首字母小写；若不存在，则默认</code></p>
+<ul>
+<li>注意：若参数只有一个时，可以省略 value，比如：@Component(“userDAO”)等价于@Component(value &#x3D; “userDAO”)</li>
+</ul>
+<hr>
+<p>接下来讲的注解都是 子类注解，具有父类注解的一切特性，都是用来创建组件对象的</p>
+</li>
+<li><p><code>@Repository</code></p>
+<ul>
+<li>作用：一般用来创建DAO组件中的注解</li>
+<li>注意：由于使用Spring+Mybatis整合时，在spring.xml配置文件中已经批量注入了，所以在DAO层我们一般不使用注解。</li>
+</ul>
+</li>
+<li><p><code>@Service</code></p>
+<ul>
+<li>作用：一般用来创建Service中组件的注解</li>
+</ul>
+</li>
+<li><p><code>@Controller</code></p>
+<ul>
+<li>作用：一般用来创建Action中组件的注解</li>
+</ul>
+</li>
+</ul>
+<h4 id="控制对象在工厂中创建次数"><a href="#控制对象在工厂中创建次数" class="headerlink" title="控制对象在工厂中创建次数"></a>控制对象在工厂中创建次数</h4><ol>
+<li><p>配置文件修改</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">&quot;&quot;</span> <span class="attr">id</span>=<span class="string">&quot;&quot;</span> <span class="attr">scope</span>=<span class="string">&quot;singleton|prototype&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注解如何控制</p>
+<p><code>@Scope</code></p>
+<ul>
+<li>作用：用来指定对象的创建次数，默认单例</li>
+<li>修饰范围：只能加在类上</li>
+<li><code>value</code>属性：<strong>singleton(单例，默认)和prototype(多例)</strong><ul>
+<li><strong>注意：在管理struts的action时必须加入@Scope注解，值必须为prototype</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="属性注入的相关注解"><a href="#属性注入的相关注解" class="headerlink" title="属性注入的相关注解"></a>属性注入的相关注解</h4><p>​	有两种</p>
+<ol>
+<li><p>Spring框架提供的 <code>@Autowired</code> [推荐]</p>
+<p><strong>注意：默认根据类型进行注入</strong></p>
+</li>
+<li><p>JavaEE中本身提供的  <code>@Resource</code></p>
+<p><strong>注意：默认根据名称注入，名称找不到时自动根据类型注入</strong></p>
+</li>
+</ol>
+<ul>
+<li>作用：用来完成成员变量的赋值（注入）操作</li>
+<li>修饰范围：用在类中的成员变量，或者是类中成员变量的SET方法上</li>
+<li><strong>注意：使用注解进行注入时，日后注入的成员变量可以不再提供SET方法，Spring底层通过反射给处理过了</strong></li>
+</ul>
+<h4 id="控制事务注解"><a href="#控制事务注解" class="headerlink" title="控制事务注解"></a>控制事务注解</h4><p><code>@Transactional</code></p>
+<ul>
+<li><p>作用：用来给类中方法加入事务控制，简化配置文件中的两段配置</p>
+<ol>
+<li><p>事务环绕通知及事务细粒度控制</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--基于事务管理器创建环绕通知对象并配置事务细粒度控制--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">&quot;txAdvice&quot;</span> <span class="attr">transaction-manager</span>=<span class="string">&quot;transactionManager&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">&quot;save*&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">&quot;update*&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">&quot;delete*&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">&quot;find*&quot;</span> <span class="attr">propagation</span>=<span class="string">&quot;SUPPORTS&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>简化事务切面配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置切面--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">id</span>=<span class="string">&quot;pc&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;execution(* com.buubiu.service.*ServiceImpl.*(..))&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">&quot;txAdvice&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;pc&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>修饰范围：类、方法上，并且 <strong>局部优先原则</strong></p>
+<ul>
+<li>加在类上：代表类中所有方法都加入事务控制</li>
+<li>加在方法上：代表当前方法加入事务控制</li>
+<li>类和方法同时存在：方法优先</li>
+</ul>
+</li>
+<li><p><strong>使用要求：如果想要让<code>@Transactional</code>这个注解生效，必须在配置文件中加入如下配置：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--开启注解式事务生效--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:annotation-driven</span> <span class="attr">transaction-manager</span>=<span class="string">&quot;transactionManager&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>注解属性：</p>
+<ul>
+<li>propagation	用来控制传播属性</li>
+<li>isolation  用来控制隔离级别</li>
+<li>rollbackFor  用来设置什么异常回滚</li>
+<li>noRollbackFor 用来设置什么异常不回滚</li>
+<li>readOnly  用来设置事务读写性</li>
+<li>timeout  用来设置超时性</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>spring框架的注解式开发</p><p><a href="https://blog.buubiu.com/spring框架的注解式开发/">https://blog.buubiu.com/spring框架的注解式开发/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-08-09</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Spring/">Spring</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/SpringMVC%E6%A6%82%E8%BF%B0/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">SpringMVC概述</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/spring%E7%9A%84%E4%BA%8B%E5%8A%A1%E5%B1%9E%E6%80%A7/"><span class="level-item">spring的事务属性</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#注解（Annotation）式开发"><span class="level-left"><span class="level-item">1</span><span class="level-item">注解（Annotation）式开发</span></span></a></li><li><a class="level is-mobile" href="#Spring中注解"><span class="level-left"><span class="level-item">2</span><span class="level-item">Spring中注解</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#创建对象相关注解"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">创建对象相关注解</span></span></a></li><li><a class="level is-mobile" href="#控制对象在工厂中创建次数"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">控制对象在工厂中创建次数</span></span></a></li><li><a class="level is-mobile" href="#属性注入的相关注解"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">属性注入的相关注解</span></span></a></li><li><a class="level is-mobile" href="#控制事务注解"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">控制事务注解</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

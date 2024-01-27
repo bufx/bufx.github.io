@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Kubernetes-控制器(Controller)模型 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="简介Pod 这个看似复杂的 API 对象，实际上就是对容器的进一步抽象和封装而已。 Pod 对象，其实就是容器的升级版。它对容器进行了组合，添加了更多的属性和字段。这就好比给容器集装箱四面安装了吊环，使得 Kubernetes 这架“吊车”，可以更轻松地操作它。 而操作这些“集装箱”的逻辑，都由控制器（Controller）完成"><meta property="og:type" content="blog"><meta property="og:title" content="Kubernetes-控制器(Controller)模型"><meta property="og:url" content="https://blog.buubiu.com/Kubernetes-%E6%8E%A7%E5%88%B6%E5%99%A8-Controller-%E6%A8%A1%E5%9E%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="简介Pod 这个看似复杂的 API 对象，实际上就是对容器的进一步抽象和封装而已。 Pod 对象，其实就是容器的升级版。它对容器进行了组合，添加了更多的属性和字段。这就好比给容器集装箱四面安装了吊环，使得 Kubernetes 这架“吊车”，可以更轻松地操作它。 而操作这些“集装箱”的逻辑，都由控制器（Controller）完成"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/9gscUa1622301912586.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/uVxwfm1622308929628.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/4t1pZJ1622310400539.jpg"><meta property="article:published_time" content="2021-05-29T14:34:50.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.868Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Kubernetes"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/9gscUa1622301912586.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Kubernetes-%E6%8E%A7%E5%88%B6%E5%99%A8-Controller-%E6%A8%A1%E5%9E%8B/"},"headline":"Kubernetes-控制器(Controller)模型","image":["https://blog.buubiu.com/img/article/9gscUa1622301912586.png","https://blog.buubiu.com/img/article/uVxwfm1622308929628.jpg","https://blog.buubiu.com/img/article/4t1pZJ1622310400539.jpg"],"datePublished":"2021-05-29T14:34:50.000Z","dateModified":"2024-01-25T15:08:05.868Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"简介Pod 这个看似复杂的 API 对象，实际上就是对容器的进一步抽象和封装而已。 Pod 对象，其实就是容器的升级版。它对容器进行了组合，添加了更多的属性和字段。这就好比给容器集装箱四面安装了吊环，使得 Kubernetes 这架“吊车”，可以更轻松地操作它。 而操作这些“集装箱”的逻辑，都由控制器（Controller）完成"}</script><link rel="canonical" href="https://blog.buubiu.com/Kubernetes-%E6%8E%A7%E5%88%B6%E5%99%A8-Controller-%E6%A8%A1%E5%9E%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-05-29T14:34:50.000Z" title="5/29/2021, 10:34:50 PM">2021-05-29</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.868Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kubernetes/">Kubernetes</a><span> / </span><a class="link-muted" href="/categories/Kubernetes/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Kubernetes/">深入理解Kubernetes</a></span><span class="level-item">30 分钟读完 (大约4562个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Kubernetes-控制器(Controller)模型</h1><div class="content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Pod 这个看似复杂的 API 对象，实际上就是对容器的进一步抽象和封装而已。</p>
+<p>Pod 对象，其实就是容器的升级版。它对容器进行了组合，添加了更多的属性和字段。这就好比给容器集装箱四面安装了吊环，使得 Kubernetes 这架“吊车”，可以更轻松地操作它。</p>
+<p>而操作这些“集装箱”的逻辑，都由<strong>控制器（Controller）</strong>完成</p>
+<span id="more"></span>
+
+<h2 id="控制器模式"><a href="#控制器模式" class="headerlink" title="控制器模式"></a>控制器模式</h2><h3 id="控制器集合"><a href="#控制器集合" class="headerlink" title="控制器集合"></a>控制器集合</h3><p>在Kubernetes 架构中，有一个叫作kube-controller-manager 的组件。实际上，这个组件，就是一系列控制器的集合。我们可以查看一下 Kubernetes 项目的 pkg&#x2F;controller 目录：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> kubernetes/pkg/controller/</span><br><span class="line">$ <span class="built_in">ls</span> -d */              </span><br><span class="line">deployment/             job/                    podautoscaler/          </span><br><span class="line">cloud/                  disruption/             namespace/              </span><br><span class="line">replicaset/             serviceaccount/         volume/</span><br><span class="line">cronjob/                garbagecollector/       nodelifecycle/          replication/            statefulset/            daemon/</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="控制器通用编排模式"><a href="#控制器通用编排模式" class="headerlink" title="控制器通用编排模式"></a>控制器通用编排模式</h3><p>这个目录下面的每一个控制器，都以独有的方式负责某种编排功能。实际上，这些控制器之所以被统一放在 pkg&#x2F;controller 目录下，就是因为它们都遵循 Kubernetes 项目中的一个通用编排模式，即：<strong>控制循环（control loop）</strong>。</p>
+<p>看一个nginx-deployment 例子：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">2</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p>这个 Deployment 定义的编排动作非常简单，即：确保携带了 app&#x3D;nginx 标签的 Pod 的个数，永远等于 spec.replicas 指定的个数，即 2 个。</p>
+<p>这就意味着，如果在这个集群中，携带 app&#x3D;nginx 标签的 Pod 的个数大于 2 的时候，就会有旧的 Pod 被删除；反之，就会有新的 Pod 被创建。</p>
+<p>控制循环的实现步骤：</p>
+<ol>
+<li>Deployment 控制器从 Etcd 中获取到所有携带了“app: nginx”标签的 Pod，然后统计它们的数量，这就是实际状态；</li>
+<li>Deployment 对象的 Replicas 字段的值就是期望状态；</li>
+<li>Deployment 控制器将两个状态做比较，然后根据比较结果，确定是创建 Pod，还是删除已有的 Pod</li>
+</ol>
+<p>Kubernetes 对象的主要编排逻辑，实际上是在第三步的“对比”阶段完成的。</p>
+<p>这个操作，通常被叫作调谐（Reconcile）。这个调谐的过程，则被称作“Reconcile Loop”（调谐循环）或者“Sync Loop”（同步循环）。它们其实指的都是同一个东西：控制循环。</p>
+<p>而调谐的最终结果，往往都是对被控制对象的某种写操作。</p>
+<h3 id="控制器组成"><a href="#控制器组成" class="headerlink" title="控制器组成"></a>控制器组成</h3><p><img src="/../img/article/9gscUa1622301912586.png"></p>
+<p>如上图所示，<strong>类似 Deployment 这样的一个控制器，实际上都是由上半部分的控制器定义（包括期望状态），加上下半部分的被控制对象的模板组成的。</strong></p>
+<p>可以看到，Deployment 这个 template 字段里的内容，跟一个标准的 Pod 对象的 API 定义，丝毫不差。而所有被这个 Deployment 管理的 Pod 实例，其实都是根据这个 template 字段的内容创建出来的。</p>
+<p>像 Deployment 定义的 template 字段，在 Kubernetes 项目中有一个专有的名字，叫作 <strong>PodTemplate（Pod 模板）</strong>。</p>
+<h2 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h2><h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>Deployment 实现了 Kubernetes 项目中一个非常重要的功能：<code>Pod 的“水平扩展 / 收缩”（horizontal scaling out/in）</code>。</p>
+<p>如果你更新了 Deployment 的 Pod 模板（比如，修改了容器的镜像），那么 Deployment 就需要遵循一种叫作“滚动更新”（rolling update）的方式，来升级现有的容器。</p>
+<p>而这个能力的实现，依赖的是 Kubernetes 项目中的一个非常重要的概念（API 对象）：<code>ReplicaSet</code>。</p>
+<p>ReplicaSet 的结构非常简单，可以通过这个 YAML 文件查看一下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-set</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br></pre></td></tr></table></figure>
+
+<p>从这个 YAML 文件中，可以看到，<strong>一个 ReplicaSet 对象，其实就是由副本数目的定义和一个 Pod 模板组成的</strong>。不难发现，它的定义其实是 Deployment 的一个子集。</p>
+<p><strong>Deployment 控制器实际操纵的，正是这样的 ReplicaSet 对象，而不是 Pod 对象。</strong></p>
+<h3 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h3><p>明白了这个原理，再来分析一个如下所示的 Deployment：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">nginx:1.7.9</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这就是一个常用的 nginx-deployment，它定义的 Pod 副本个数是 3（spec.replicas&#x3D;3）。</p>
+<p>Deployment与 ReplicaSet的关系是怎样的呢？</p>
+<p>可以用一张图描述出来：</p>
+<p><img src="/../img/article/uVxwfm1622308929628.jpg"></p>
+<p>清楚地看到，一个定义了 replicas&#x3D;3 的 Deployment，与它的 ReplicaSet，以及 Pod 的关系，实际上是一种“层层控制”的关系。</p>
+<p>其中，ReplicaSet 负责通过“控制器模式”，保证系统中 Pod 的个数永远等于指定的个数（比如，3 个）。这也正是 Deployment 只允许容器的 restartPolicy&#x3D;Always 的主要原因：只有在容器能保证自己始终是 Running 状态的前提下，ReplicaSet 调整 Pod 的个数才有意义。</p>
+<p>而在此基础上，Deployment 同样通过“控制器模式”，来操作 ReplicaSet 的个数和属性，进而实现“水平扩展 &#x2F; 收缩”和“滚动更新”这两个编排动作。</p>
+<h4 id="水平扩展-x2F-收缩"><a href="#水平扩展-x2F-收缩" class="headerlink" title="水平扩展&#x2F;收缩"></a>水平扩展&#x2F;收缩</h4><p>“水平扩展 &#x2F; 收缩”非常容易实现，Deployment Controller 只需要修改它所控制的 ReplicaSet 的 Pod 副本个数就可以了。</p>
+<p>比如，把这个值从 3 改成 4，那么 Deployment 所对应的 ReplicaSet，就会根据修改后的值自动创建一个新的 Pod。这就是“水平扩展”了；“水平收缩”则反之。</p>
+<p>命令如下：<code>kubectl scale</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl scale deployment nginx-deployment --replicas=4</span><br><span class="line">deployment.apps/nginx-deployment scaled</span><br></pre></td></tr></table></figure>
+
+<h4 id="滚动更新"><a href="#滚动更新" class="headerlink" title="滚动更新"></a>滚动更新</h4><h5 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h5><p><strong>将一个集群中正在运行的多个 Pod 版本，交替地逐一升级的过程，就是“滚动更新”。</strong></p>
+<h5 id="更新流程"><a href="#更新流程" class="headerlink" title="更新流程"></a>更新流程</h5><p>下面用实际例子来解释一下：</p>
+<p>首先，来创建这个 nginx-deployment：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create -f nginx-deployment.yaml --record</span><br></pre></td></tr></table></figure>
+
+<p><code>--record</code>：记录下每次操作所执行的命令，以方便后面查看。</p>
+<p>检查一下 nginx-deployment 创建后的状态信息：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get deployments</span><br><span class="line">NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">nginx-deployment   3         0         0            0           1s</span><br></pre></td></tr></table></figure>
+
+<p>在返回结果中，可以看到四个状态字段，它们的含义如下所示。</p>
+<ol>
+<li>DESIRED：用户期望的 Pod 副本个数（spec.replicas 的值）；</li>
+<li>CURRENT：当前处于 Running 状态的 Pod 的个数；</li>
+<li>UP-TO-DATE：当前处于最新版本的 Pod 的个数，所谓最新版本指的是 Pod 的 Spec 部分与 Deployment 里 Pod 模板里定义的完全一致；</li>
+<li>AVAILABLE：当前已经可用的 Pod 的个数，即：既是 Running 状态，又是最新版本，并且已经处于 Ready（健康检查正确）状态的 Pod 的个数。</li>
+</ol>
+<p>可以看到，只有这个 AVAILABLE 字段，描述的才是用户所期望的最终状态。vs</p>
+<p>还可以实时查看 Deployment 对象的状态变化。</p>
+<p>命令：<code>kubectl rollout status</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout status deployment/nginx-deployment</span><br><span class="line"><span class="comment"># 意味着已经有 2 个 Pod 进入了 UP-TO-DATE 状态。</span></span><br><span class="line">Waiting <span class="keyword">for</span> rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">deployment.apps/nginx-deployment successfully rolled out</span><br></pre></td></tr></table></figure>
+
+<p>继续等待一会儿，就能看到这个 Deployment 的 3 个 Pod，就进入到了 AVAILABLE 状态：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get deployments</span><br><span class="line">NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">nginx-deployment   3         3         3            3           20s</span><br></pre></td></tr></table></figure>
+
+<p>查看一下这个 Deployment 所控制的 ReplicaSet：</p>
+<p>命令：<code>kubectl get rs</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get rs</span><br><span class="line">NAME                          DESIRED   CURRENT   READY   AGE</span><br><span class="line">nginx-deployment-3167673210   3         3         3       20s</span><br></pre></td></tr></table></figure>
+
+<p>如上所示，在用户提交了一个 Deployment 对象后，Deployment Controller 就会立即创建一个 Pod 副本个数为 3 的 ReplicaSet。这个 ReplicaSet 的名字，则是由 Deployment 的名字和一个随机字符串共同组成。</p>
+<p>这个随机字符串叫作 <strong>pod-template-hash</strong>，在这个例子里就是：3167673210。ReplicaSet 会把这个随机字符串加在它所控制的所有 Pod 的标签里，从而<strong>保证这些 Pod 不会与集群里的其他 Pod 混淆</strong>。</p>
+<p>而 ReplicaSet 的 DESIRED、CURRENT 和 READY 字段的含义，和 Deployment 中是一致的。所以，<strong>相比之下，Deployment 只是在 ReplicaSet 的基础上，添加了 UP-TO-DATE 这个跟版本有关的状态字段。</strong></p>
+<p>编辑Pod模版，“滚动更新”就会被自动触发，编辑有很多方式</p>
+<ul>
+<li><p>直接编辑原来的yaml文件</p>
+</li>
+<li><p>kubectl set image命令(下面会写到)</p>
+</li>
+<li><p>直接使用<code>kubectl edit</code>指令编辑 Etcd 里的 API 对象。</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl edit deployment/nginx-deployment</span><br><span class="line">... </span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">      - name: nginx</span><br><span class="line">        image: nginx:1.9.1 <span class="comment"># 1.7.9 -&gt; 1.9.1</span></span><br><span class="line">        ports:</span><br><span class="line">        - containerPort: 80</span><br><span class="line">...</span><br><span class="line">deployment.extensions/nginx-deployment edited</span><br></pre></td></tr></table></figure>
+
+<p>这个 kubectl edit 指令，会帮你直接打开 nginx-deployment 的 API 对象。然后，你就可以修改这里的 Pod 模板部分了。比如，在这里，我将 nginx 镜像的版本升级到了 1.9.1。</p>
+<blockquote>
+<p>备注：kubectl edit 命令实际上是把 API 对象的内容下载到了本地文件，等修改完成后再提交上去。</p>
+</blockquote>
+<p>通过 <code>kubectl rollout status</code> 指令查看 nginx-deployment 的状态变化：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout status deployment/nginx-deployment</span><br><span class="line">Waiting <span class="keyword">for</span> rollout to finish: 2 out of 3 new replicas have been updated...</span><br><span class="line">deployment.extensions/nginx-deployment successfully rolled out</span><br></pre></td></tr></table></figure>
+
+<p>通过查看 Deployment 的 Events，看到这个“滚动更新”的流程：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl describe deployment nginx-deployment</span><br><span class="line">...</span><br><span class="line">Events:</span><br><span class="line">  Type    Reason             Age   From                   Message</span><br><span class="line">  ----    ------             ----  ----                   -------</span><br><span class="line">...</span><br><span class="line">  Normal  ScalingReplicaSet  24s   deployment-controller  Scaled up replica <span class="built_in">set</span> nginx-deployment-1764197365 to 1</span><br><span class="line">  Normal  ScalingReplicaSet  22s   deployment-controller  Scaled down replica <span class="built_in">set</span> nginx-deployment-3167673210 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  22s   deployment-controller  Scaled up replica <span class="built_in">set</span> nginx-deployment-1764197365 to 2</span><br><span class="line">  Normal  ScalingReplicaSet  19s   deployment-controller  Scaled down replica <span class="built_in">set</span> nginx-deployment-3167673210 to 1</span><br><span class="line">  Normal  ScalingReplicaSet  19s   deployment-controller  Scaled up replica <span class="built_in">set</span> nginx-deployment-1764197365 to 3</span><br><span class="line">  Normal  ScalingReplicaSet  14s   deployment-controller  Scaled down replica <span class="built_in">set</span> nginx-deployment-3167673210 to 0</span><br></pre></td></tr></table></figure>
+
+<p> Pod 的版本升级过程：</p>
+<ul>
+<li>首先，当你修改了 Deployment 里的 Pod 定义之后，Deployment Controller 会使用这个修改后的 Pod 模板，创建一个新的 ReplicaSet（hash&#x3D;1764197365），这个新的 ReplicaSet 的初始 Pod 副本数是：0。</li>
+<li>然后，在 Age&#x3D;24 s 的位置，Deployment Controller 开始将这个新的 ReplicaSet 所控制的 Pod 副本数从 0 个变成 1 个，即：“水平扩展”出一个副本。</li>
+<li>紧接着，在 Age&#x3D;22 s 的位置，Deployment Controller 又将旧的 ReplicaSet（hash&#x3D;3167673210）所控制的旧 Pod 副本数减少一个，即：“水平收缩”成两个副本。</li>
+<li>如此交替进行，新 ReplicaSet 管理的 Pod 副本数，从 0 个变成 1 个，再变成 2 个，最后变成 3 个。而旧的 ReplicaSet 管理的 Pod 副本数则从 3 个变成 2 个，再变成 1 个，最后变成 0 个。</li>
+</ul>
+<p>像这样，<strong>将一个集群中正在运行的多个 Pod 版本，交替地逐一升级的过程，就是“滚动更新”。</strong></p>
+<p>在这个“滚动更新”过程完成之后，可以查看一下新、旧两个 ReplicaSet 的最终状态：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get rs</span><br><span class="line">NAME                          DESIRED   CURRENT   READY   AGE</span><br><span class="line">nginx-deployment-1764197365   3         3         3       6s</span><br><span class="line">nginx-deployment-3167673210   0         0         0       30s</span><br></pre></td></tr></table></figure>
+
+<p>其中，旧 ReplicaSet（hash&#x3D;3167673210）已经被“水平收缩”成了 0 个副本。</p>
+<h5 id="更新原则"><a href="#更新原则" class="headerlink" title="更新原则"></a>更新原则</h5><p>为了保证服务的连续性，Deployment Controller 还会确保，在任何时间窗口内，只有指定比例的 Pod 处于离线状态。同时，它也会确保，在任何时间窗口内，只有指定比例的新 Pod 被创建出来。这两个比例的值都是可以配置的，默认都是 DESIRED 值的 25%。</p>
+<p>所以，在上面这个 Deployment 的例子中，它有 3 个 Pod 副本，那么控制器在“滚动更新”的过程中永远都会确保至少有 2 个 Pod 处于可用状态，至多只有 4 个 Pod 同时存在于集群中。这个策略，是 Deployment 对象的一个字段，名叫 RollingUpdateStrategy，如下所示：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>maxSurge</code>：除了 DESIRED 数量之外，在一次“滚动”中，Deployment 控制器还可以创建多少个新 Pod；</li>
+<li><code>maxUnavailable</code>：在一次“滚动”中，Deployment 控制器可以删除多少个旧 Pod。</li>
+</ul>
+<p>同时，这两个配置还可以用前面我们介绍的百分比形式来表示，比如：maxUnavailable&#x3D;50%，指的是我们最多可以一次删除“50%*DESIRED 数量”个 Pod。</p>
+<h5 id="滚动回滚-降级"><a href="#滚动回滚-降级" class="headerlink" title="滚动回滚(降级)"></a>滚动回滚(降级)</h5><p>先把镜像名字修改成为了一个错误的名字，比如：nginx:1.91，这样，这个 Deployment 就会出现一个升级失败的版本。</p>
+<p>这次，使用<code> kubectl set image</code> 的指令，直接修改 nginx-deployment 所使用的镜像。这个命令的好处就是，你可以不用像 kubectl edit 那样需要打开编辑器。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">set</span> image deployment/nginx-deployment nginx=nginx:1.91</span><br><span class="line">deployment.extensions/nginx-deployment image updated</span><br></pre></td></tr></table></figure>
+
+<p>查一下 ReplicaSet 的状态，如下所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get rs</span><br><span class="line">NAME                          DESIRED   CURRENT   READY   AGE</span><br><span class="line">nginx-deployment-1764197365   2         2         2       24s</span><br><span class="line">nginx-deployment-3167673210   0         0         0       35s</span><br><span class="line">nginx-deployment-2156724341   2         2         0       7s</span><br></pre></td></tr></table></figure>
+
+<p>通过这个返回结果，可以看到，新版本的 ReplicaSet（hash&#x3D;2156724341）的“水平扩展”已经停止。而且此时，它已经创建了两个 Pod，但是它们都没有进入 READY 状态。这当然是因为这两个 Pod 都拉取不到有效的镜像。</p>
+<p>与此同时，旧版本的 ReplicaSet（hash&#x3D;1764197365）的“水平收缩”，也自动停止了。此时，已经有一个旧 Pod 被删除，还剩下两个旧 Pod。</p>
+<h6 id="回滚到上一个版本"><a href="#回滚到上一个版本" class="headerlink" title="回滚到上一个版本"></a>回滚到上一个版本</h6><p>执行<code>kubectl rollout undo</code> 命令，就能把整个 Deployment 回滚到上一个版本：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/nginx-deployment</span><br><span class="line">deployment.extensions/nginx-deployment</span><br></pre></td></tr></table></figure>
+
+<p>在具体操作上，Deployment 的控制器，其实就是让这个旧 ReplicaSet（hash&#x3D;1764197365）再次“扩展”成 3 个 Pod，而让新的 ReplicaSet（hash&#x3D;2156724341）重新“收缩”到 0 个 Pod。</p>
+<h6 id="回滚到任意一个版本"><a href="#回滚到任意一个版本" class="headerlink" title="回滚到任意一个版本"></a>回滚到任意一个版本</h6><p>使用<code>kubectl rollout history</code>命令，查看每次 Deployment 变更对应的版本。由于在创建这个 Deployment 的时候，指定了–record 参数，所以我们创建这些版本时执行的 kubectl 命令，都会被记录下来。还可以通过这个指令，看到每个版本对应的 Deployment 的 API 对象的细节，最后加上具体的版本即可，这个操作的输出如下所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout <span class="built_in">history</span> deployment/nginx-deployment [--revision=2]</span><br><span class="line">deployments <span class="string">&quot;nginx-deployment&quot;</span></span><br><span class="line">REVISION    CHANGE-CAUSE</span><br><span class="line">1           kubectl create -f nginx-deployment.yaml --record</span><br><span class="line">2           kubectl edit deployment/nginx-deployment</span><br><span class="line">3           kubectl <span class="built_in">set</span> image deployment/nginx-deployment nginx=nginx:1.91</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，前面执行的创建和更新操作，分别对应了版本 1 和版本 2，而那次失败的更新操作，则对应的是版本 3。</p>
+<p>最后使用<code>kubectl rollout undo</code> 命令，再加上要回滚到的指定版本的版本号，就可以回滚到指定版本了。这个指令的用法如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout undo deployment/nginx-deployment --to-revision=2</span><br><span class="line">deployment.extensions/nginx-deployment</span><br></pre></td></tr></table></figure>
+
+<p>这样，Deployment Controller 会按照“滚动更新”的方式，完成对 Deployment 的降级操作。</p>
+<h5 id="控制多余版本的生成"><a href="#控制多余版本的生成" class="headerlink" title="控制多余版本的生成"></a>控制多余版本的生成</h5><h6 id="控制多次编辑版本的数量"><a href="#控制多次编辑版本的数量" class="headerlink" title="控制多次编辑版本的数量"></a>控制多次编辑版本的数量</h6><p>Kubernetes 项目还提供了一个指令，使得对 Deployment 的多次更新操作，最后 只生成一个 ReplicaSet。</p>
+<p>具体的做法是，在更新 Deployment 前，你要先执行一条 <code>kubectl rollout pause</code> 指令。它的用法如下所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout pause deployment/nginx-deployment</span><br><span class="line">deployment.extensions/nginx-deployment paused</span><br></pre></td></tr></table></figure>
+
+<p>这个 kubectl rollout pause 的作用，是让这个 Deployment 进入了一个“暂停”状态。</p>
+<p>所以接下来，就可以随意使用 kubectl edit 或者 kubectl set image 指令，修改这个 Deployment 的内容了。</p>
+<p>由于此时 Deployment 正处于“暂停”状态，所以对 Deployment 的所有修改，都不会触发新的“滚动更新”，也不会创建新的 ReplicaSet。</p>
+<p>而等到对 Deployment 修改操作都完成之后，只需要再执行一条 <code>kubectl rollout resume </code>指令，就可以把这个 Deployment“恢复”回来，如下所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl rollout resume deployment/nginx-deployment</span><br><span class="line">deployment.extensions/nginx-deployment resumed</span><br></pre></td></tr></table></figure>
+
+<p>而在这个 kubectl rollout resume 指令执行之前，在 kubectl rollout pause 指令之后的这段时间里，对 Deployment 进行的所有修改，最后只会触发一次“滚动更新”。</p>
+<p>可以通过检查 ReplicaSet 状态的变化，来验证一下 kubectl rollout pause 和 kubectl rollout resume 指令的执行效果，如下所示：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl get rs</span><br><span class="line">NAME               DESIRED   CURRENT   READY     AGE</span><br><span class="line">nginx-1764197365   0         0         0         2m</span><br><span class="line">nginx-3196763511   3         3         3         28s</span><br></pre></td></tr></table></figure>
+
+<p>通过返回结果，可以看到，只有一个 hash&#x3D;3196763511 的 ReplicaSet 被创建了出来。</p>
+<h6 id="控制ReplicaSet-的数量"><a href="#控制ReplicaSet-的数量" class="headerlink" title="控制ReplicaSet 的数量"></a>控制ReplicaSet 的数量</h6><p>Deployment 对象有一个字段，叫作 spec.revisionHistoryLimit，就是 Kubernetes 为 Deployment 保留的“历史版本”个数。所以，如果把它设置为 0，你就再也不能做回滚操作了。</p>
+<h3 id="Deployment、ReplicaSet-和-Pod-的关系"><a href="#Deployment、ReplicaSet-和-Pod-的关系" class="headerlink" title="Deployment、ReplicaSet 和 Pod 的关系"></a>Deployment、ReplicaSet 和 Pod 的关系</h3><p><img src="/../img/article/4t1pZJ1622310400539.jpg"></p>
+<p>如上所示，Deployment 的控制器，实际上控制的是 ReplicaSet 的数目，以及每个 ReplicaSet 的属性。</p>
+<p>而一个应用的版本，对应的正是一个 ReplicaSet；这个版本应用的 Pod 数量，则由 ReplicaSet 通过它自己的控制器（ReplicaSet Controller）来保证。</p>
+<p>通过这样的多个 ReplicaSet 对象，Kubernetes 项目就实现了对多个“应用版本”的描述。</p>
+<p><strong>Deployment 实际上是一个两层控制器。首先，它通过 ReplicaSet 的个数来描述应用的版本；然后，它再通过 ReplicaSet 的属性（比如 replicas 的值），来保证 Pod 的副本数量。</strong></p>
+<p><strong>Deployment 控制 ReplicaSet（版本），ReplicaSet 控制 Pod（副本数）。</strong></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Kubernetes-控制器(Controller)模型</p><p><a href="https://blog.buubiu.com/Kubernetes-控制器-Controller-模型/">https://blog.buubiu.com/Kubernetes-控制器-Controller-模型/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-05-29</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Kubernetes/">Kubernetes</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Kubernetes-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-StatefulSet/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Kubernetes-深入理解 StatefulSet</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Kubernetes-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Pod/"><span class="level-item">Kubernetes-深入理解Pod</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#简介"><span class="level-left"><span class="level-item">1</span><span class="level-item">简介</span></span></a></li><li><a class="level is-mobile" href="#控制器模式"><span class="level-left"><span class="level-item">2</span><span class="level-item">控制器模式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#控制器集合"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">控制器集合</span></span></a></li><li><a class="level is-mobile" href="#控制器通用编排模式"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">控制器通用编排模式</span></span></a></li><li><a class="level is-mobile" href="#控制器组成"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">控制器组成</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Deployment"><span class="level-left"><span class="level-item">3</span><span class="level-item">Deployment</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#实现原理"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">实现原理</span></span></a></li><li><a class="level is-mobile" href="#实现方法"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">实现方法</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#水平扩展-x2F-收缩"><span class="level-left"><span class="level-item">3.2.1</span><span class="level-item">水平扩展/收缩</span></span></a></li><li><a class="level is-mobile" href="#滚动更新"><span class="level-left"><span class="level-item">3.2.2</span><span class="level-item">滚动更新</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Deployment、ReplicaSet-和-Pod-的关系"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">Deployment、ReplicaSet 和 Pod 的关系</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

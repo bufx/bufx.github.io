@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Kubernetes基本概念 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Kubernetes是Google团队发起并维护的基于Docker的开源容器集群管理系统，它不仅支持常见的云平台，而且支持内部数据中心。"><meta property="og:type" content="blog"><meta property="og:title" content="Kubernetes基本概念"><meta property="og:url" content="https://blog.buubiu.com/Kubernetes%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="Kubernetes是Google团队发起并维护的基于Docker的开源容器集群管理系统，它不仅支持常见的云平台，而且支持内部数据中心。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/sjRiRv1617155670585.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/oPkeYx1617158682558.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/8XRTnQ1617203955892.png"><meta property="article:published_time" content="2021-03-31T01:49:24.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.871Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Kubernetes"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/sjRiRv1617155670585.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Kubernetes%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"},"headline":"Kubernetes基本概念","image":["https://blog.buubiu.com/img/article/sjRiRv1617155670585.png","https://blog.buubiu.com/img/article/oPkeYx1617158682558.jpg","https://blog.buubiu.com/img/article/8XRTnQ1617203955892.png"],"datePublished":"2021-03-31T01:49:24.000Z","dateModified":"2024-01-25T15:08:05.871Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"Kubernetes是Google团队发起并维护的基于Docker的开源容器集群管理系统，它不仅支持常见的云平台，而且支持内部数据中心。"}</script><link rel="canonical" href="https://blog.buubiu.com/Kubernetes%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-31T01:49:24.000Z" title="3/31/2021, 9:49:24 AM">2021-03-31</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.871Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Kubernetes/">Kubernetes</a><span> / </span><a class="link-muted" href="/categories/Kubernetes/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Kubernetes/">深入理解Kubernetes</a></span><span class="level-item">35 分钟读完 (大约5206个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Kubernetes基本概念</h1><div class="content"><p><code>Kubernetes</code>是Google团队发起并维护的基于Docker的开源容器集群管理系统，它不仅支持常见的云平台，而且支持内部数据中心。</p>
+<img src="../img/article/sjRiRv1617155670585.png" style="zoom:50%;" />
+
+<span id="more"></span>
+
+<p>建于 Docker 之上的 <code>Kubernetes</code> 可以构建一个容器的调度服务，其目的是让用户透过 <code>Kubernetes</code> 集群来进行云端容器集群的管理，而无需用户进行复杂的设置工作。系统会自动选取合适的工作节点来执行具体的容器集群调度处理工作。其核心概念是 <code>Container Pod</code>。一个 <code>Pod</code> 由一组工作于同一物理工作节点的容器构成。这些组容器拥有相同的网络命名空间、IP以及存储配额，也可以根据实际情况对每一个 <code>Pod</code> 进行端口映射。此外，<code>Kubernetes</code> 工作节点会由主系统进行管理，节点包含了能够运行 Docker 容器所用到的服务。</p>
+<hr>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><code>Kubernetes</code>是Google团队发起的开源项目，它的目标是管理跨多个主机的容器，提供基本的部署，维护以及应用伸缩，主要实现语言为Go语言。Kubernetes是：</p>
+<ul>
+<li>易学：轻量级，简单，容易理解</li>
+<li>便携：支持公有云，私有云，混合云，以及各种云平台</li>
+<li>可拓展：模块化，可插拔，支持钩子，可任意组合</li>
+<li>自修复：自动重调度，自动重启，自动复制</li>
+</ul>
+<p>Kubernetes构建于Google数十年经验，一大半来源于Google生产环境规模的经验。结合了社区最佳的想法和实践。</p>
+<p>在分布式系统中，部署，调度，伸缩一直是最为重要的，也是最为基础的功能。Kubernetes就是洗完解决这一序列问题的。</p>
+<p>Kubernetes目前在<a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes">GitHub</a>镜像维护。</p>
+<hr>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><img src="/../img/article/oPkeYx1617158682558.jpg"></p>
+<ul>
+<li>节点（<code>Node</code>）：一个节点是一个运行Kubernetes中的主机</li>
+<li>容器组（<code>Pod</code>）：一个Pod对应于由若干容器组成的一个容器组，同个组内的容器共享一个存储卷(volume)。</li>
+<li>容器组生命周期（<code>pos-states</code>）：包含所有容器状态集合，包括容器组状态类型，容器组生命周期，事件，重启策略，以及replication controllers。</li>
+<li><code>Replication Controllers</code>：主要负责指定数量的pod在同一时间一起运行。</li>
+<li>服务（<code>services</code>）：一个Kubernetes服务是容器组逻辑的高级抽象，同时也对外提供访问容器组的策略。</li>
+<li>卷（<code>volumes</code>）：一个卷就是一个目录，容器对其有访问权限。</li>
+<li>标签（<code>labels</code>）：标签是用来连接一组对象的，比如容器组。标签可以被用来组织和选择子对象。</li>
+<li>接口权限（<code>accessing_the_api</code>）：端口，IP地址和代理的防火墙规则。</li>
+<li>web界面（<code>ux</code>）：用户可以通过web界面操作Kubernetes。</li>
+<li>命令行操作（<code>cli</code>）：<code>kubectl</code>命令。</li>
+</ul>
+<hr>
+<h3 id="节点-node"><a href="#节点-node" class="headerlink" title="节点(node)"></a>节点(node)</h3><p>在<code>Kubernetes</code>中，节点是实际工作的点，节点可以是虚拟机或者物理机器，依赖于一个集群环境。每个节点都有一个些必要的服务以运行容器组，并且它们都可以通过主节点来管理。必要服务包括Docker，kubelet和代理服务。</p>
+<hr>
+<h3 id="容器状态"><a href="#容器状态" class="headerlink" title="容器状态"></a>容器状态</h3><p>容器状态用来描述节点的当前状态。现在，其中包含三个信息：</p>
+<h4 id="主机IP"><a href="#主机IP" class="headerlink" title="主机IP"></a>主机IP</h4><p>主机IP需要云平台来查询，<code>Kubernetes</code>把它作为状态的一部分来保存。如果<code>Kubernetes</code>没有运行在云平台上，节点ID就是必需的。IP地址可以变化，并且可以包含多种类型的IP地址，如公共IP，私有IP，动态IP，ipv6等等。</p>
+<h4 id="节点周期"><a href="#节点周期" class="headerlink" title="节点周期"></a>节点周期</h4><p>通常来说节点有<code>Pending(等待中)</code>、<code>Running(运行中)</code>、<code>Terminated(已终止)</code>三个周期，如果Kubernetes发现了一个节点并且其可用，那么Kubernetes就把它标记为<code>Pending</code>。然后在某个时刻，Kubernetes将会标记其为<code>Running</code>。节点的结束周期成为<code>Terminated</code>。一个已经<code>Terminated</code>的节点不会接受和调度任何请求，并且已经在其上运行的容器组也会删除。</p>
+<h4 id="节点状态"><a href="#节点状态" class="headerlink" title="节点状态"></a>节点状态</h4><p>节点状态主要是用来描述处于<code>Running</code>的节点。当前可用的有<code>NodeReachable</code>和<code>NodeReady</code>。</p>
+<p>以后可能会增加其他状态。<code>NodeReachable</code>表示集群可达。<code>NodeReady</code>表示kubelet返回Status Ok并且HTTP状态检查健康。</p>
+<hr>
+<h3 id="节点管理"><a href="#节点管理" class="headerlink" title="节点管理"></a>节点管理</h3><p>节点并非Kubernetes创建，而是由云平台创建，或者就是物理机器、虚拟机。在Kubernetes中，节点仅仅是一条记录，节点创建后，Kubernetes会检查其是否可用。在Kubernetes中，节点用如下结构保存：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10.1.2.3&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Minion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1beta1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;resources&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;capacity&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;cpu&quot;</span><span class="punctuation">:</span> <span class="number">1000</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;memory&quot;</span><span class="punctuation">:</span> <span class="number">1073741824</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;labels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;my-first-k8s-node&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>Kubernetes校验节点可用依赖于 ID。在当前的版本中，有两个接口可以用来管理节点：<strong>节点控制</strong>和<strong>Kube管理</strong>。</p>
+<hr>
+<h3 id="节点控制"><a href="#节点控制" class="headerlink" title="节点控制"></a>节点控制</h3><p>在Kubernetes主节点中，节点控制器是用来管理节点的组件。主要包括：</p>
+<ul>
+<li>集群范围内节点同步</li>
+<li>单节点生命周期管理</li>
+</ul>
+<p>节点控制有一个同步轮询，主要监听所有云平台的虚拟实例，会根据节点状态创建和删除。可以通过 <code>--node_sync_period</code>标志来控制该轮询。如果一个实例已经创建，节点控制将会为其创建一个结构。同样的，如果一个节点被删除，节点控制也会删除该结构。在 Kubernetes 启动时可用通过 <code>--machines</code>标记来显示指定节点。同样可以使用 <code>kubectl</code> 来一条一条的添加节点，两者是相同的。通过设置 <code>--sync_nodes=false</code>标记来禁止集群之间的节点同步，你也可以使用 api&#x2F;kubectl 命令行来增删节点。</p>
+<hr>
+<h3 id="容器组（pod）"><a href="#容器组（pod）" class="headerlink" title="容器组（pod）"></a>容器组（pod）</h3><p>在 Kubernetes 中，使用的最小单位是容器组，容器组是创建，调度，管理的最小单位。 一个容器组使用相同的 Docker 容器并共享卷（挂载点）。一个容器组是一个特定应用的打包集合，包含一个或多个容器。</p>
+<p>和运行的容器类似，一个容器组被认为只有很短的运行周期。容器组被调度到一组节点运行，直到容器的生命周期结束或者其被删除。如果节点死掉，运行在其上的容器组将会被删除而不是重新调度。（也许在将来的版本中会添加容器组的移动）。</p>
+<h4 id="容器组设计的初衷"><a href="#容器组设计的初衷" class="headerlink" title="容器组设计的初衷"></a>容器组设计的初衷</h4><p>假设 Kubernetes 中调度的基本单元就是容器，对于一个非常简单的应用可以直接被调度直接使用，没有什么问题，但是往往还有很多应用程序是由多个进程组成的，有的同学可能会说把这些进程都打包到一个容器中去不就可以了吗？理论上是可以实现的，但是不要忘记了 Docker 管理的进程是 pid&#x3D;1 的主进程，其他进程死掉了就会成为僵尸进程，没办法进行管理了，这种方式本身也不是容器推荐的运行方式，一个容器最<strong>只干一件事情</strong>，所以在真实的环境中不会使用这种方式。</p>
+<p>那么我们就把这个应用的进程进行拆分，拆分成一个一个的容器总可以了吧？但是不要忘记一个问题，拆分成一个一个的容器后，是不是就有可能出现一个应用下面的某个进程容器被调度到了不同的节点上呢？往往我们应用内部的进程与进程间通信（通过 IPC 或者共享本地文件之类）都是要求在本地进行的，也就是需要在同一个节点上运行。</p>
+<p>所以我们需要一个更高级别的结构来将这些容器绑定在一起，并将他们作为一个基本的调度单元进行管理，这样就可以保证这些容器始终在同一个节点上面，这也就是容器组设计的初衷。</p>
+<h4 id="资源共享和通信"><a href="#资源共享和通信" class="headerlink" title="资源共享和通信"></a>资源共享和通信</h4><p>容器组主要是为了数据共享和它们之间的通信。</p>
+<p>在一个容器组中，容器都使用相同的网络地址和端口，可以通过本地网络来相互通信。每个容器组都有独立的 IP，可以通过网络来和其他物理主机或者容器通信。</p>
+<p>容器组有一组存储卷（挂载点），主要是为了让容器在重启之后可以不丢失数据。</p>
+<h4 id="容器组管理"><a href="#容器组管理" class="headerlink" title="容器组管理"></a>容器组管理</h4><p>容器组是一个应用管理和部署的高层次抽象，同时也是一组容器的接口。容器组是部署、水平收缩的最小单位。</p>
+<h4 id="容器组的使用"><a href="#容器组的使用" class="headerlink" title="容器组的使用"></a>容器组的使用</h4><p>容器组可以通过组合来构建复杂的应用，其本来的意义包含：</p>
+<ul>
+<li>内容管理，文件和数据加载以及本地缓存管理等。</li>
+<li>日志和检查点备份，压缩，快照等。</li>
+<li>监听数据变化，跟踪日志，日志和监控代理，消息发布等。</li>
+<li>代理，网桥</li>
+<li>控制器，管理，配置以及更新</li>
+</ul>
+<h4 id="替代方案"><a href="#替代方案" class="headerlink" title="替代方案"></a>替代方案</h4><p>为什么不在一个单一的容器里运行多个程序？</p>
+<ul>
+<li><strong>透明化</strong>。为了使容器组中的容器保持一致的基础设施和服务，比如进程管理和资源监控。这样设计是为了用户的便利性。</li>
+<li><strong>解偶软件之间的依赖</strong>。每个容器都可能重新构建和发布，Kubernetes 必须支持热发布和热更新（将来）。</li>
+<li><strong>方便使用</strong>。用户不必运行独立的程序管理，也不用担心每个应用程序的退出状态。</li>
+<li><strong>高效</strong>。考虑到基础设施有更多的职责，容器必须要轻量化。</li>
+</ul>
+<h4 id="容器组的生命状态"><a href="#容器组的生命状态" class="headerlink" title="容器组的生命状态"></a>容器组的生命状态</h4><p>包括若干状态值：<code>pending</code>、<code>running</code>、<code>succeeded</code>、<code>failed</code>。</p>
+<h5 id="pending"><a href="#pending" class="headerlink" title="pending"></a>pending</h5><p>容器组已经被节点接受，但有一个或多个容器还没有运行起来。这将包含某些节点正在下载镜像的时间，这种情形会依赖于网络情况。</p>
+<h5 id="running"><a href="#running" class="headerlink" title="running"></a>running</h5><p>容器组已经被调度到节点，并且所有的容器都已经启动。至少有一个容器处于运行状态（或者处于重启状态）</p>
+<h5 id="succeeded"><a href="#succeeded" class="headerlink" title="succeeded"></a>succeeded</h5><p>所有的容器都正常退出。</p>
+<h5 id="failed"><a href="#failed" class="headerlink" title="failed"></a>failed</h5><p>容器组中所有容器都意外中断了。</p>
+<h4 id="容器组的生命周期"><a href="#容器组的生命周期" class="headerlink" title="容器组的生命周期"></a>容器组的生命周期</h4><p>通常来说，如果容器组被创建了就不会自动销毁，除非被某种行为触发，而触发此种情况可能是人为，或者复制控制器所为。唯一例外的是容器组由 succeeded 状态成功退出，或者在一定时间内重试多次依然失败。</p>
+<p>如果某个节点死掉或者不能连接，那么节点控制器将会标记其上的容器组的状态为 <code>failed</code>。</p>
+<p>举例如下。</p>
+<ul>
+<li><p>容器组状态 <code>running</code>，有 1 容器，容器正常退出</p>
+<ul>
+<li>记录完成事件</li>
+<li>如果重启策略为：<ul>
+<li>始终：重启容器，容器组保持 <code>running</code></li>
+<li>失败时：容器组变为 <code>succeeded</code></li>
+<li>从不：容器组变为 <code>succeeded</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>容器组状态 <code>running</code>，有1容器，容器异常退出</p>
+<ul>
+<li>记录失败事件</li>
+<li>如果重启策略为：<ul>
+<li>始终：重启容器，容器组保持 <code>running</code></li>
+<li>失败时：重启容器，容器组保持 <code>running</code></li>
+<li>从不：容器组变为 <code>failed</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>容器组状态 <code>running</code>，有2容器，</p>
+<ul>
+<li>当有1容器异常退出<ul>
+<li>记录失败事件</li>
+<li>如果重启策略为：<ul>
+<li>始终：重启容器，容器组保持 <code>running</code></li>
+<li>失败时：重启容器，容器组保持 <code>running</code></li>
+<li>从不：容器组保持 <code>running</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>当有2容器退出<ul>
+<li>记录失败事件</li>
+<li>如果重启策略为：<ul>
+<li>始终：重启容器，容器组保持 <code>running</code></li>
+<li>失败时：重启容器，容器组保持 <code>running</code></li>
+<li>从不：容器组变为 <code>failed</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>容器组状态 <code>running</code>，容器内存不足</p>
+<ul>
+<li>标记容器错误中断</li>
+<li>记录内存不足事件</li>
+<li>如果重启策略为：<ul>
+<li>始终：重启容器，容器组保持 <code>running</code></li>
+<li>失败时：重启容器，容器组保持 <code>running</code></li>
+<li>从不：记录错误事件，容器组变为 <code>failed</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>容器组状态 <code>running</code>，一块磁盘死掉</p>
+<ul>
+<li>杀死所有容器</li>
+<li>记录事件</li>
+<li>容器组变为 <code>failed</code></li>
+<li>如果容器组运行在一个控制器下，容器组将会在其他地方重新创建</li>
+</ul>
+</li>
+<li><p>容器组状态 <code>running</code>，对应的节点段溢出</p>
+<ul>
+<li>节点控制器等到超时</li>
+<li>节点控制器标记容器组 <code>failed</code></li>
+<li>如果容器组运行在一个控制器下，容器组将会在其他地方重新创建</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Replication-Controllers"><a href="#Replication-Controllers" class="headerlink" title="Replication Controllers"></a>Replication Controllers</h3><p><code>ReplicationController</code>确保在任何时候都有特定数量的容器组副本处于运行状态。 换句话说，<code>ReplicationController</code> 确保一个 容器组 或一组同类的 容器组 总是可用的。</p>
+<h4 id="ReplicationController-如何工作"><a href="#ReplicationController-如何工作" class="headerlink" title="ReplicationController 如何工作"></a>ReplicationController 如何工作</h4><p>当 Pod 数量过多时，ReplicationController 会终止多余的 Pod。当 Pod 数量太少时，ReplicationController 将会启动新的 Pod。 与手动创建的 Pod 不同，由 ReplicationController 创建的 Pod 在失败、被删除或被终止时会被自动替换。 例如，在中断性维护（如内核升级）之后，你的 Pod 会在节点上重新创建。 因此，即使你的应用程序只需要一个 Pod，你也应该使用 ReplicationController 创建 Pod。 ReplicationController 类似于进程管理器，但是 ReplicationController 不是监控单个节点上的单个进程，而是监控跨多个节点的多个 Pod。</p>
+<p>在讨论中，ReplicationController 通常缩写为 “rc”，并作为 kubectl 命令的快捷方式。</p>
+<p>一个简单的示例是创建一个 ReplicationController 对象来可靠地无限期地运行 Pod 的一个实例。 更复杂的用例是运行一个多副本服务（如 web 服务器）的若干相同副本。</p>
+<hr>
+<h3 id="服务-service"><a href="#服务-service" class="headerlink" title="服务(service)"></a>服务(service)</h3><p>将运行在一组 <code>Pods</code>上的应用程序公开为网络服务的抽象方法。</p>
+<p>使用 Kubernetes，你无需修改应用程序即可使用不熟悉的服务发现机制。 Kubernetes 为 Pods 提供自己的 IP 地址，并为一组 Pod 提供相同的 DNS 名， 并且可以在它们之间进行负载均衡。</p>
+<hr>
+<h3 id="卷"><a href="#卷" class="headerlink" title="卷"></a>卷</h3><p>容器中的文件在磁盘上是临时存放的，这给容器中运行的较重要的应用 程序带来一些问题：</p>
+<ul>
+<li>当容器崩溃时文件丢失。kubelet 会重新启动容器， 但容器会以干净的状态重启。 </li>
+<li>会在同一 <code>Pod</code> 中运行多个容器并共享文件时出现。</li>
+</ul>
+<p> Kubernetes <code>卷（Volume）</code> 这一抽象概念能够解决这两个问题。</p>
+<hr>
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><p>标签（<code>Labels</code>）是附加到 Kubernetes 对象（比如 Pods）上的键值对。 标签旨在用于指定对用户有意义且相关的对象的标识属性，但不直接对核心系统有语义含义。 标签可以用于组织和选择对象的子集。标签可以在创建时附加到对象，随后可以随时添加和修改。 每个对象都可以定义一组键&#x2F;值标签。每个键对于给定对象必须是唯一的。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;labels&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;key1&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;value1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;key2&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;value2&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>标签能够支持高效的查询和监听操作，对于用户界面和命令行是很理想的。</p>
+<hr>
+<h3 id="接口权限"><a href="#接口权限" class="headerlink" title="接口权限"></a>接口权限</h3><p>Pod 的安全性配置一般通过使用 <strong>安全性上下文（Security Context）</strong>来保证。安全性上下文允许用户逐个 Pod 地定义特权级及访问控制。</p>
+<p>以前，对集群的安全性上下文的需求的实施及其基于策略的定义都通过使用 <strong>Pod 安全性策略</strong>来实现。 <strong>Pod 安全性策略（Pod Security Policy）</strong>是一种集群层面的资源，控制 Pod 规约中 安全性敏感的部分。</p>
+<p>不过，新的策略实施方式不断涌现，或增强或替换 PodSecurityPolicy 的使用。</p>
+<hr>
+<h3 id="web界面"><a href="#web界面" class="headerlink" title="web界面"></a>web界面</h3><p><code>Dashboard</code> 是基于网页的 Kubernetes 用户界面。 你可以使用 Dashboard 将容器应用部署到 Kubernetes 集群中，也可以对容器应用排错，还能管理集群资源。 你可以使用 Dashboard 获取运行在集群中的应用的概览信息，也可以创建或者修改 Kubernetes 资源 （如 Deployment，Job，DaemonSet 等等）。 例如，你可以对 Deployment 实现弹性伸缩、发起滚动升级、重启 Pod 或者使用向导创建新的应用。</p>
+<p>Dashboard 同时展示了 Kubernetes 集群中的资源状态信息和所有报错信息。</p>
+<p><img src="/../img/article/8XRTnQ1617203955892.png"></p>
+<hr>
+<h3 id="命令行操作"><a href="#命令行操作" class="headerlink" title="命令行操作"></a>命令行操作</h3><p>可以使用 Kubectl 命令行工具管理 Kubernetes 集群。 <code>kubectl</code> 在 <code>$HOME/.kube</code> 目录中查找一个名为 <code>config</code> 的配置文件。 可以通过设置 KUBECONFIG 环境变量或设置 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/configuration/organize-cluster-access-kubeconfig/"><code>--kubeconfig</code></a> 参数来指定其它 kubeconfig文件。</p>
+<hr>
+<h2 id="安装工具介绍"><a href="#安装工具介绍" class="headerlink" title="安装工具介绍"></a>安装工具介绍</h2><h3 id="Kubeadm"><a href="#Kubeadm" class="headerlink" title="Kubeadm"></a>Kubeadm</h3><p>Kubeadm 是一个提供了 <code>kubeadm init</code> 和 <code>kubeadm join</code> 的工具，作为创建 Kubernetes 集群的 “快捷途径” 的最佳实践。</p>
+<p>kubeadm 通过执行必要的操作来启动和运行最小可用集群。按照设计，它只关注启动引导，而非配置机器。同样的，安装各种 “锦上添花” 的扩展，例如 Kubernetes Dashboard, 监控方案，以及特定云平台的扩展，都不在讨论范围内。</p>
+<p>相反，我们希望在 kubeadm 之上构建更高级别以及更加合规的工具，理想情况下，使用 kubeadm 作为所有部署工作的基准将会更加易于创建一致性集群。</p>
+<h3 id="Kubectl"><a href="#Kubectl" class="headerlink" title="Kubectl"></a>Kubectl</h3><p>使用 Kubectl 命令行工具管理 Kubernetes 集群。</p>
+<p>从用户的角度来看，kubectl是控制Kubernetes的驾驶舱。它允许您执行所有可能的Kubernetes操作。</p>
+<p>从技术角度来看，kubectl是Kubernetes API的客户端。</p>
+<p>Kubernetes API是一个HTTP REST API。此API是真正的Kubernetes用户接口。通过API我们可以完全控制Kubernetes。这意味着每个Kubernetes操作都作为API端点公开，并且可以通过对此端点的HTTP请求来执行。</p>
+<p>因此，kubectl的主要工作是对Kubernetes API执行HTTP请求。</p>
+<h3 id="Kubelet"><a href="#Kubelet" class="headerlink" title="Kubelet"></a>Kubelet</h3><p>Kubelet 是 kubernetes 工作节点上的一个代理组件，运行在每个节点上。</p>
+<p>Kubelet是工作节点上的主要服务，定期从kube-apiserver组件接收新的或修改的Pod规范，并确保Pod及其容器在期望规范下运行。同时该组件作为工作节点的监控组件，向kube-apiserver汇报主机的运行状况。</p>
+<p>kubelet 是运行在每个节点上的主要的“节点代理”，每个节点都会启动 kubelet进程，用来处理 Master 节点下发到本节点的任务，按照 PodSpec 描述来管理Pod 和其中的容器（PodSpec 是用来描述一个 pod 的 YAML 或者 JSON 对象）。</p>
+<p>kubelet 通过各种机制（主要通过 apiserver ）获取一组 PodSpec 并保证在这些 PodSpec 中描述的容器健康运行。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Kubernetes基本概念</p><p><a href="https://blog.buubiu.com/Kubernetes基本概念/">https://blog.buubiu.com/Kubernetes基本概念/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-03-31</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Kubernetes/">Kubernetes</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Kubernetes%E7%9A%84%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Kubernetes的架构设计</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Linux%E7%AE%A1%E9%81%93%E7%AC%A6/"><span class="level-item">Linux管道符(&#039;|&#039;)</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#简介"><span class="level-left"><span class="level-item">1</span><span class="level-item">简介</span></span></a></li><li><a class="level is-mobile" href="#基本概念"><span class="level-left"><span class="level-item">2</span><span class="level-item">基本概念</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#节点-node"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">节点(node)</span></span></a></li><li><a class="level is-mobile" href="#容器状态"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">容器状态</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#主机IP"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">主机IP</span></span></a></li><li><a class="level is-mobile" href="#节点周期"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">节点周期</span></span></a></li><li><a class="level is-mobile" href="#节点状态"><span class="level-left"><span class="level-item">2.2.3</span><span class="level-item">节点状态</span></span></a></li></ul></li><li><a class="level is-mobile" href="#节点管理"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">节点管理</span></span></a></li><li><a class="level is-mobile" href="#节点控制"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">节点控制</span></span></a></li><li><a class="level is-mobile" href="#容器组（pod）"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">容器组（pod）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#容器组设计的初衷"><span class="level-left"><span class="level-item">2.5.1</span><span class="level-item">容器组设计的初衷</span></span></a></li><li><a class="level is-mobile" href="#资源共享和通信"><span class="level-left"><span class="level-item">2.5.2</span><span class="level-item">资源共享和通信</span></span></a></li><li><a class="level is-mobile" href="#容器组管理"><span class="level-left"><span class="level-item">2.5.3</span><span class="level-item">容器组管理</span></span></a></li><li><a class="level is-mobile" href="#容器组的使用"><span class="level-left"><span class="level-item">2.5.4</span><span class="level-item">容器组的使用</span></span></a></li><li><a class="level is-mobile" href="#替代方案"><span class="level-left"><span class="level-item">2.5.5</span><span class="level-item">替代方案</span></span></a></li><li><a class="level is-mobile" href="#容器组的生命状态"><span class="level-left"><span class="level-item">2.5.6</span><span class="level-item">容器组的生命状态</span></span></a></li><li><a class="level is-mobile" href="#容器组的生命周期"><span class="level-left"><span class="level-item">2.5.7</span><span class="level-item">容器组的生命周期</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Replication-Controllers"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">Replication Controllers</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#ReplicationController-如何工作"><span class="level-left"><span class="level-item">2.6.1</span><span class="level-item">ReplicationController 如何工作</span></span></a></li></ul></li><li><a class="level is-mobile" href="#服务-service"><span class="level-left"><span class="level-item">2.7</span><span class="level-item">服务(service)</span></span></a></li><li><a class="level is-mobile" href="#卷"><span class="level-left"><span class="level-item">2.8</span><span class="level-item">卷</span></span></a></li><li><a class="level is-mobile" href="#标签"><span class="level-left"><span class="level-item">2.9</span><span class="level-item">标签</span></span></a></li><li><a class="level is-mobile" href="#接口权限"><span class="level-left"><span class="level-item">2.10</span><span class="level-item">接口权限</span></span></a></li><li><a class="level is-mobile" href="#web界面"><span class="level-left"><span class="level-item">2.11</span><span class="level-item">web界面</span></span></a></li><li><a class="level is-mobile" href="#命令行操作"><span class="level-left"><span class="level-item">2.12</span><span class="level-item">命令行操作</span></span></a></li></ul></li><li><a class="level is-mobile" href="#安装工具介绍"><span class="level-left"><span class="level-item">3</span><span class="level-item">安装工具介绍</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Kubeadm"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">Kubeadm</span></span></a></li><li><a class="level is-mobile" href="#Kubectl"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">Kubectl</span></span></a></li><li><a class="level is-mobile" href="#Kubelet"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">Kubelet</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

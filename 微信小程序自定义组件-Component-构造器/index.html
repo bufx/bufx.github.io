@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序自定义组件-Component 构造器 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Component 构造器可用于定义组件，调用 Component 构造器时可以指定组件的属性、数据、方法等。 详细的参数含义和使用请参考 Component 参考文档。"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序自定义组件-Component 构造器"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-Component-%E6%9E%84%E9%80%A0%E5%99%A8/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="Component 构造器可用于定义组件，调用 Component 构造器时可以指定组件的属性、数据、方法等。 详细的参数含义和使用请参考 Component 参考文档。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/og_image.png"><meta property="article:published_time" content="2021-11-14T10:50:28.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.936Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-Component-%E6%9E%84%E9%80%A0%E5%99%A8/"},"headline":"微信小程序自定义组件-Component 构造器","image":["https://blog.buubiu.com/img/og_image.png"],"datePublished":"2021-11-14T10:50:28.000Z","dateModified":"2024-01-25T15:08:05.936Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"Component 构造器可用于定义组件，调用 Component 构造器时可以指定组件的属性、数据、方法等。 详细的参数含义和使用请参考 Component 参考文档。"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-Component-%E6%9E%84%E9%80%A0%E5%99%A8/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-14T10:50:28.000Z" title="11/14/2021, 6:50:28 PM">2021-11-14</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.936Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">19 分钟读完 (大约2879个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序自定义组件-Component 构造器</h1><div class="content"><p><code>Component</code> 构造器可用于定义组件，调用 <code>Component</code> 构造器时可以指定组件的属性、数据、方法等。</p>
+<p>详细的参数含义和使用请参考 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/api/Component.html">Component 参考文档</a>。</p>
+<span id="more"></span>
+
+<h2 id="Component-Object-object"><a href="#Component-Object-object" class="headerlink" title="Component(Object object)"></a>Component(Object object)</h2><p>创建自定义组件，接受一个 <code>Object</code> 类型的参数。</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p><strong>Object object</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">定义段</th>
+<th align="left">类型</th>
+<th align="left">是否必填</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">properties</td>
+<td align="left">Object Map</td>
+<td align="left">否</td>
+<td align="left">组件的对外属性，是属性名到属性设置的映射表</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">data</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件的内部数据，和 <code>properties</code> 一同用于组件的模板渲染</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">observers</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件数据字段监听器，用于监听 properties 和 data 的变化，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/observer.html">数据监听器</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.1</a></td>
+</tr>
+<tr>
+<td align="left">methods</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件的方法，包括事件响应函数和任意的自定义方法，关于事件响应函数的使用，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html">组件间通信与事件</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">behaviors</td>
+<td align="left">String Array</td>
+<td align="left">否</td>
+<td align="left">类似于mixins和traits的组件间代码复用机制，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html">behaviors</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">created</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">组件生命周期函数-在组件实例刚刚被创建时执行，注意此时不能调用 <code>setData</code> )</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">attached</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">组件生命周期函数-在组件实例进入页面节点树时执行)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">ready</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">组件生命周期函数-在组件布局完成后执行)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">moved</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">组件生命周期函数-在组件实例被移动到节点树另一个位置时执行)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">detached</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">组件生命周期函数-在组件实例被从页面节点树移除时执行)</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">relations</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件间关系定义，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/relations.html">组件间关系</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">externalClasses</td>
+<td align="left">String Array</td>
+<td align="left">否</td>
+<td align="left">组件接受的外部样式类，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/wxml-wxss.html">外部样式类</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">options</td>
+<td align="left">Object Map</td>
+<td align="left">否</td>
+<td align="left">一些选项（文档中介绍相关特性时会涉及具体的选项设置，这里暂不列举）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">lifetimes</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件生命周期声明对象，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/lifetimes.html">组件生命周期</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.3</a></td>
+</tr>
+<tr>
+<td align="left">pageLifetimes</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">组件所在页面的生命周期声明对象，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/lifetimes.html">组件生命周期</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.3</a></td>
+</tr>
+<tr>
+<td align="left">definitionFilter</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">定义段过滤器，用于自定义组件扩展，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/extend.html">自定义组件扩展</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.3</a></td>
+</tr>
+</tbody></table>
+<p>生成的组件实例可以在组件的方法、生命周期函数和属性 <code>observer</code> 中通过 <code>this</code> 访问。组件包含一些通用属性和方法。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">类型</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">is</td>
+<td align="left">String</td>
+<td align="left">组件的文件路径</td>
+</tr>
+<tr>
+<td align="left">id</td>
+<td align="left">String</td>
+<td align="left">节点id</td>
+</tr>
+<tr>
+<td align="left">dataset</td>
+<td align="left">String</td>
+<td align="left">节点dataset</td>
+</tr>
+<tr>
+<td align="left">data</td>
+<td align="left">Object</td>
+<td align="left">组件数据，<strong>包括内部数据和属性值</strong></td>
+</tr>
+<tr>
+<td align="left">properties</td>
+<td align="left">Object</td>
+<td align="left">组件数据，<strong>包括内部数据和属性值</strong>（与 <code>data</code> 一致）</td>
+</tr>
+<tr>
+<td align="left">router</td>
+<td align="left">Object</td>
+<td align="left">相对于当前自定义组件的 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/api/Router.html">Router</a> 对象</td>
+</tr>
+<tr>
+<td align="left">pageRouter</td>
+<td align="left">Object</td>
+<td align="left">相对于当前自定义组件所在页面的 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/api/Router.html">Router</a> 对象</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">方法名</th>
+<th align="left">参数</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">setData</td>
+<td align="left">Object <code>newData</code></td>
+<td align="left">设置data并执行视图层渲染</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">hasBehavior</td>
+<td align="left">Object <code>behavior</code></td>
+<td align="left">检查组件是否具有 <code>behavior</code> （检查时会递归检查被直接或间接引入的所有behavior）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">triggerEvent</td>
+<td align="left">String <code>name</code>, Object <code>detail</code>, Object <code>options</code></td>
+<td align="left">触发事件，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/events.html">组件间通信与事件</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">createSelectorQuery</td>
+<td align="left"></td>
+<td align="left">创建一个 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/wxml/SelectorQuery.html">SelectorQuery</a> 对象，选择器选取范围为这个组件实例内</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">createIntersectionObserver</td>
+<td align="left"></td>
+<td align="left">创建一个 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/wxml/IntersectionObserver.html">IntersectionObserver</a> 对象，选择器选取范围为这个组件实例内</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">createMediaQueryObserver</td>
+<td align="left"></td>
+<td align="left">创建一个 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/wxml/MediaQueryObserver.html">MediaQueryObserver</a> 对象</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">selectComponent</td>
+<td align="left">String <code>selector</code></td>
+<td align="left">使用选择器选择组件实例节点，返回匹配到的第一个组件实例对象（会被 <code>wx://component-export</code> 影响）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">selectAllComponents</td>
+<td align="left">String <code>selector</code></td>
+<td align="left">使用选择器选择组件实例节点，返回匹配到的全部组件实例对象组成的数组（会被 <code>wx://component-export</code> 影响）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">selectOwnerComponent</td>
+<td align="left"></td>
+<td align="left">选取当前组件节点所在的组件实例（即组件的引用者），返回它的组件实例对象（会被 <code>wx://component-export</code> 影响）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.2</a></td>
+</tr>
+<tr>
+<td align="left">getRelationNodes</td>
+<td align="left">String <code>relationKey</code></td>
+<td align="left">获取这个关系所对应的所有关联节点，参见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/relations.html">组件间关系</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">groupSetData</td>
+<td align="left">Function <code>callback</code></td>
+<td align="left">立刻执行 <code>callback</code> ，其中的多个 <code>setData</code> 之间不会触发界面绘制（只有某些特殊场景中需要，如用于在不同组件同时 setData 时进行界面绘制同步）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a></td>
+</tr>
+<tr>
+<td align="left">getTabBar</td>
+<td align="left"></td>
+<td align="left">返回当前页面的 custom-tab-bar 的组件实例，详见<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/ability/custom-tabbar.html">自定义 tabBar</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.2</a></td>
+</tr>
+<tr>
+<td align="left">getPageId</td>
+<td align="left"></td>
+<td align="left">返回页面标识符（一个字符串），可以用来判断几个自定义组件实例是不是在同一个页面内</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.7.1</a></td>
+</tr>
+<tr>
+<td align="left">animate</td>
+<td align="left">String <code>selector</code>, Array <code>keyframes</code>, Number <code>duration</code>, Function <code>callback</code></td>
+<td align="left">执行关键帧动画，详见<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/animation.html">动画</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.9.0</a></td>
+</tr>
+<tr>
+<td align="left">clearAnimation</td>
+<td align="left">String <code>selector</code>, Object <code>options</code>, Function <code>callback</code></td>
+<td align="left">清除关键帧动画，详见<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/animation.html">动画</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.9.0</a></td>
+</tr>
+<tr>
+<td align="left">setUpdatePerformanceListener</td>
+<td align="left">Object <code>options</code>, Function <code>listener</code></td>
+<td align="left">清除关键帧动画，详见<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/update-perf-stat.html">动画</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+</tbody></table>
+<h4 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h4><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/GqVTnvmq7g1m">在开发者工具中预览效果</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="attr">behaviors</span>: [],</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 属性定义（详情参见下文）</span></span><br><span class="line">  <span class="attr">properties</span>: &#123;</span><br><span class="line">    <span class="attr">myProperty</span>: &#123; <span class="comment">// 属性名</span></span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line">      <span class="attr">value</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">myProperty2</span>: <span class="title class_">String</span> <span class="comment">// 简化的定义方式</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="attr">data</span>: &#123;&#125;, <span class="comment">// 私有数据，可用于模板渲染</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">lifetimes</span>: &#123;</span><br><span class="line">    <span class="comment">// 生命周期函数，可以为函数，或一个在methods段中定义的方法名</span></span><br><span class="line">    <span class="attr">attached</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">    <span class="attr">moved</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">    <span class="attr">detached</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 生命周期函数，可以为函数，或一个在methods段中定义的方法名</span></span><br><span class="line">  <span class="attr">attached</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;, <span class="comment">// 此处attached的声明会被lifetimes字段中的声明覆盖</span></span><br><span class="line">  <span class="attr">ready</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123; &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="attr">pageLifetimes</span>: &#123;</span><br><span class="line">    <span class="comment">// 组件所在页面的生命周期函数</span></span><br><span class="line">    <span class="attr">show</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">    <span class="attr">hide</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">    <span class="attr">resize</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123; &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="attr">onMyButtonTap</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">        <span class="comment">// 更新属性和数据的方法与更新页面数据的方法类似</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 内部方法建议以下划线开头</span></span><br><span class="line">    <span class="attr">_myPrivateMethod</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">      <span class="comment">// 这里将 data.A[0].B 设为 &#x27;myPrivateData&#x27;</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">        <span class="string">&#x27;A[0].B&#x27;</span>: <span class="string">&#x27;myPrivateData&#x27;</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">_propertyChange</span>: <span class="keyword">function</span>(<span class="params">newVal, oldVal</span>) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>注意：在 <code>properties</code> 定义段中，属性名采用驼峰写法（<code>propertyName</code>）；在 <code>wxml</code> 中，指定属性值时则对应使用连字符写法（<code>component-tag-name property-name=&quot;attr value&quot;</code>），应用于数据绑定时采用驼峰写法（<code>attr=&quot;&quot;</code>）。</p>
+<h4 id="properties-定义"><a href="#properties-定义" class="headerlink" title="properties 定义"></a>properties 定义</h4><table>
+<thead>
+<tr>
+<th align="left">定义段</th>
+<th align="left">类型</th>
+<th align="left">是否必填</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">type</td>
+<td align="left"></td>
+<td align="left">是</td>
+<td align="left">属性的类型</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">optionalTypes</td>
+<td align="left">Array</td>
+<td align="left">否</td>
+<td align="left">属性的类型（可以指定多个）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.5</a></td>
+</tr>
+<tr>
+<td align="left">value</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">属性的初始值</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">observer</td>
+<td align="left">Function</td>
+<td align="left">否</td>
+<td align="left">属性值变化时的回调函数</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>属性值的改变情况可以使用 observer 来监听。目前，在新版本基础库中不推荐使用这个字段，而是使用 Component 构造器的 <code>observers</code> 字段代替，它更加强大且性能更好。</p>
+<h5 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">properties</span>: &#123;</span><br><span class="line">    <span class="attr">min</span>: &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">      <span class="attr">value</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">min</span>: &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">      <span class="attr">value</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">observer</span>: <span class="keyword">function</span>(<span class="params">newVal, oldVal</span>) &#123;</span><br><span class="line">        <span class="comment">// 属性值变化时执行</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">lastLeaf</span>: &#123;</span><br><span class="line">      <span class="comment">// 这个属性可以是 Number 、 String 、 Boolean 三种类型中的一种</span></span><br><span class="line">      <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">      <span class="attr">optionalTypes</span>: [<span class="title class_">String</span>, <span class="title class_">Object</span>],</span><br><span class="line">      <span class="attr">value</span>: <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>属性的类型可以为 <code>String</code> <code>Number</code> <code>Boolean</code> <code>Object</code> <code>Array</code> 其一，也可以为 <code>null</code> 表示不限制类型。</p>
+<p>多数情况下，属性最好指定一个确切的类型。这样，在 WXML 中以字面量指定属性值时，值可以获得一个确切的类型，如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">custom-comp</span> <span class="attr">min</span>=<span class="string">&quot;1&quot;</span> <span class="attr">max</span>=<span class="string">&quot;5&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此时，由于自定义组件的对应属性被规定为 <code>Number</code> 类型， <code>min</code> 和 <code>max</code> 会被赋值为 <code>1</code> 和 <code>5</code> ，而非 <code>&quot;1&quot;</code> 和 <code>&quot;5&quot;</code> ，即：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">data</span>.<span class="property">min</span> === <span class="number">1</span> <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">this</span>.<span class="property">data</span>.<span class="property">max</span> === <span class="number">5</span> <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Bug-amp-Tip"><a href="#Bug-amp-Tip" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ul>
+<li>使用 <code>this.data</code> 可以获取内部数据和属性值；但直接修改它不会将变更应用到界面上，应使用 <code>setData</code> 修改。</li>
+<li>生命周期函数无法在组件方法中通过 <code>this</code> 访问到。</li>
+<li>属性名应避免以 data 开头，即不要命名成 <code>dataXyz</code> 这样的形式，因为在 WXML 中， <code>data-xyz=&quot;&quot;</code> 会被作为节点 dataset 来处理，而不是组件属性。</li>
+<li>在一个组件的定义和使用时，组件的属性名和 data 字段相互间都不能冲突（尽管它们位于不同的定义段中）。</li>
+<li>从基础库 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.9</a> 开始，对象类型的属性和 data 字段中可以包含函数类型的子字段，即可以通过对象类型的属性字段来传递函数。低于这一版本的基础库不支持这一特性。</li>
+<li><code>bug</code> : 位于 slot 中的自定义组件没有触发 <code>pageLifetimes</code> 中声明的页面生命周期，此问题在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.5.2</a> 中修复。</li>
+<li><code>bug</code> : 对于 type 为 Object 或 Array 的属性，如果通过该组件自身的 this.setData 来改变属性值的一个子字段，则依旧会触发属性 observer ，且 observer 接收到的 <code>newVal</code> 是变化的那个子字段的值， <code>oldVal</code> 为空， <code>changedPath</code> 包含子字段的字段名相关信息；目前推荐使用 <code>observers</code> 定义段代替。</li>
+</ul>
+<h2 id="使用-Component-构造器构造页面"><a href="#使用-Component-构造器构造页面" class="headerlink" title="使用 Component 构造器构造页面"></a>使用 Component 构造器构造页面</h2><p>事实上，小程序的页面也可以视为自定义组件。因而，页面也可以使用 <code>Component</code> 构造器构造，拥有与普通组件一样的定义段与实例方法。但此时要求对应 json 文件中包含 <code>usingComponents</code> 定义段。</p>
+<p>此时，组件的属性可以用于接收页面的参数，如访问页面 <code>/pages/index/index?paramA=123&amp;paramB=xyz</code> ，如果声明有属性 <code>paramA</code> 或 <code>paramB</code> ，则它们会被赋值为 <code>123</code> 或 <code>xyz</code> 。</p>
+<p>页面的生命周期方法（即 <code>on</code> 开头的方法），应写在 <code>methods</code> 定义段中。</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;usingComponents&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line"></span><br><span class="line">  <span class="attr">properties</span>: &#123;</span><br><span class="line">    <span class="attr">paramA</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">paramB</span>: <span class="title class_">String</span>,</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="attr">onLoad</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">data</span>.<span class="property">paramA</span> <span class="comment">// 页面参数 paramA 的值</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">data</span>.<span class="property">paramB</span> <span class="comment">// 页面参数 paramB 的值</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>Component</code> 构造器来构造页面的一个好处是可以使用 <code>behaviors</code> 来提取所有页面中公用的代码段。</p>
+<p>例如，在所有页面被创建和销毁时都要执行同一段代码，就可以把这段代码提取到 <code>behaviors</code> 中。</p>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// page-common-behavior.js</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title class_">Behavior</span>(&#123;</span><br><span class="line">  <span class="attr">attached</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 页面创建时执行</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">info</span>(<span class="string">&#x27;Page loaded!&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">detached</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 页面销毁时执行</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">info</span>(<span class="string">&#x27;Page unloaded!&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 页面 A</span></span><br><span class="line"><span class="keyword">var</span> pageCommonBehavior = <span class="built_in">require</span>(<span class="string">&#x27;./page-common-behavior&#x27;</span>)</span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">behaviors</span>: [pageCommonBehavior],</span><br><span class="line">  <span class="attr">data</span>: &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 页面 B</span></span><br><span class="line"><span class="keyword">var</span> pageCommonBehavior = <span class="built_in">require</span>(<span class="string">&#x27;./page-common-behavior&#x27;</span>)</span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">behaviors</span>: [pageCommonBehavior],</span><br><span class="line">  <span class="attr">data</span>: &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  <span class="attr">methods</span>: &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序自定义组件-Component 构造器</p><p><a href="https://blog.buubiu.com/微信小程序自定义组件-Component-构造器/">https://blog.buubiu.com/微信小程序自定义组件-Component-构造器/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-14</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E9%97%B4%E9%80%9A%E4%BF%A1%E4%B8%8E%E4%BA%8B%E4%BB%B6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序自定义组件-组件间通信与事件</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E7%9A%84%E6%A8%A1%E7%89%88%E4%B8%8E%E6%A0%B7%E5%BC%8F/"><span class="level-item">微信小程序自定义组件-组件的模版与样式</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#Component-Object-object"><span class="level-left"><span class="level-item">1</span><span class="level-item">Component(Object object)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#参数"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">参数</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码"><span class="level-left"><span class="level-item">1.1.1</span><span class="level-item">示例代码</span></span></a></li><li><a class="level is-mobile" href="#properties-定义"><span class="level-left"><span class="level-item">1.1.2</span><span class="level-item">properties 定义</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Bug-amp-Tip"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">Bug &amp; Tip</span></span></a></li></ul></li><li><a class="level is-mobile" href="#使用-Component-构造器构造页面"><span class="level-left"><span class="level-item">2</span><span class="level-item">使用 Component 构造器构造页面</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

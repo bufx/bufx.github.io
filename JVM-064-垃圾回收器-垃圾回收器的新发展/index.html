@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-064-垃圾回收器-垃圾回收器的新发展 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="介绍 GC仍然处于飞速发展之中，目前的默认选项G1 GC在不断的进行改进，很多我们原来认为的缺点，例如串行的Full GC、Card Table扫描的低效等，都已经被大幅改进，例如，JDK10以后，Full GC已经是并行运行，在很多场景下，其表现还略优于Parallel GC的并行Full GC实现。 即使是Serial GC，虽然比较古老，但是简单的设计和实现未必就是过时的，它本身的开销，不管"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-064-垃圾回收器-垃圾回收器的新发展"><meta property="og:url" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="介绍 GC仍然处于飞速发展之中，目前的默认选项G1 GC在不断的进行改进，很多我们原来认为的缺点，例如串行的Full GC、Card Table扫描的低效等，都已经被大幅改进，例如，JDK10以后，Full GC已经是并行运行，在很多场景下，其表现还略优于Parallel GC的并行Full GC实现。 即使是Serial GC，虽然比较古老，但是简单的设计和实现未必就是过时的，它本身的开销，不管"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124232305443.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234101164.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234300069.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234411243.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234658157.png"><meta property="article:published_time" content="2024-01-24T08:03:25.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.836Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="垃圾回收器"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124232305443.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/"},"headline":"JVM-064-垃圾回收器-垃圾回收器的新发展","image":["https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124232305443.png","https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234101164.png","https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234300069.png","https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234411243.png","https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234658157.png"],"datePublished":"2024-01-24T08:03:25.000Z","dateModified":"2024-01-25T15:08:05.836Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"介绍 GC仍然处于飞速发展之中，目前的默认选项G1 GC在不断的进行改进，很多我们原来认为的缺点，例如串行的Full GC、Card Table扫描的低效等，都已经被大幅改进，例如，JDK10以后，Full GC已经是并行运行，在很多场景下，其表现还略优于Parallel GC的并行Full GC实现。 即使是Serial GC，虽然比较古老，但是简单的设计和实现未必就是过时的，它本身的开销，不管"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-01-24T08:03:25.000Z" title="1/24/2024, 4:03:25 PM">2024-01-24</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.836Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></span><span class="level-item">10 分钟读完 (大约1567个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-064-垃圾回收器-垃圾回收器的新发展</h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>GC仍然处于飞速发展之中，目前的默认选项<strong>G1 GC在不断的进行改进</strong>，很多我们原来认为的缺点，例如串行的Full GC、Card Table扫描的低效等，都已经被大幅改进，例如，JDK10以后，Full GC已经是并行运行，在很多场景下，其表现还略优于Parallel GC的并行Full GC实现。</li>
+<li>即使是Serial GC，虽然比较古老，但是简单的设计和实现未必就是过时的，它本身的开销，不管是GC相关数据结构的开销，还是线程的开销，都是非常小的，所以随着云计算的兴起，<strong>在Serverless等新的应用场景下，Serial GC找到了新的舞台。</strong></li>
+<li>比较不幸的是CMS GC，因为其算法的理论缺陷等原因，虽然现在还有非常大的用户群体，但在JDK9中已经被标记为废弃，并在JDK14版本中移除</li>
+<li>现在G1回收器已成为默认回收器好几年了。我们还看到了引入了两个新的收集器：ZGC（JDK11出现）和Shenandoah（Open JDK12），其特点：主打低停顿时间</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="Epsilon"><a href="#Epsilon" class="headerlink" title="Epsilon"></a>Epsilon</h2><p>JEP318:</p>
+<p>Esplion：A No-Op Garbage Collecgtor</p>
+<p>（Epsilon垃圾回收器，“No-Op（无操作）”回收器）</p>
+<p><a target="_blank" rel="noopener" href="https://openjdk.org/jeps/318">https://openjdk.org/jeps/318</a></p>
+<h2 id="Shenandoah"><a href="#Shenandoah" class="headerlink" title="Shenandoah"></a>Shenandoah</h2><h3 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h3><p><strong>Open JDK12的Shenandoash GC：低停顿时间的GC（实验性）</strong></p>
+<ul>
+<li><strong>Shenandoah无疑是众多GC中最孤独的一个。</strong>是第一款不由Oracle公司团队领导开发的Hotspot垃圾收集器。不可避免的受到官方的排挤。比如号称openJDK和OracleJDK没有区别的Oracle公司仍拒绝在OracleJDK12中支持Shenandoah。</li>
+<li>Shenandoah垃圾回收器最初由RedHat进行的一项垃圾收集器研究项目Pauseless GC的实现，<strong>旨在针对JVM上的内存回收实现低停顿的需求。</strong>在2014年贡献给OpenJDK。</li>
+<li>Red Hat研发Shenandoah团队对外宣称，<strong>Shenandoah垃圾回收器的暂停时间与堆大小无关，这意味着无论将堆设置为200MB还是200GB，99.9%的目标都可以把垃圾收集的停顿时间限制在十毫秒以内。</strong>不过实际使用性能将取决于实际工作堆的大小和工作负载。</li>
+</ul>
+<h3 id="比较数据"><a href="#比较数据" class="headerlink" title="比较数据"></a>比较数据</h3><p><img src="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124232305443.png"></p>
+<p>这是RedHat在2016年发表的论文数据，测试内容是使用ES对200GB的维基百科数据进行索引。从结果看：</p>
+<ul>
+<li>停顿时间比其他几款收集器确实有了质的飞跃，但也未实现最大停顿时间控制在十毫秒以内的目标。</li>
+<li>而吞吐量方面出现了明显的下降，总运行时间是所有测试收集器里最长的。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>Shenandoah GC的弱项：高运行负担下的吞吐量下降。</li>
+<li>Shenandoah GC的强项：低延迟时间。</li>
+</ul>
+<h2 id="ZGC"><a href="#ZGC" class="headerlink" title="ZGC"></a>ZGC</h2><h3 id="JDK11开始引入"><a href="#JDK11开始引入" class="headerlink" title="JDK11开始引入"></a>JDK11开始引入</h3><p>JEP 333: </p>
+<p>ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</p>
+<p>（ZGC：可伸缩的低延迟回收器，属于试验性阶段）</p>
+<p><a target="_blank" rel="noopener" href="https://openjdk.org/jeps/333">https://openjdk.org/jeps/333</a></p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>官方：<a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/12/gctuning/">https://docs.oracle.com/en/java/javase/12/gctuning/</a></p>
+<p><img src="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234101164.png"></p>
+<ul>
+<li>ZGC与Shenandoah目标高度相似，<strong>在尽可能对吞吐量影响不大的前提下，实现在任意堆内存大小下都可以把垃圾收集的停颇时间限制在十毫秒以内的低延迟。</strong></li>
+<li>《深入理解Java虚拟机》一书中这样定义ZGC：ZGC收集器是一款基于Region内存布局的，（暂时）不设分代的，使用了读屏障、染色指针和内存多重映射等技术来实现<strong>可并发的标记-压缩算法</strong>的，以<strong>低延迟为首要目标</strong>的一款垃圾收集器。</li>
+<li>ZGC的工作过程可以分为4个阶段：<strong>并发标记 - 并发预备重分配 - 并发重分配 - 并发重映射</strong> 等。</li>
+<li>ZGC几乎在所有地方并发执行的，除了<strong>初始标记的是STW</strong>的。所以停顿时间几乎就耗费在初始标记上，这部分的实际时间是非常少的。</li>
+</ul>
+<h3 id="比较数据-1"><a href="#比较数据-1" class="headerlink" title="比较数据"></a>比较数据</h3><p><strong>吞吐量</strong></p>
+<p><img src="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234300069.png"></p>
+<p>max-JOPS：以低延迟为首要前提下的数据</p>
+<p>critical-JOPS：不考虑低延迟下的数据</p>
+<p><strong>低延迟</strong></p>
+<p><img src="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234411243.png"></p>
+<p>在ZGC的强项停顿时间测试上，它毫不留情的将Parallel、G1拉开了两个数量级的差距。无论平均停顿、95%停顿、998停顿、99. 98停顿，还是最大停顿时间，ZGC都能毫不费劲控制在10毫秒以内。</p>
+<h3 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h3><p>虽然ZGC还在试验状态，没有完成所有特性，但此时性能已经相当亮眼，用“令人震惊、革命性”来形容，不为过。<strong>未来将在服务端、大内存、低延迟应用的首选垃圾收集器。</strong></p>
+<ul>
+<li><p>JEP 364：ZGC应用在macOS上</p>
+</li>
+<li><p>JEP 365：ZGC应用在Windows上</p>
+</li>
+<li><p>JDK14之前，ZGC仅Linux才支持。</p>
+</li>
+<li><p>尽管许多使用ZGC的用户都使用类Linux的环境，但在Windows和macOS上，人们也需要ZGC进行开发部署和测试。许多桌面应用也可以从ZGC中受益。因此，ZGC特性被移植到了Windows和macOS上。</p>
+</li>
+<li><p>现在mac或Windows上也能使用ZGC了，示例如下：</p>
+<p><code>-XX:+UnlockExperimentalVMOptions-XX：+UseZGC</code></p>
+</li>
+</ul>
+<h2 id="其他垃圾回收器"><a href="#其他垃圾回收器" class="headerlink" title="其他垃圾回收器"></a>其他垃圾回收器</h2><h3 id="AliGC"><a href="#AliGC" class="headerlink" title="AliGC"></a>AliGC</h3><p>AliGC是阿里巴巴JVM团队基于G1算法，面向大堆（LargeHeap）应用场景。指定场景下的对比：</p>
+<p><img src="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/image-20240124234658157.png"></p>
+<h3 id="Zing"><a href="#Zing" class="headerlink" title="Zing"></a>Zing</h3><p>其他厂商也提供了各种独具一格的GC实现，例如比较有名的低延迟GC，<a target="_blank" rel="noopener" href="https://www.infoq.com/articles/azul_gc_in_detail">Zing</a>。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-064-垃圾回收器-垃圾回收器的新发展</p><p><a href="https://blog.buubiu.com/JVM-064-垃圾回收器-垃圾回收器的新发展/">https://blog.buubiu.com/JVM-064-垃圾回收器-垃圾回收器的新发展/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-01-24</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-063-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/"><span class="level-item">JVM-063-垃圾回收器-GC日志分析</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#介绍"><span class="level-left"><span class="level-item">1</span><span class="level-item">介绍</span></span></a></li><li><a class="level is-mobile" href="#Epsilon"><span class="level-left"><span class="level-item">2</span><span class="level-item">Epsilon</span></span></a></li><li><a class="level is-mobile" href="#Shenandoah"><span class="level-left"><span class="level-item">3</span><span class="level-item">Shenandoah</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#引入"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">引入</span></span></a></li><li><a class="level is-mobile" href="#比较数据"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">比较数据</span></span></a></li><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">总结</span></span></a></li></ul></li><li><a class="level is-mobile" href="#ZGC"><span class="level-left"><span class="level-item">4</span><span class="level-item">ZGC</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#JDK11开始引入"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">JDK11开始引入</span></span></a></li><li><a class="level is-mobile" href="#定义"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">定义</span></span></a></li><li><a class="level is-mobile" href="#比较数据-1"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">比较数据</span></span></a></li><li><a class="level is-mobile" href="#发展"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">发展</span></span></a></li></ul></li><li><a class="level is-mobile" href="#其他垃圾回收器"><span class="level-left"><span class="level-item">5</span><span class="level-item">其他垃圾回收器</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#AliGC"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">AliGC</span></span></a></li><li><a class="level is-mobile" href="#Zing"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">Zing</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

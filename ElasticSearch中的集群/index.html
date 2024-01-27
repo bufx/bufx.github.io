@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>ElasticSearch中的集群 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="相关概念集群(cluster) 一个集群就是由一个或多个节点组织在一起，它们共同持有你整个的数据，并一起提供索引和搜索功能。 一个集群是由一个唯一的名字标识，这个名字默认就是elasticsearch。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。在产品环境中显式地设定这个名字是一个好习惯，但是使用默认值来进行测试&amp;#x2F;开发也是不错的。"><meta property="og:type" content="blog"><meta property="og:title" content="ElasticSearch中的集群"><meta property="og:url" content="https://blog.buubiu.com/ElasticSearch%E4%B8%AD%E7%9A%84%E9%9B%86%E7%BE%A4/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="相关概念集群(cluster) 一个集群就是由一个或多个节点组织在一起，它们共同持有你整个的数据，并一起提供索引和搜索功能。 一个集群是由一个唯一的名字标识，这个名字默认就是elasticsearch。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。在产品环境中显式地设定这个名字是一个好习惯，但是使用默认值来进行测试&amp;#x2F;开发也是不错的。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/rLgVBF1611997854886.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/sMlKsk1612004053863.png"><meta property="article:published_time" content="2021-01-30T09:00:56.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:04.804Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="ElasticSearch"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/rLgVBF1611997854886.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/ElasticSearch%E4%B8%AD%E7%9A%84%E9%9B%86%E7%BE%A4/"},"headline":"ElasticSearch中的集群","image":["https://blog.buubiu.com/img/article/rLgVBF1611997854886.png","https://blog.buubiu.com/img/article/sMlKsk1612004053863.png"],"datePublished":"2021-01-30T09:00:56.000Z","dateModified":"2024-01-25T15:08:04.804Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"相关概念集群(cluster) 一个集群就是由一个或多个节点组织在一起，它们共同持有你整个的数据，并一起提供索引和搜索功能。 一个集群是由一个唯一的名字标识，这个名字默认就是elasticsearch。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。在产品环境中显式地设定这个名字是一个好习惯，但是使用默认值来进行测试&#x2F;开发也是不错的。"}</script><link rel="canonical" href="https://blog.buubiu.com/ElasticSearch%E4%B8%AD%E7%9A%84%E9%9B%86%E7%BE%A4/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-01-30T09:00:56.000Z" title="1/30/2021, 5:00:56 PM">2021-01-30</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:04.804Z" title="1/25/2024, 11:08:04 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/ElasticSearch/">ElasticSearch</a><span> / </span><a class="link-muted" href="/categories/ElasticSearch/ElasticSearch6/">ElasticSearch6</a></span><span class="level-item">14 分钟读完 (大约2063个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">ElasticSearch中的集群</h1><div class="content"><h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><h4 id="集群-cluster"><a href="#集群-cluster" class="headerlink" title="集群(cluster)"></a>集群(cluster)</h4><ul>
+<li>一个集群就是由一个或多个节点组织在一起，它们共同持有你整个的数据，并一起提供索引和搜索功能。</li>
+<li>一个集群是由一个唯一的名字标识，这个名字默认就是<code>elasticsearch</code>。这个名字是重要的，因为一个节点只能通过指定某个集群的名字，来加入这个集群。在产品环境中显式地设定这个名字是一个好习惯，但是使用默认值来进行测试&#x2F;开发也是不错的。</li>
+</ul>
+<span id="more"></span>
+
+<h4 id="节点-node"><a href="#节点-node" class="headerlink" title="节点(node)"></a>节点(node)</h4><ul>
+<li>一个节点是你集群中的一个服务器，作为集群的一部分，它存储你的数据，参与集群的索引和搜索功能。和集群类似，一个节点也是由一个名字来标识的，默认情况下，这个名字是一个随机的漫威漫画角色的名字，这个名字会在启动的时候赋予节点。这个名字对于管理工作来说挺重要的，因为在这个管理过程中，你会去确定网络中的哪些服务器对应于Elasticsearch集群中的哪些节点。 </li>
+<li>一个节点可以通过配置集群名称的方式来加入一个指定的集群。默认情况下，每个节点都会被安排加入到一个叫 做<code>elasticsearch</code>的集群中，这意味着，如果你在你的网络中启动了若干个节点，并假定它们能够相互发现彼此，它们将会自动地形成并加入到一个叫做<code>elasticsearch</code>的集群中。 </li>
+<li>在一个集群里，可以拥有任意多个节点。而且，如果当前你的网络中没有运行任何Elasticsearch节点， 这时启动一个节点，会默认创建并加入一个叫做<code>elasticsearch</code>的集群。</li>
+</ul>
+<h4 id="分片和复制-shards-amp-replicas"><a href="#分片和复制-shards-amp-replicas" class="headerlink" title="分片和复制(shards &amp; replicas)"></a>分片和复制(shards &amp; replicas)</h4><ul>
+<li><p>一个索引可以存储超出单个结点硬件限制的大量数据。比如，一个具有10亿文档的索引占据1TB的磁盘空间，而任一节点都没有这样大的磁盘空间;或者单个节点处理搜索请求，响应太慢。为了解决这个问题，Elasticsearch提供了将索引划分成多份的能力，这些份就叫做分片。当你创建一个索引的时候，你可以指定你想要的分片的数量。每个分片本身也是一个功能完善并且独立的“索引”，这个“索引”可以被放置 到集群中的任何节点上。 <strong>分片之所以重要，主要有两方面的原因:</strong> </p>
+<ol>
+<li>允许你水平分割&#x2F;扩展你的内容容量</li>
+<li>允许你在分片(潜在地，位于多个节点上)之上进行分布式的、并行的操作，进而提高性能&#x2F;吞吐量 至于一个分片怎样分布，它的文档怎样聚合回搜索请求，是完全由Elasticsearch管理的，对于作为用户的你来说，这些都是透明的。</li>
+</ol>
+</li>
+<li><p>在一个网络&#x2F;云的环境里，失败随时都可能发生，在某个分片&#x2F;节点不知怎么的就处于离线状态，或者由于任何原因 消失了。这种情况下，有一个故障转移机制是非常有用并且是强烈推荐的。为此目的，Elasticsearch允许你创建分 片的一份或多份拷贝，这些拷贝叫做<strong>复制分片</strong>，或者直接叫复制。<strong>复制之所以重要，主要有两方面的原因:</strong> </p>
+<ol>
+<li>在分片&#x2F;节点失败的情况下，提供了高可用性。因为这个原因，复制分片从不与原&#x2F;主要 (original&#x2F;primary)分片置于同一节点上是非常重要的。</li>
+<li>扩展你的搜索量&#x2F;吞吐量，因为搜索可以在所有的复制上并行运行</li>
+</ol>
+</li>
+<li><p>总之，每个索引可以被分成多个分片。一个索引也可以被复制0次(意思是没有复制)或多次。一旦复制了，每个索引就有了主分片(作为复制源的原来的分片)和复制分片(主分片的拷贝)之别。分片和复制的数量可以在索引创建的时候指定。在索引创建之后，你可以在任何时候动态地改变复制数量，但是不能改变分片的数量。</p>
+</li>
+<li><p>默认情况下<strong>（在7.0版本之前）</strong>，<code>Elasticsearch中的每个索引被分片5个主分片和1个复制</code>，这意味着，如果你的集群中至少有两个节点，你的索引将会有5个主分片和另外5个复制分片(1个完全拷贝)，这样的话每个索引总共就有10个分片。一个 索引的多个分片可以存放在集群中的一台主机上，也可以存放在多台主机上，这取决于你的集群机器数量。主分片和复制分片的具体位置是由ES内在的策略所决定的。</p>
+</li>
+</ul>
+<p><strong><code>7.0版本之后：默认情况下，Elasticsearch中的每个索引被分片1个主分片和1个复制</code></strong></p>
+<h3 id="集群架构图"><a href="#集群架构图" class="headerlink" title="集群架构图"></a>集群架构图</h3><p><img src="/../img/article/rLgVBF1611997854886.png"></p>
+<h4 id="搭建集群"><a href="#搭建集群" class="headerlink" title="搭建集群"></a>搭建集群</h4><p>ES 搭建集群非常简单，就是分别启动多台ES服务，并且保持集群的名称一致以及每个节点的名称不同即可；如果在同一台机器搭建集群，要保重 9200 9300 端点不能冲突</p>
+<h4 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h4><ol>
+<li>将原有ES安装包复制三份</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp -r elasticsearch-6.8.0/ elasticsearch-6.8.0-node1/</span><br><span class="line">cp -r elasticsearch-6.8.0/ elasticsearch-6.8.0-node2/</span><br><span class="line">cp -r elasticsearch-6.8.0/ elasticsearch-6.8.0-node3/</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>删除复制目录中的data目录</p>
+<p><strong>注意:由于复制目录之前使用过因此需要在创建集群时将原来数据删除</strong></p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm -rf elasticsearch-6.8.0-node1/data</span><br><span class="line">rm -rf elasticsearch-6.8.0-node2/data</span><br><span class="line">rm -rf elasticsearch-6.8.0-node3/data</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><p>编辑每个节点config目录中的<code>jvm.options</code>文件修改启动内存</p>
+<p>分别修改：<code>-Xms512m -Xmx512m</code></p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim elasticsearch-6.8.0-node1/config/jvm.options</span><br><span class="line">vim elasticsearch-6.8.0-node2/config/jvm.options</span><br><span class="line">vim elasticsearch-6.8.0-node3/config/jvm.options</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>编辑每个节点config目录中<code>elasticsearch.yml</code>文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim elasticsearch-6.8.0-node1/config/elasticsearch.yml</span><br><span class="line">vim elasticsearch-6.8.0-node2/config/elasticsearch.yml</span><br><span class="line">vim elasticsearch-6.8.0-node3/config/elasticsearch.yml</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">分别修改如下配置:</span></span><br><span class="line">		cluster.name: my-es                       #集群名称(集群名称必须一致)</span><br><span class="line">		node.name: es-1                         #节点名称(节点名称不能一致)</span><br><span class="line">		network.host: 0.0.0.0                     #监听地址(必须开启远程权限,并关闭防火墙)</span><br><span class="line">		http.port: 9201                           #监听端口(在一台机器时服务端口不能一致)</span><br><span class="line">		discovery.zen.ping.unicast.hosts: [&quot;172.30.2.175:9302&quot;, &quot;172.30.2.201:9303&quot;] #另外两个节点的ip</span><br><span class="line">		gateway.recover_after_nodes: 3            #集群可做master的最小节点数</span><br><span class="line">		transport.tcp.port: 9301				  				#集群TCP端口(在一台机器搭建必须修改)  </span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>启动每个ES</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-6.8.0-node1/bin/elasticsearch</span><br><span class="line">./elasticsearch-6.8.0-node2/bin/elasticsearch</span><br><span class="line">./elasticsearch-6.8.0-node3/bin/elasticsearch</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>查看每个节点启动状态</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:9201</span><br><span class="line">curl http://127.0.0.1:9202</span><br><span class="line">curl http://127.0.0.1:9203</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li><p>查看集群健康状态</p>
+<ul>
+<li>直接浏览器查看</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://127.0.0.1:9201/_cat/health?v</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在kibana上查看</p>
+<ul>
+<li>修改kibana的配置文件，改为任意节点的IP+端口</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim kibana.yml</span><br><span class="line">elasticsearch.hosts: [&quot;http://127.0.0.1:9201&quot;]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>执行命令</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /_cat/health?v</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<h3 id="安装elasticsearch-head-插件"><a href="#安装elasticsearch-head-插件" class="headerlink" title="安装elasticsearch-head 插件"></a>安装elasticsearch-head 插件</h3><h4 id="下载elasticsearch-head"><a href="#下载elasticsearch-head" class="headerlink" title="下载elasticsearch-head"></a>下载elasticsearch-head</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/mobz/elasticsearch-head.git</span><br><span class="line">cd elasticsearch-head</span><br><span class="line">npm install #编译安装</span><br></pre></td></tr></table></figure>
+
+<h4 id="编写ES配置文件开启head插件的访问"><a href="#编写ES配置文件开启head插件的访问" class="headerlink" title="编写ES配置文件开启head插件的访问"></a>编写ES配置文件开启head插件的访问</h4><p>在每个ES节点的<code>elastsearch.yml</code>最后添加以下内容，并重启</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http.cors.enabled: true</span><br><span class="line">http.cors.allow-origin: &quot;*&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="进入elasticsearch-head的目录启动插件"><a href="#进入elasticsearch-head的目录启动插件" class="headerlink" title="进入elasticsearch-head的目录启动插件"></a>进入elasticsearch-head的目录启动插件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run start</span><br></pre></td></tr></table></figure>
+
+<h4 id="通过插件查看集群状态"><a href="#通过插件查看集群状态" class="headerlink" title="通过插件查看集群状态"></a>通过插件查看集群状态</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:9100</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/sMlKsk1612004053863.png"></p>
+<h3 id="Java对集群的操作"><a href="#Java对集群的操作" class="headerlink" title="Java对集群的操作"></a>Java对集群的操作</h3><p>在初始化ES客户端的代码处，把说有节点都写上，之后的操作都和单节点一样了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> buubiu</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ElasticSearchRestClientConfig</span> <span class="keyword">extends</span> <span class="title class_">AbstractElasticsearchConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//这个client用来替换transportClient(9300)对象</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="meta">@Bean</span></span><br><span class="line">	<span class="keyword">public</span> RestHighLevelClient <span class="title function_">elasticsearchClient</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="comment">//定义客户端配置对象 RestClient 9200</span></span><br><span class="line">		<span class="keyword">final</span> <span class="type">ClientConfiguration</span> <span class="variable">clientConfiguration</span> <span class="operator">=</span> ClientConfiguration.builder()</span><br><span class="line">			.connectedTo(<span class="string">&quot;127.0.0.1:9201&quot;</span>,<span class="string">&quot;127.0.0.1:9202&quot;</span>,<span class="string">&quot;127.0.0.1:9203&quot;</span>)</span><br><span class="line">			.build();</span><br><span class="line">		<span class="comment">//通过RestClients对象创建</span></span><br><span class="line">		<span class="keyword">return</span> RestClients.create(clientConfiguration).rest();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>ElasticSearch中的集群</p><p><a href="https://blog.buubiu.com/ElasticSearch中的集群/">https://blog.buubiu.com/ElasticSearch中的集群/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-01-30</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/ElasticSearch/">ElasticSearch</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Docker的基本概念</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/SpringBoot-Data%E6%93%8D%E4%BD%9CElasticSearch/"><span class="level-item">SpringBoot Data操作ElasticSearch</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#相关概念"><span class="level-left"><span class="level-item">1</span><span class="level-item">相关概念</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#集群-cluster"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">集群(cluster)</span></span></a></li><li><a class="level is-mobile" href="#节点-node"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">节点(node)</span></span></a></li><li><a class="level is-mobile" href="#分片和复制-shards-amp-replicas"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">分片和复制(shards &amp; replicas)</span></span></a></li></ul></li><li><a class="level is-mobile" href="#集群架构图"><span class="level-left"><span class="level-item">2</span><span class="level-item">集群架构图</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#搭建集群"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">搭建集群</span></span></a></li><li><a class="level is-mobile" href="#搭建步骤"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">搭建步骤</span></span></a></li></ul></li><li><a class="level is-mobile" href="#安装elasticsearch-head-插件"><span class="level-left"><span class="level-item">3</span><span class="level-item">安装elasticsearch-head 插件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#下载elasticsearch-head"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">下载elasticsearch-head</span></span></a></li><li><a class="level is-mobile" href="#编写ES配置文件开启head插件的访问"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">编写ES配置文件开启head插件的访问</span></span></a></li><li><a class="level is-mobile" href="#进入elasticsearch-head的目录启动插件"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">进入elasticsearch-head的目录启动插件</span></span></a></li><li><a class="level is-mobile" href="#通过插件查看集群状态"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">通过插件查看集群状态</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Java对集群的操作"><span class="level-left"><span class="level-item">4</span><span class="level-item">Java对集群的操作</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序框架组件-组件基础内容 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="组件基础内容分类，如下图:"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序框架组件-组件基础内容"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="组件基础内容分类，如下图:"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/rm92wC1636596237726.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/52b2aW1636596462923.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/lOTnIc1636596643779.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/DjxL9K1636597184571.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/z2vrPL1636598298495.png"><meta property="article:published_time" content="2021-11-11T02:03:19.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.934Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/rm92wC1636596237726.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9/"},"headline":"微信小程序框架组件-组件基础内容","image":["https://blog.buubiu.com/img/article/rm92wC1636596237726.png","https://blog.buubiu.com/img/article/52b2aW1636596462923.png","https://blog.buubiu.com/img/article/lOTnIc1636596643779.png","https://blog.buubiu.com/img/article/DjxL9K1636597184571.png","https://blog.buubiu.com/img/article/z2vrPL1636598298495.png"],"datePublished":"2021-11-11T02:03:19.000Z","dateModified":"2024-01-25T15:08:05.934Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"组件基础内容分类，如下图:"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-11T02:03:19.000Z" title="11/11/2021, 10:03:19 AM">2021-11-11</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.934Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">11 分钟读完 (大约1689个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序框架组件-组件基础内容</h1><div class="content"><p>组件基础内容分类，如下图:</p>
+<p><img src="/../img/article/rm92wC1636596237726.png"></p>
+<span id="more"></span>
+
+<h2 id="图标icon"><a href="#图标icon" class="headerlink" title="图标icon"></a>图标icon</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>图标。组件属性的长度单位默认为px，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a>起支持传入单位(rpx&#x2F;px)。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">type</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">是</td>
+<td align="left">icon的类型，有效值：success, success_no_circle, info, warn, waiting, cancel, download, search, clear</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">size</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">23</td>
+<td align="left">否</td>
+<td align="left">icon的大小</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">color</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">icon的颜色，同css的color</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+</tbody></table>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/LK9tzcmM6QYj">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">block</span> <span class="attr">wx:for</span>=<span class="string">&quot;&#123;&#123;iconSize&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">icon</span> <span class="attr">type</span>=<span class="string">&quot;success&quot;</span> <span class="attr">size</span>=<span class="string">&quot;&#123;&#123;item&#125;&#125;&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">block</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">block</span> <span class="attr">wx:for</span>=<span class="string">&quot;&#123;&#123;iconType&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">icon</span> <span class="attr">type</span>=<span class="string">&quot;&#123;&#123;item&#125;&#125;&quot;</span> <span class="attr">size</span>=<span class="string">&quot;40&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">block</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;group&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">block</span> <span class="attr">wx:for</span>=<span class="string">&quot;&#123;&#123;iconColor&#125;&#125;&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">icon</span> <span class="attr">type</span>=<span class="string">&quot;success&quot;</span> <span class="attr">size</span>=<span class="string">&quot;40&quot;</span> <span class="attr">color</span>=<span class="string">&quot;&#123;&#123;item&#125;&#125;&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">block</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">iconSize</span>: [<span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>, <span class="number">60</span>, <span class="number">70</span>],</span><br><span class="line">    <span class="attr">iconColor</span>: [</span><br><span class="line">      <span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;orange&#x27;</span>, <span class="string">&#x27;yellow&#x27;</span>, <span class="string">&#x27;green&#x27;</span>, <span class="string">&#x27;rgb(0,255,255)&#x27;</span>, <span class="string">&#x27;blue&#x27;</span>, <span class="string">&#x27;purple&#x27;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">iconType</span>: [</span><br><span class="line">      <span class="string">&#x27;success&#x27;</span>, <span class="string">&#x27;success_no_circle&#x27;</span>, <span class="string">&#x27;info&#x27;</span>, <span class="string">&#x27;warn&#x27;</span>, <span class="string">&#x27;waiting&#x27;</span>, <span class="string">&#x27;cancel&#x27;</span>, <span class="string">&#x27;download&#x27;</span>, <span class="string">&#x27;search&#x27;</span>, <span class="string">&#x27;clear&#x27;</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/52b2aW1636596462923.png"></p>
+<h2 id="进度条progress"><a href="#进度条progress" class="headerlink" title="进度条progress"></a>进度条progress</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>进度条。组件属性的长度单位默认为px，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a>起支持传入单位(rpx&#x2F;px)。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">percent</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">百分比0~100</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">show-info</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">在进度条右侧显示百分比</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">border-radius</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">0</td>
+<td align="left">否</td>
+<td align="left">圆角大小</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.3.1</a></td>
+</tr>
+<tr>
+<td align="left">font-size</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">16</td>
+<td align="left">否</td>
+<td align="left">右侧百分比字体大小</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.3.1</a></td>
+</tr>
+<tr>
+<td align="left">stroke-width</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">6</td>
+<td align="left">否</td>
+<td align="left">进度条线的宽度</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">color</td>
+<td align="left">string</td>
+<td align="left">#09BB07</td>
+<td align="left">否</td>
+<td align="left">进度条颜色（请使用activeColor）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">activeColor</td>
+<td align="left">string</td>
+<td align="left">#09BB07</td>
+<td align="left">否</td>
+<td align="left">已选择的进度条的颜色</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">backgroundColor</td>
+<td align="left">string</td>
+<td align="left">#EBEBEB</td>
+<td align="left">否</td>
+<td align="left">未选择的进度条的颜色</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">active</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">进度条从左往右的动画</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">active-mode</td>
+<td align="left">string</td>
+<td align="left">backwards</td>
+<td align="left">否</td>
+<td align="left">backwards: 动画从头播；forwards：动画从上次结束点接着播</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.7.0</a></td>
+</tr>
+<tr>
+<td align="left">duration</td>
+<td align="left">number</td>
+<td align="left">30</td>
+<td align="left">否</td>
+<td align="left">进度增加1%所需毫秒数</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.2</a></td>
+</tr>
+<tr>
+<td align="left">bindactiveend</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">动画完成事件</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.1</a></td>
+</tr>
+</tbody></table>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/Oga4Hcmj6cYS">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">progress</span> <span class="attr">percent</span>=<span class="string">&quot;20&quot;</span> <span class="attr">show-info</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">progress</span> <span class="attr">percent</span>=<span class="string">&quot;40&quot;</span> <span class="attr">stroke-width</span>=<span class="string">&quot;12&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">progress</span> <span class="attr">percent</span>=<span class="string">&quot;60&quot;</span> <span class="attr">color</span>=<span class="string">&quot;pink&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">progress</span> <span class="attr">percent</span>=<span class="string">&quot;80&quot;</span> <span class="attr">active</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/lOTnIc1636596643779.png"></p>
+<h2 id="富文本rich-text"><a href="#富文本rich-text" class="headerlink" title="富文本rich-text"></a>富文本rich-text</h2><blockquote>
+<p>基础库 1.4.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>富文本。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">nodes</td>
+<td align="left">array&#x2F;string</td>
+<td align="left">[]</td>
+<td align="left">否</td>
+<td align="left">节点列表&#x2F;HTML String</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">space</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">显示连续空格</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.1</a></td>
+</tr>
+</tbody></table>
+<p><strong>space 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ensp</td>
+<td align="left">中文字符空格一半大小</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">emsp</td>
+<td align="left">中文字符空格大小</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">nbsp</td>
+<td align="left">根据字体设置的空格大小</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="nodes"><a href="#nodes" class="headerlink" title="nodes"></a>nodes</h3><p>现支持两种节点，通过type来区分，分别是元素节点和文本节点，默认是元素节点，在富文本区域里显示的HTML节点</p>
+<p><strong>元素节点：type &#x3D; node</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">说明</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">name</td>
+<td align="left">标签名</td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left">支持部分受信任的 HTML 节点</td>
+</tr>
+<tr>
+<td align="left">attrs</td>
+<td align="left">属性</td>
+<td align="left">object</td>
+<td align="left">否</td>
+<td align="left">支持部分受信任的属性，遵循 Pascal 命名法</td>
+</tr>
+<tr>
+<td align="left">children</td>
+<td align="left">子节点列表</td>
+<td align="left">array</td>
+<td align="left">否</td>
+<td align="left">结构和 nodes 一致</td>
+</tr>
+</tbody></table>
+<p><strong>文本节点：type &#x3D; text</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">说明</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">text</td>
+<td align="left">文本</td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left">支持entities</td>
+</tr>
+</tbody></table>
+<h3 id="受信任的HTML节点及属性"><a href="#受信任的HTML节点及属性" class="headerlink" title="受信任的HTML节点及属性"></a>受信任的HTML节点及属性</h3><p>全局支持class和style属性，<strong>不支持id属性</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">节点</th>
+<th align="left">属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">a</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">abbr</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">address</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">article</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">aside</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">b</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">bdi</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">bdo</td>
+<td align="left">dir</td>
+</tr>
+<tr>
+<td align="left">big</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">blockquote</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">br</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">caption</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">center</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">cite</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">code</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">col</td>
+<td align="left">span，width</td>
+</tr>
+<tr>
+<td align="left">colgroup</td>
+<td align="left">span，width</td>
+</tr>
+<tr>
+<td align="left">dd</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">del</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">div</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">dl</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">dt</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">em</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">fieldset</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">font</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">footer</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h1</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h2</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h3</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h4</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h5</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">h6</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">header</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">hr</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">i</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">img</td>
+<td align="left">alt，src，height，width</td>
+</tr>
+<tr>
+<td align="left">ins</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">label</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">legend</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">li</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">mark</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">nav</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">ol</td>
+<td align="left">start，type</td>
+</tr>
+<tr>
+<td align="left">p</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">pre</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">q</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">rt</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">ruby</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">s</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">section</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">small</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">span</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">strong</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">sub</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">sup</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">table</td>
+<td align="left">width</td>
+</tr>
+<tr>
+<td align="left">tbody</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">td</td>
+<td align="left">colspan，height，rowspan，width</td>
+</tr>
+<tr>
+<td align="left">tfoot</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">th</td>
+<td align="left">colspan，height，rowspan，width</td>
+</tr>
+<tr>
+<td align="left">thead</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">tr</td>
+<td align="left">colspan，height，rowspan，width</td>
+</tr>
+<tr>
+<td align="left">tt</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">u</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">ul</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip"><a href="#Bug-amp-Tip" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>: nodes 不推荐使用 String 类型，性能会有所下降。</li>
+<li><code>tip</code>: <code>rich-text</code> 组件内屏蔽所有节点的事件。</li>
+<li><code>tip</code>: attrs 属性不支持 id ，支持 class 。</li>
+<li><code>tip</code>: name 属性大小写不敏感。</li>
+<li><code>tip</code>: 如果使用了不受信任的HTML节点，该节点及其所有子节点将会被移除。</li>
+<li><code>tip</code>: img 标签仅支持网络图片。</li>
+<li><code>tip</code>: 如果在自定义组件中使用 <code>rich-text</code> 组件，那么仅自定义组件的 wxss 样式对 <code>rich-text</code> 中的 class 生效。</li>
+</ol>
+<h3 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/zPVmpim46wYQ">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-body&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-section&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-section-title&quot;</span>&gt;</span>传入html字符串<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;rich-text-wrp&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rich-text</span> <span class="attr">nodes</span>=<span class="string">&quot;&#123;&#123;html&#125;&#125;&quot;</span> <span class="attr">bindtap</span>=<span class="string">&quot;tap&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">rich-text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-section&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-section-title&quot;</span>&gt;</span>传入节点列表<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;rich-text-wrp&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rich-text</span> <span class="attr">nodes</span>=<span class="string">&quot;&#123;&#123;nodes&#125;&#125;&quot;</span> <span class="attr">bindtap</span>=<span class="string">&quot;tap&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">rich-text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">html</span>: <span class="string">&#x27;&lt;div class=&quot;div_class&quot; style=&quot;line-height: 60px; color: red;&quot;&gt;Hello&amp;nbsp;World!&lt;/div&gt;&#x27;</span>,</span><br><span class="line">    <span class="attr">nodes</span>: [&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;div&#x27;</span>,</span><br><span class="line">      <span class="attr">attrs</span>: &#123;</span><br><span class="line">        <span class="attr">class</span>: <span class="string">&#x27;div_class&#x27;</span>,</span><br><span class="line">        <span class="attr">style</span>: <span class="string">&#x27;line-height: 60px; color: red;&#x27;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">children</span>: [&#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;text&#x27;</span>,</span><br><span class="line">        <span class="attr">text</span>: <span class="string">&#x27;Hello&amp;nbsp;World!&#x27;</span></span><br><span class="line">      &#125;]</span><br><span class="line">    &#125;]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">tap</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;tap&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/DjxL9K1636597184571.png"></p>
+<h2 id="文本text"><a href="#文本text" class="headerlink" title="文本text"></a>文本text</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>文本。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">selectable</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">文本是否可选 (已废弃)</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">user-select</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">文本是否可选，该属性会使文本节点显示为 inline-block</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.1</a></td>
+</tr>
+<tr>
+<td align="left">space</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">显示连续空格</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">decode</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否解码</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+</tbody></table>
+<p><strong>space 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ensp</td>
+<td align="left">中文字符空格一半大小</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">emsp</td>
+<td align="left">中文字符空格大小</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">nbsp</td>
+<td align="left">根据字体设置的空格大小</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip-1"><a href="#Bug-amp-Tip-1" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>: decode可以解析的有 <code> </code> <code>&lt;</code> <code>&gt;</code> <code>&amp;</code> <code>&#39;</code> <code> </code> <code> </code></li>
+<li><code>tip</code>: 各个操作系统的空格标准并不一致。</li>
+<li><code>tip</code>:<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/text.html">text</a> 组件内只支持 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/text.html">text</a> 嵌套。</li>
+<li><code>tip</code>: 除了文本节点以外的其他节点都无法长按选中。</li>
+<li><code>bug</code>: 基础库版本低于 <code>2.1.0</code> 时， <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/text.html">text</a> 组件内嵌的 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/text.html">text</a> style 设置可能不会生效。</li>
+</ol>
+<h3 id="示例代码-3"><a href="#示例代码-3" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/Egao9cm46gY6">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;btn-area&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;body-view&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">text</span>&gt;</span>&#123;&#123;text&#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">bindtap</span>=<span class="string">&quot;add&quot;</span>&gt;</span>add line<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">bindtap</span>=<span class="string">&quot;remove&quot;</span>&gt;</span>remove line<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span><span class="tag">&lt;<span class="name">text</span> <span class="attr">user-select</span>&gt;</span>bb  iu<span class="tag">&lt;/<span class="name">text</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span><span class="tag">&lt;<span class="name">text</span> <span class="attr">user-select</span> <span class="attr">space</span>=<span class="string">&quot;nbsp&quot;</span>&gt;</span>bb  i<span class="symbol">&amp;nbsp;</span> <span class="symbol">&amp;lt;</span> <span class="symbol">&amp;gt;</span> <span class="symbol">&amp;amp;</span> <span class="symbol">&amp;apos;</span> <span class="symbol">&amp;ensp;</span> <span class="symbol">&amp;emsp;</span>u<span class="tag">&lt;/<span class="name">text</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span><span class="tag">&lt;<span class="name">text</span> <span class="attr">user-select</span> <span class="attr">space</span>=<span class="string">&quot;nbsp&quot;</span> <span class="attr">decode</span>&gt;</span>bb  i<span class="symbol">&amp;nbsp;</span> <span class="symbol">&amp;lt;</span> <span class="symbol">&amp;gt;</span> <span class="symbol">&amp;amp;</span> <span class="symbol">&amp;apos;</span> <span class="symbol">&amp;ensp;</span> <span class="symbol">&amp;emsp;</span>u<span class="tag">&lt;/<span class="name">text</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> initData = <span class="string">&#x27;this is first line\nthis is second line&#x27;</span></span><br><span class="line"><span class="keyword">var</span> extraLine = [];</span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line">    <span class="attr">text</span>: initData</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">add</span>: <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">    extraLine.<span class="title function_">push</span>(<span class="string">&#x27;other line&#x27;</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">      <span class="attr">text</span>: initData + <span class="string">&#x27;\n&#x27;</span> + extraLine.<span class="title function_">join</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">remove</span>: <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (extraLine.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      extraLine.<span class="title function_">pop</span>()</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">        <span class="attr">text</span>: initData + <span class="string">&#x27;\n&#x27;</span> + extraLine.<span class="title function_">join</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/z2vrPL1636598298495.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序框架组件-组件基础内容</p><p><a href="https://blog.buubiu.com/微信小程序框架组件-组件基础内容/">https://blog.buubiu.com/微信小程序框架组件-组件基础内容/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-11</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序框架组件-表单组件</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A7%86%E5%9B%BE%E5%AE%B9%E5%99%A8%E7%BB%84%E4%BB%B6/"><span class="level-item">微信小程序框架组件-视图容器组件</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#图标icon"><span class="level-left"><span class="level-item">1</span><span class="level-item">图标icon</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#进度条progress"><span class="level-left"><span class="level-item">2</span><span class="level-item">进度条progress</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#富文本rich-text"><span class="level-left"><span class="level-item">3</span><span class="level-item">富文本rich-text</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#nodes"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">nodes</span></span></a></li><li><a class="level is-mobile" href="#受信任的HTML节点及属性"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">受信任的HTML节点及属性</span></span></a></li><li><a class="level is-mobile" href="#Bug-amp-Tip"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">Bug &amp; Tip</span></span></a></li><li><a class="level is-mobile" href="#示例代码-2"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#文本text"><span class="level-left"><span class="level-item">4</span><span class="level-item">文本text</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Bug-amp-Tip-1"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">Bug &amp; Tip</span></span></a></li><li><a class="level is-mobile" href="#示例代码-3"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">示例代码</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

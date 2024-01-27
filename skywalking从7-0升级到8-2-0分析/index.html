@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>skywalking从7.0升级到8.2.0分析 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content=""><meta property="og:type" content="blog"><meta property="og:title" content="skywalking从7.0升级到8.2.0分析"><meta property="og:url" content="https://blog.buubiu.com/skywalking%E4%BB%8E7-0%E5%8D%87%E7%BA%A7%E5%88%B08-2-0%E5%88%86%E6%9E%90/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/Wy36a81606127060847.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/BsIAVT1606122818560.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/v35xBr1606123099640.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/PuelTd1606123192234.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/UWx87w1606125144063.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/XrZxrO1606125204692.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/M8GRW81606125279206.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/8KZBsd1606125337751.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/rs5EHJ1606125645674.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/BsIAVT1606122818560.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/rs5EHJ1606125645674.png"><meta property="article:published_time" content="2020-11-23T08:59:38.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.913Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="skywalking"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/Wy36a81606127060847.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/skywalking%E4%BB%8E7-0%E5%8D%87%E7%BA%A7%E5%88%B08-2-0%E5%88%86%E6%9E%90/"},"headline":"skywalking从7.0升级到8.2.0分析","image":["https://blog.buubiu.com/img/article/Wy36a81606127060847.jpg","https://blog.buubiu.com/img/article/BsIAVT1606122818560.png","https://blog.buubiu.com/img/article/v35xBr1606123099640.png","https://blog.buubiu.com/img/article/PuelTd1606123192234.png","https://blog.buubiu.com/img/article/UWx87w1606125144063.png","https://blog.buubiu.com/img/article/XrZxrO1606125204692.png","https://blog.buubiu.com/img/article/M8GRW81606125279206.png","https://blog.buubiu.com/img/article/8KZBsd1606125337751.png","https://blog.buubiu.com/img/article/rs5EHJ1606125645674.png","https://blog.buubiu.com/img/article/BsIAVT1606122818560.png","https://blog.buubiu.com/img/article/rs5EHJ1606125645674.png"],"datePublished":"2020-11-23T08:59:38.000Z","dateModified":"2024-01-25T15:08:05.913Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":""}</script><link rel="canonical" href="https://blog.buubiu.com/skywalking%E4%BB%8E7-0%E5%8D%87%E7%BA%A7%E5%88%B08-2-0%E5%88%86%E6%9E%90/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-11-23T08:59:38.000Z" title="11/23/2020, 4:59:38 PM">2020-11-23</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.913Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/APM/">APM</a></span><span class="level-item">9 分钟读完 (大约1297个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">skywalking从7.0升级到8.2.0分析</h1><div class="content"><p><img src="/../img/article/Wy36a81606127060847.jpg"></p>
+<span id="more"></span>
+
+<h3 id="boms与skw7-0调用的流程"><a href="#boms与skw7-0调用的流程" class="headerlink" title="boms与skw7.0调用的流程"></a>boms与skw7.0调用的流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">	start(开始) --&gt; 结束(结束)</span><br></pre></td></tr></table></figure>
+
+<h4 id="以获取拓扑图为例"><a href="#以获取拓扑图为例" class="headerlink" title="以获取拓扑图为例:"></a>以获取拓扑图为例:</h4><ol>
+<li>页面选择具体的应用，可以多选</li>
+</ol>
+<p><img src="/../img/article/BsIAVT1606122818560.png"></p>
+<ol start="2">
+<li>调用broker工程后台接口：&#x2F;apm&#x2F;topo&#x2F;global_topology</li>
+</ol>
+<p><img src="/../img/article/v35xBr1606123099640.png"></p>
+<ol start="3">
+<li>具体通过这里和skw通信：</li>
+</ol>
+<p><img src="/../img/article/PuelTd1606123192234.png"></p>
+<p>这里做了以下主要操作：</p>
+<ul>
+<li>封装请求体body<ul>
+<li>根据服务关联的skw版本选择对应的GrapHQL</li>
+<li>参数放到variables里面</li>
+<li>HQL放到query里面</li>
+</ul>
+</li>
+<li>调用skw接口<ul>
+<li>根据服务关联的skw的OAP地址来进行拼接URL</li>
+</ul>
+</li>
+</ul>
+<ol start="4">
+<li><p>这一步完成后就没有broker工程的事情了，接下来去skw源码看看</p>
+</li>
+<li><p>通过第三步调用到了skw</p>
+</li>
+</ol>
+<p><img src="/../img/article/UWx87w1606125144063.png"></p>
+<ol start="6">
+<li>通过了doPost，根据定制的GrapHQL找到对应的方法</li>
+</ol>
+<p><img src="/../img/article/XrZxrO1606125204692.png"></p>
+<p><img src="/../img/article/M8GRW81606125279206.png"></p>
+<p><img src="/../img/article/8KZBsd1606125337751.png"></p>
+<p>最后一张图做了以下操作：</p>
+<ul>
+<li>根据查询条件（开始时间，结束时间）调用原生skw接口从ES获取所有服务的拓扑图数据</li>
+<li>在根据boms传过来的参数（appids,appnames）对结果进行过滤，只保留我们需要的服务拓扑图数据</li>
+<li>最后返回给boms</li>
+</ul>
+<ol start="7">
+<li>最后显示在页面上</li>
+</ol>
+<p><img src="/../img/article/rs5EHJ1606125645674.png"></p>
+<h3 id="boms与sky8-2-0调用的流程"><a href="#boms与sky8-2-0调用的流程" class="headerlink" title="boms与sky8.2.0调用的流程"></a>boms与sky8.2.0调用的流程</h3><h4 id="以获取拓扑图为例-1"><a href="#以获取拓扑图为例-1" class="headerlink" title="以获取拓扑图为例:"></a>以获取拓扑图为例:</h4><ol>
+<li>页面选择具体的应用，可以多选</li>
+</ol>
+<p><img src="/../img/article/BsIAVT1606122818560.png"></p>
+<ol start="2">
+<li>调用broker工程后台接口：&#x2F;apm&#x2F;topo&#x2F;global_topology_new</li>
+</ol>
+<p>该接口做了以下操作：</p>
+<ul>
+<li>获取前台传入的参数（主要是application.name）</li>
+<li>调用skw接口获取所有的服务列表</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;Service&gt; <span class="title function_">getAllServices</span><span class="params">(<span class="keyword">final</span> Duration duration)</span> <span class="keyword">throws</span> IOException, ParseException &#123;</span><br><span class="line">        <span class="keyword">return</span> getMetadataQueryService().getAllServices(duration.getStartTimestamp(), duration.getEndTimestamp());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>返回值包含了label（application.name)和key，并结合传入的参数做交集，获取对应的key</li>
+</ul>
+<ol start="3">
+<li>调用skw接口获取选择服务的拓扑图数据，serviceIds就是上一步获取的交集keys</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Topology <span class="title function_">getServicesTopology</span><span class="params">(<span class="keyword">final</span> List&lt;String&gt; serviceIds, <span class="keyword">final</span> Duration duration)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="keyword">return</span> getQueryService().getServiceTopology(</span><br><span class="line">        duration.getStartTimeBucket(), duration.getEndTimeBucket(), serviceIds);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>最后显示在页面上</li>
+</ol>
+<p><img src="/../img/article/rs5EHJ1606125645674.png"></p>
+<h3 id="分析两种方法的区别"><a href="#分析两种方法的区别" class="headerlink" title="分析两种方法的区别"></a>分析两种方法的区别</h3><ol>
+<li><p>第二种方法不需要定制查询接口</p>
+</li>
+<li><p>第二种方法是先查询所有列表在进行筛选，而第一种是先查询拓扑图在进行筛选，相较于第一种，查询速度会快一些。</p>
+</li>
+<li><p>不需要做新增应用时，进行手动补偿</p>
+</li>
+</ol>
+<h3 id="sky8-2-0相较于老版本新增的可用功能"><a href="#sky8-2-0相较于老版本新增的可用功能" class="headerlink" title="sky8.2.0相较于老版本新增的可用功能"></a>sky8.2.0相较于老版本新增的可用功能</h3><ul>
+<li>从7.1.0开始，概要分析跟踪自动收集Tomcat和SpringMVC Controller的HTTP请求参数。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/ui/README.md">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/ui/README.md</a></p>
+<ul>
+<li><p>从6.5.0开始，可以通过<a target="_blank" rel="noopener" href="https://github.com/SkyAPM/document-cn-translation-of-skywalking/blob/master/docs/zh/8.0.0/setup/backend/dynamic-config.md">动态配置</a>在运行时动态更新报警设置 , 它将覆盖 <code>alarm-settings.yml</code> 中的设置.</p>
+<p>为了确定是否触发告警规则, SkyWalking 需要为每个告警规则缓存时间窗的指标, 如果任何属性 (<code>metrics-name</code>, <code>op</code>, <code>threshold</code>, <code>period</code>, <code>count</code>, etc.) 的规则改变, 滑动窗口将会毁坏和重建, 导致此告警规则重新启动.</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/setup/backend/backend-alarm.md">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/setup/backend/backend-alarm.md</a></p>
+<ul>
+<li><p>8.0版本以后 oal脚本存放目录 ‘&#x2F;config&#x2F;oal&#x2F;*.oal’ 你可以修改相关内容，重启OAP服务，即可生效。</p>
+<p>此脚本中命名的所有指标都可以用于报警和UI查询.</p>
+<p>注意！</p>
+<p>建议基于自定义指标构建的自定义UI功能才能添加或删除一些指标，否则UI可能会有问题。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/guides/backend-oal-scripts.md">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/guides/backend-oal-scripts.md</a></p>
+<ul>
+<li>6.3版本以后, OAL引擎嵌入在OAP服务器运行时中，称为“OAL -rt”(OAL运行时)。 OAL脚本现在位于’ &#x2F;config ‘文件夹，用户可以简单地改变和重新启动服务器，使其有效。 但是，OAL脚本仍然是编译语言，OAL运行时动态生成java代码。 您可以在system env上打开set ‘ SW_OAL_ENGINE_DEBUG&#x3D;Y ‘，查看生成了哪些类。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/concepts-and-designs/oal.md#observability-analysis-language">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/concepts-and-designs/oal.md#observability-analysis-language</a></p>
+<ul>
+<li><p><strong>百分位</strong>是自7.0版本引入的第一个多值度量。由于有多个值，可以通过’ getMultipleLinearIntValues ‘ GraphQL查询进行查询。 在本例中，所有传入请求的“p99”、“p95”、“p90”、“p75”、“p50”。参数是p99延迟计算的精度，如在上述情况下，120ms和124被认为是相同的。 在7.0.0之前，使用’ p99 ‘、’ p95 ‘、’ p90 ‘、’ p75 ‘、’ p50 ‘函数分别计算指标。在7.x版本仍然支持，但不推荐且不包括在正式脚本。</p>
+<blockquote>
+<p>All_p99 &#x3D; from(All.latency).p99(10);</p>
+</blockquote>
+<p>在本例中，p99为所有传入请求的值。参数是p99延迟计算的精度，如在上述情况下，120ms和124被认为是相同的。</p>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/concepts-and-designs/oal.md#aggregation-function">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/concepts-and-designs/oal.md#aggregation-function</a></p>
+<ul>
+<li>7.0.0 以上支持令牌认证</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/skywalking/blob/v8.2.0/docs/en/setup/backend/backend-token-auth.md">https://github.com/apache/skywalking/blob/v8.2.0/docs/en/setup/backend/backend-token-auth.md</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>skywalking从7.0升级到8.2.0分析</p><p><a href="https://blog.buubiu.com/skywalking从7-0升级到8-2-0分析/">https://blog.buubiu.com/skywalking从7-0升级到8-2-0分析/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-11-23</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/skywalking/">skywalking</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Config%E7%BB%84%E4%BB%B6%E4%BD%BF%E7%94%A8/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Config组件使用</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Gateway%E7%BB%84%E4%BB%B6%E7%9A%84%E4%BD%BF%E7%94%A8/"><span class="level-item">Gateway组件的使用</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#boms与skw7-0调用的流程"><span class="level-left"><span class="level-item">1</span><span class="level-item">boms与skw7.0调用的流程</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#以获取拓扑图为例"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">以获取拓扑图为例:</span></span></a></li></ul></li><li><a class="level is-mobile" href="#boms与sky8-2-0调用的流程"><span class="level-left"><span class="level-item">2</span><span class="level-item">boms与sky8.2.0调用的流程</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#以获取拓扑图为例-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">以获取拓扑图为例:</span></span></a></li></ul></li><li><a class="level is-mobile" href="#分析两种方法的区别"><span class="level-left"><span class="level-item">3</span><span class="level-item">分析两种方法的区别</span></span></a></li><li><a class="level is-mobile" href="#sky8-2-0相较于老版本新增的可用功能"><span class="level-left"><span class="level-item">4</span><span class="level-item">sky8.2.0相较于老版本新增的可用功能</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

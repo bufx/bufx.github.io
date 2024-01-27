@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微服务介绍 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="版本：Hoxton SR9  In short, the microservice architectural style is an approach to developing a single application as a suite of small services(一系列微小服务), each running in its own process(运行在自己的进程里) and c"><meta property="og:type" content="blog"><meta property="og:title" content="微服务介绍"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BB%8B%E7%BB%8D/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="版本：Hoxton SR9  In short, the microservice architectural style is an approach to developing a single application as a suite of small services(一系列微小服务), each running in its own process(运行在自己的进程里) and c"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/vaoEQg1605536398469.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/elvOlK1605537327691.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/qUIfwK1605539216653.png"><meta property="article:published_time" content="2020-11-16T14:15:23.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.940Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微服务"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/vaoEQg1605536398469.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BB%8B%E7%BB%8D/"},"headline":"微服务介绍","image":["https://blog.buubiu.com/img/article/vaoEQg1605536398469.png","https://blog.buubiu.com/img/article/elvOlK1605537327691.png","https://blog.buubiu.com/img/article/qUIfwK1605539216653.png"],"datePublished":"2020-11-16T14:15:23.000Z","dateModified":"2024-01-25T15:08:05.940Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"版本：Hoxton SR9  In short, the microservice architectural style is an approach to developing a single application as a suite of small services(一系列微小服务), each running in its own process(运行在自己的进程里) and c"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BB%8B%E7%BB%8D/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-11-16T14:15:23.000Z" title="11/16/2020, 10:15:23 PM">2020-11-16</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.940Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/SpringCloud/">SpringCloud</a></span><span class="level-item">13 分钟读完 (大约1943个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微服务介绍</h1><div class="content"><ul>
+<li>版本：Hoxton SR9</li>
+</ul>
+<p>In short, the microservice architectural style is an approach to developing a single application as <code>a suite of small services(一系列微小服务)</code>, each <code>running in its own process(运行在自己的进程里)</code> and communicating with lightweight mechanisms, often an HTTP resource API. These services are <code>built around business capabilities(围绕自己的业务开发)</code> and <code>independently deployable(独立部署)</code> by fully automated deployment machinery. <code>There is a bare minimum of centralized management of these services(基于分布式管理)</code>, which may be written in different programming languages and use different data storage technologies.                        —–[摘自官网]</p>
+<span id="more"></span>
+
+<h3 id="什么是微服务"><a href="#什么是微服务" class="headerlink" title="什么是微服务"></a>什么是微服务</h3><ul>
+<li><p>官方定义:</p>
+<p><strong>微服务就是由一系列围绕自己业务开发的微小服务构成,他们独立部署运行在自己的进程里,基于分布式的管理</strong></p>
+</li>
+<li><p>通俗定义:</p>
+<p><strong>微服务是一种架构，这种架构是将单个的整体应用程序分割成更小的项目关联的独立的服务。一个服务通常实现一组独立的特性或功能，包含自己的业务逻辑和适配器。各个微服务之间的关联通过暴露api来实现。这些独立的微服务不需要部署在同一个虚拟机，同一个系统和同一个应用服务器中。</strong></p>
+</li>
+</ul>
+<h3 id="为什么是微服务"><a href="#为什么是微服务" class="headerlink" title="为什么是微服务"></a>为什么是微服务</h3><h4 id="单体应用"><a href="#单体应用" class="headerlink" title="单体应用"></a>单体应用</h4><p><img src="/../img/article/vaoEQg1605536398469.png"></p>
+<ol>
+<li>优点<ul>
+<li>单一架构模式在项目初期很小的时候开发方便，测试方便，部署方便，运行良好。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>应用随着时间的推进，加入的功能越来越多，最终会变得巨大，一个项目中很有可能数百万行的代码，互相之间繁琐的jar包。</li>
+<li>久而久之，开发效率低，代码维护困难</li>
+<li>还有一个如果想整体应用采用新的技术，新的框架或者语言，那是不可能的。</li>
+<li>任意模块的漏洞或者错误都会影响这个应用，降低系统的可靠性</li>
+</ul>
+</li>
+</ol>
+<h4 id="微服务架构应用"><a href="#微服务架构应用" class="headerlink" title="微服务架构应用"></a>微服务架构应用</h4><p><img src="/../img/article/elvOlK1605537327691.png"></p>
+<ol>
+<li><p>优点</p>
+<ul>
+<li><p>将服务拆分成多个单一职责的小的服务，进行单独部署，服务之间通过网络进行通信</p>
+</li>
+<li><p>每个服务应该有自己单独的管理团队，高度自治</p>
+</li>
+<li><p>服务各自有自己单独的职责，服务之间松耦合，避免因一个模块的问题导致服务崩溃</p>
+</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>开发人员要处理分布式系统的复杂性</li>
+<li>多服务运维难度，随着服务的增加，运维的压力也在增大</li>
+<li>服务治理 和 服务监控 关键</li>
+</ul>
+</li>
+</ol>
+<h3 id="架构的演变"><a href="#架构的演变" class="headerlink" title="架构的演变"></a>架构的演变</h3><p><strong>架构的演变过程</strong></p>
+<p>[单一应用架构] <code>===&gt;</code> [垂直应用架构] <code>===&gt;</code> [分布式服务架构] <code>===&gt;</code> [流动计算架构]||[微服务架构] <code>===&gt;</code> [未知]</p>
+<h4 id="All-in-One-Application-单一架构"><a href="#All-in-One-Application-单一架构" class="headerlink" title="All in One Application 单一架构"></a>All in One Application 单一架构</h4><p><code>起初当网站流量很小时,将所有功能都写在一个应用里面,对整个应用进行部署,以减少部署节点和成本。对于这个架构简化增删改查的工作量的数据访问框架（ORM）是关键。</code></p>
+<h4 id="Vertical-Application-垂直架构"><a href="#Vertical-Application-垂直架构" class="headerlink" title="Vertical Application 垂直架构"></a>Vertical Application 垂直架构</h4><p><code>当访问量逐渐增大，单一应用增加机器带来的加速度越来越小，提升效率的方法之一是将应用拆成互不相干的几个应用，以提升效率。此时，用于加速前端页面开发的Web框架(MVC)是关键。</code></p>
+<h4 id="Distributed-Service-分布式服务架构"><a href="#Distributed-Service-分布式服务架构" class="headerlink" title="Distributed Service  分布式服务架构"></a>Distributed Service  分布式服务架构</h4><p><code>当垂直应用越来越多，应用之间交互不可避免，将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，使前端应用能更快速的响应多变的市场需求。此时，用于提高业务复用及整合的分布式服务框架(RPC)是关键。</code></p>
+<h4 id="Elastic-Computin-流动计算架构即微服务架构"><a href="#Elastic-Computin-流动计算架构即微服务架构" class="headerlink" title="Elastic Computin 流动计算架构即微服务架构"></a>Elastic Computin 流动计算架构即微服务架构</h4><p><code>当服务越来越多，容量的评估，小服务资源的浪费等问题逐渐显现，此时需增加一个调度中心基于访问压力实时管理集群容量，提高集群利用率。此时，用于提高机器利用率的资源调度和治理中心(SOA)是关键</code></p>
+<h3 id="微服务的解决方案"><a href="#微服务的解决方案" class="headerlink" title="微服务的解决方案"></a>微服务的解决方案</h3><h4 id="Dubbo-阿里系"><a href="#Dubbo-阿里系" class="headerlink" title="Dubbo(阿里系)"></a>Dubbo(阿里系)</h4><ol>
+<li><p>初出茅庐:2011年末，阿里巴巴在GitHub上开源了基于Java的分布式服务治理框架Dubbo，之后它成为了国内该类开源项目的佼佼者，许多开发者对其表示青睐。同时，先后有不少公司在实践中基于Dubbo进行分布式系统架构，目前在GitHub上，它的fork、star数均已破万。Dubbo致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案，使得应用可通过高性能RPC实现服务的输出、输入功能和Spring框架无缝集成。Dubbo包含远程通讯、集群容错和自动发现三个核心部分。</p>
+</li>
+<li><p>停止维护:从2012年10月23日Dubbo 2.5.3发布后，在Dubbo开源将满一周年之际，阿里基本停止了对Dubbo的主要升级。只在之后的2013年和2014年更新过2次对Dubbo 2.4的维护版本，然后停止了所有维护工作。Dubbo对Srping的支持也停留在了Spring 2.5.6版本上。</p>
+</li>
+<li><p>死而复生:多年漫长的等待，随着微服务的火热兴起，在国内外开发者对阿里不再升级维护Dubbo的吐槽声中，阿里终于开始重新对Dubbo的升级和维护工作。在2017年9月7日，阿里发布了Dubbo的2.5.4版本，距离上一个版本2.5.3发布已经接近快5年时间了。在随后的几个月中，阿里Dubbo开发团队以差不多每月一版本的速度开始快速升级迭代，修补了Dubbo老版本多年来存在的诸多bug，并对Spring等组件的支持进行了全面升级。</p>
+</li>
+<li><p>2018年1月8日，Dubbo创始人之一梁飞在Dubbo交流群里透露了Dubbo 3.0正在动工的消息。Dubbo 3.0内核与Dubbo 2.0完全不同，但兼容Dubbo 2.0。Dubbo 3.0将以Streaming为内核，不再是Dubbo 时代的RPC，但是RPC会在Dubbo 3.0中变成远程Streaming对接的一种可选形态。从Dubbo新版本的路线规划上可以看出，新版本的Dubbo在原有服务治理的功能基础上，将全面拥抱微服务解决方案。</p>
+</li>
+<li><p>结论:当前由于RPC协议、注册中心元数据不匹配等问题，在面临微服务基础框架选型时Dubbo与Spring Cloud是只能二选一，这也是为什么大家总是拿Dubbo和Spring Cloud做对比的原因之一。Dubbo之后会积极寻求适配到Spring Cloud生态，比如作为Spring Cloud的二进制通信方案来发挥Dubbo的性能优势，或者Dubbo通过模块化以及对http的支持适配到Spring Cloud。</p>
+</li>
+</ol>
+<p><img src="/../img/article/qUIfwK1605539216653.png"></p>
+<h4 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud"></a>Spring Cloud</h4><ul>
+<li><p>Spring Cloud NetFlix(美国 在线视频网站)<br>  基于美国Netflix公司开源的组件进行封装,提供了微服务一栈式的解决方案。 G版本之前</p>
+</li>
+<li><p>Spring Cloud alibaba<br>  在Spring cloud netflix基础上封装了阿里巴巴的微服务解决方案。</p>
+</li>
+<li><p>Spring Cloud<br>  目前spring官方趋势正在逐渐吸收Netflix组件的精华,并在此基础进行二次封装优化,打造spring专有的解决方案</p>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微服务介绍</p><p><a href="https://blog.buubiu.com/微服务介绍/">https://blog.buubiu.com/微服务介绍/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-11-16</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/SpringCloud%E4%BB%8B%E7%BB%8D%E5%8F%8A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">SpringCloud介绍及环境搭建</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Swagger%E7%AE%80%E4%BB%8B/"><span class="level-item">Swagger简介</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#什么是微服务"><span class="level-left"><span class="level-item">1</span><span class="level-item">什么是微服务</span></span></a></li><li><a class="level is-mobile" href="#为什么是微服务"><span class="level-left"><span class="level-item">2</span><span class="level-item">为什么是微服务</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#单体应用"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">单体应用</span></span></a></li><li><a class="level is-mobile" href="#微服务架构应用"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">微服务架构应用</span></span></a></li></ul></li><li><a class="level is-mobile" href="#架构的演变"><span class="level-left"><span class="level-item">3</span><span class="level-item">架构的演变</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#All-in-One-Application-单一架构"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">All in One Application 单一架构</span></span></a></li><li><a class="level is-mobile" href="#Vertical-Application-垂直架构"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">Vertical Application 垂直架构</span></span></a></li><li><a class="level is-mobile" href="#Distributed-Service-分布式服务架构"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">Distributed Service  分布式服务架构</span></span></a></li><li><a class="level is-mobile" href="#Elastic-Computin-流动计算架构即微服务架构"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">Elastic Computin 流动计算架构即微服务架构</span></span></a></li></ul></li><li><a class="level is-mobile" href="#微服务的解决方案"><span class="level-left"><span class="level-item">4</span><span class="level-item">微服务的解决方案</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Dubbo-阿里系"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">Dubbo(阿里系)</span></span></a></li><li><a class="level is-mobile" href="#Spring-Cloud"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">Spring Cloud</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

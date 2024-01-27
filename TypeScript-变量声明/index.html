@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>TypeScript 变量声明 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="变量是一种使用方便的占位符，用于引用计算机内存地址。 我们可以把变量看做存储数据的容器。 TypeScript 变量的命名规则：  变量名称可以包含数字和字母。 除了下划线 _ 和美元 $符号外，不能包含其他特殊字符，包括空格。 变量名不能以数字开头。  变量使用前必须先声明，我们可以使用 var 来声明变量。 我们可以使用以下四种方式来声明变量："><meta property="og:type" content="blog"><meta property="og:title" content="TypeScript 变量声明"><meta property="og:url" content="https://blog.buubiu.com/TypeScript-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="变量是一种使用方便的占位符，用于引用计算机内存地址。 我们可以把变量看做存储数据的容器。 TypeScript 变量的命名规则：  变量名称可以包含数字和字母。 除了下划线 _ 和美元 $符号外，不能包含其他特殊字符，包括空格。 变量名不能以数字开头。  变量使用前必须先声明，我们可以使用 var 来声明变量。 我们可以使用以下四种方式来声明变量："><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/og_image.png"><meta property="article:published_time" content="2021-08-19T06:44:12.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.899Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="TypeScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/TypeScript-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E/"},"headline":"TypeScript 变量声明","image":["https://blog.buubiu.com/img/og_image.png"],"datePublished":"2021-08-19T06:44:12.000Z","dateModified":"2024-01-25T15:08:05.899Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"变量是一种使用方便的占位符，用于引用计算机内存地址。 我们可以把变量看做存储数据的容器。 TypeScript 变量的命名规则：  变量名称可以包含数字和字母。 除了下划线 _ 和美元 $符号外，不能包含其他特殊字符，包括空格。 变量名不能以数字开头。  变量使用前必须先声明，我们可以使用 var 来声明变量。 我们可以使用以下四种方式来声明变量："}</script><link rel="canonical" href="https://blog.buubiu.com/TypeScript-%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-19T06:44:12.000Z" title="8/19/2021, 2:44:12 PM">2021-08-19</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.899Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span> / </span><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/TypeScript/">TypeScript</a></span><span class="level-item">10 分钟读完 (大约1515个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">TypeScript 变量声明</h1><div class="content"><p>变量是一种使用方便的占位符，用于引用计算机内存地址。</p>
+<p>我们可以把变量看做存储数据的容器。</p>
+<p>TypeScript 变量的命名规则：</p>
+<ul>
+<li>变量名称可以包含数字和字母。</li>
+<li>除了下划线 <code>_</code> 和美元 <code>$</code>符号外，不能包含其他特殊字符，包括空格。</li>
+<li>变量名不能以数字开头。</li>
+</ul>
+<p>变量使用前必须先声明，我们可以使用 var 来声明变量。</p>
+<p>我们可以使用以下四种方式来声明变量：</p>
+<span id="more"></span>
+
+<h2 id="四种方式来声明变量"><a href="#四种方式来声明变量" class="headerlink" title="四种方式来声明变量"></a>四种方式来声明变量</h2><h3 id="声明变量的类型及初始值"><a href="#声明变量的类型及初始值" class="headerlink" title="声明变量的类型及初始值"></a>声明变量的类型及初始值</h3><p>声明变量的类型及初始值：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [变量名] : [类型] = 值;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">uname</span>:<span class="built_in">string</span> = <span class="string">&quot;buubiu&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="声明变量的类型，但没有初始值"><a href="#声明变量的类型，但没有初始值" class="headerlink" title="声明变量的类型，但没有初始值"></a>声明变量的类型，但没有初始值</h3><p>声明变量的类型，但没有初始值，变量值会设置为 undefined：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [变量名] : [类型];</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">uname</span>:<span class="built_in">string</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="声明变量并初始值，但不设置类型"><a href="#声明变量并初始值，但不设置类型" class="headerlink" title="声明变量并初始值，但不设置类型"></a>声明变量并初始值，但不设置类型</h3><p>声明变量并初始值，但不设置类型，该变量可以是任意类型：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [变量名] = 值;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> uname = <span class="string">&quot;buubiu&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="声明变量没有设置类型和初始值"><a href="#声明变量没有设置类型和初始值" class="headerlink" title="声明变量没有设置类型和初始值"></a>声明变量没有设置类型和初始值</h3><p>声明变量没有设置类型和初始值，类型可以是任意类型，默认初始值为 undefined：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [变量名];</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> uname;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">uname</span>:<span class="built_in">string</span> = <span class="string">&quot;buubiu&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="attr">score1</span>:<span class="built_in">number</span> = <span class="number">50</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="attr">score2</span>:<span class="built_in">number</span> = <span class="number">42.50</span></span><br><span class="line"><span class="keyword">var</span> sum = score1 + score2</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;名字: &quot;</span>+uname)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;第一个科目成绩: &quot;</span>+score1)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;第二个科目成绩: &quot;</span>+score2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;总成绩: &quot;</span>+sum)</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>变量不要使用 name 否则会与 DOM 中的全局 window 对象下的 name 属性出现了重名。</p>
+<p>使用 tsc 命令编译以上代码，得到如下 JavaScript 代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> uname = <span class="string">&quot;buubiu&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> score1 = <span class="number">50</span>;</span><br><span class="line"><span class="keyword">var</span> score2 = <span class="number">42.50</span>;</span><br><span class="line"><span class="keyword">var</span> sum = score1 + score2;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;名字: &quot;</span> + uname);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;第一个科目成绩: &quot;</span> + score1);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;第二个科目成绩: &quot;</span> + score2);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;总成绩: &quot;</span> + sum);</span><br></pre></td></tr></table></figure>
+
+<p>执行该 JavaScript 代码输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">名字: buubiu</span><br><span class="line">第一个科目成绩: 50</span><br><span class="line">第二个科目成绩: 42.5</span><br><span class="line">总成绩: 92.5</span><br></pre></td></tr></table></figure>
+
+<p>TypeScript 遵循强类型，如果将不同的类型赋值给变量会编译错误，如下实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num</span>:<span class="built_in">number</span> = <span class="string">&quot;hello&quot;</span>     <span class="comment">// 这个代码会编译错误</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="类型断言（Type-Assertion）"><a href="#类型断言（Type-Assertion）" class="headerlink" title="类型断言（Type Assertion）"></a>类型断言（Type Assertion）</h2><p>类型断言可以用来手动指定一个值的类型，即允许变量从一种类型更改为另一种类型。</p>
+<p>语法格式：</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;类型&gt;值</span><br></pre></td></tr></table></figure>
+
+<p>或:</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">值 <span class="keyword">as</span> 类型</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;1&#x27;</span> </span><br><span class="line"><span class="keyword">var</span> <span class="attr">str2</span>:<span class="built_in">number</span> = &lt;<span class="built_in">number</span>&gt; &lt;<span class="built_in">any</span>&gt; str   <span class="comment">//str、str2 是 string 类型</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="TypeScript-是怎么确定单个断言是否足够"><a href="#TypeScript-是怎么确定单个断言是否足够" class="headerlink" title="TypeScript 是怎么确定单个断言是否足够"></a>TypeScript 是怎么确定单个断言是否足够</h3><p>当 S 类型是 T 类型的子集，或者 T 类型是 S 类型的子集时，S 能被成功断言成 T。这是为了在进行类型断言时提供额外的安全性，完全毫无根据的断言是危险的，如果你想这么做，你可以使用 any。</p>
+<p>它之所以不被称为<strong>类型转换</strong>，是因为转换通常意味着某种运行时的支持。但是，类型断言纯粹是一个编译时语法，同时，它也是一种为编译器提供关于如何分析代码的方法。</p>
+<p>编译后，以上代码会生成如下 JavaScript 代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;1&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> str2 = str;  <span class="comment">//str、str2 是 string 类型</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str2);</span><br></pre></td></tr></table></figure>
+
+<p>执行输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<h2 id="类型推断"><a href="#类型推断" class="headerlink" title="类型推断"></a>类型推断</h2><p>当类型没有给出时，TypeScript 编译器利用类型推断来推断类型。</p>
+<p>如果由于缺乏声明而不能推断出类型，那么它的类型被视作默认的动态 any 类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">2</span>;    <span class="comment">// 类型推断为 number</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;num 变量的值为 &quot;</span>+num); </span><br><span class="line">num = <span class="string">&quot;12&quot;</span>;    <span class="comment">// 编译错误</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(num);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>第一行代码声明了变量 num 并&#x3D;设置初始值为 2。 注意变量声明没有指定类型。因此，程序使用类型推断来确定变量的数据类型，第一次赋值为 2，<strong>num</strong> 设置为 number 类型。</p>
+</li>
+<li><p>第三行代码，当我们再次为变量设置字符串类型的值时，这时编译会错误。因为变量已经设置为了 number 类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error <span class="title class_">TS2322</span>: <span class="title class_">Type</span> <span class="string">&#x27;&quot;12&quot;&#x27;</span> is not assignable to <span class="keyword">type</span> <span class="string">&#x27;number&#x27;</span>.</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h2><p>变量作用域指定了变量定义的位置。</p>
+<p>程序中变量的可用性由变量作用域决定。</p>
+<p>TypeScript 有以下几种作用域：</p>
+<ul>
+<li><strong>全局作用域</strong> − 全局变量定义在程序结构的外部，它可以在你代码的任何位置使用。</li>
+<li><strong>类作用域</strong> − 这个变量也可以称为 <strong>字段</strong>。类变量声明在一个类里头，但在类的方法外面。 该变量可以通过类的对象来访问。类变量也可以是静态的，静态的变量可以通过类名直接访问。</li>
+<li><strong>局部作用域</strong> − 局部变量，局部变量只能在声明它的一个代码块（如：方法）中使用。</li>
+</ul>
+<p>以下实例说明了三种作用域的使用：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> global_num = <span class="number">12</span>          <span class="comment">// 全局变量</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Numbers</span> &#123; </span><br><span class="line">   num_val = <span class="number">13</span>;             <span class="comment">// 实例变量</span></span><br><span class="line">   <span class="keyword">static</span> sval = <span class="number">10</span>;         <span class="comment">// 静态变量</span></span><br><span class="line">   </span><br><span class="line">   <span class="title function_">storeNum</span>():<span class="built_in">void</span> &#123; </span><br><span class="line">      <span class="keyword">var</span> local_num = <span class="number">14</span>;    <span class="comment">// 局部变量</span></span><br><span class="line">   &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;全局变量为: &quot;</span>+global_num)  </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Numbers</span>.<span class="property">sval</span>)   <span class="comment">// 静态变量</span></span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="title class_">Numbers</span>(); </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;实例变量: &quot;</span>+obj.<span class="property">num_val</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以上代码使用 tsc 命令编译为 JavaScript 代码为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> global_num = <span class="number">12</span>; <span class="comment">// 全局变量</span></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Numbers</span> = <span class="comment">/** <span class="doctag">@class</span> */</span> (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">Numbers</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">num_val</span> = <span class="number">13</span>; <span class="comment">// 实例变量</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title class_">Numbers</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">storeNum</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> local_num = <span class="number">14</span>; <span class="comment">// 局部变量</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="title class_">Numbers</span>.<span class="property">sval</span> = <span class="number">10</span>; <span class="comment">// 静态变量</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Numbers</span>;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;全局变量为: &quot;</span> + global_num);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Numbers</span>.<span class="property">sval</span>); <span class="comment">// 静态变量</span></span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="title class_">Numbers</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;实例变量: &quot;</span> + obj.<span class="property">num_val</span>);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">全局变量为: 12</span><br><span class="line">10</span><br><span class="line">实例变量: 13</span><br></pre></td></tr></table></figure>
+
+<p>如果我们在方法外部调用局部变量 local_num，会报错：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error <span class="title class_">TS2322</span>: <span class="title class_">Could</span> not find <span class="built_in">symbol</span> <span class="string">&#x27;local_num&#x27;</span>.</span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>TypeScript 变量声明</p><p><a href="https://blog.buubiu.com/TypeScript-变量声明/">https://blog.buubiu.com/TypeScript-变量声明/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-08-19</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/TypeScript/">TypeScript</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/TypeScript-%E8%BF%90%E7%AE%97%E7%AC%A6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">TypeScript 运算符</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/TypeScript-%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B/"><span class="level-item">TypeScript 基础类型</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#四种方式来声明变量"><span class="level-left"><span class="level-item">1</span><span class="level-item">四种方式来声明变量</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#声明变量的类型及初始值"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">声明变量的类型及初始值</span></span></a></li><li><a class="level is-mobile" href="#声明变量的类型，但没有初始值"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">声明变量的类型，但没有初始值</span></span></a></li><li><a class="level is-mobile" href="#声明变量并初始值，但不设置类型"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">声明变量并初始值，但不设置类型</span></span></a></li><li><a class="level is-mobile" href="#声明变量没有设置类型和初始值"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">声明变量没有设置类型和初始值</span></span></a></li><li><a class="level is-mobile" href="#实例"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">实例</span></span></a></li></ul></li><li><a class="level is-mobile" href="#类型断言（Type-Assertion）"><span class="level-left"><span class="level-item">2</span><span class="level-item">类型断言（Type Assertion）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#实例-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">实例</span></span></a></li><li><a class="level is-mobile" href="#TypeScript-是怎么确定单个断言是否足够"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">TypeScript 是怎么确定单个断言是否足够</span></span></a></li></ul></li><li><a class="level is-mobile" href="#类型推断"><span class="level-left"><span class="level-item">3</span><span class="level-item">类型推断</span></span></a></li><li><a class="level is-mobile" href="#变量作用域"><span class="level-left"><span class="level-item">4</span><span class="level-item">变量作用域</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

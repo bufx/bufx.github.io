@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-021-运行时数据区-方法区(Method Area)-概述 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="栈、堆、方法区的交互关系 方法区所在 JVM 中的位置：   三者之间是相互配合的关系，不是竞争关系。"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-021-运行时数据区-方法区(Method Area)-概述"><meta property="og:url" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="栈、堆、方法区的交互关系 方法区所在 JVM 中的位置：   三者之间是相互配合的关系，不是竞争关系。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182023096.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182250717.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182403501.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182505559.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618183957063.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144200160.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144421931.png"><meta property="article:published_time" content="2022-06-18T10:32:06.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.146Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="方法区"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182023096.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/"},"headline":"JVM-021-运行时数据区-方法区(Method Area)-概述","image":["https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182023096.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182250717.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182403501.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182505559.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618183957063.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144200160.png","https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144421931.png"],"datePublished":"2022-06-18T10:32:06.000Z","dateModified":"2024-01-25T15:08:05.146Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"栈、堆、方法区的交互关系 方法区所在 JVM 中的位置：   三者之间是相互配合的关系，不是竞争关系。"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-18T10:32:06.000Z" title="6/18/2022, 6:32:06 PM">2022-06-18</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.146Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E6%96%B9%E6%B3%95%E5%8C%BA/">方法区</a></span><span class="level-item">7 分钟读完 (大约1032个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-021-运行时数据区-方法区(Method Area)-概述</h1><div class="content"><h2 id="栈、堆、方法区的交互关系"><a href="#栈、堆、方法区的交互关系" class="headerlink" title="栈、堆、方法区的交互关系"></a>栈、堆、方法区的交互关系</h2><ul>
+<li>方法区所在 JVM 中的位置：</li>
+</ul>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182023096.png"></p>
+<p><strong>三者之间是相互配合的关系，不是竞争关系。</strong></p>
+<span id="more"></span>
+
+<ul>
+<li>从线程共享与否的角度来看：</li>
+</ul>
+<p>ThreadLocal：如何保证多个线程在并发环境下的安全性？典型场景就是数据库连接管理，以及会话管理。</p>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182250717.png"></p>
+<ul>
+<li>从对象创建的代码上来看：<ol>
+<li>Person 类的 .class 信息存放在方法区中</li>
+<li>person 变量存放在 Java 栈的局部变量表中</li>
+<li>真正的 person 对象存放在 Java 堆中</li>
+<li>在 person 对象中，有个指针指向方法区中的 person 类型数据，表明这个 person 对象是用方法区中的 Person 类 new 出来的</li>
+</ol>
+</li>
+</ul>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182403501.png"></p>
+<ul>
+<li>从内存结构上来看：</li>
+</ul>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618182505559.png"></p>
+<h2 id="对方法区的理解"><a href="#对方法区的理解" class="headerlink" title="对方法区的理解"></a>对方法区的理解</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5.4</a></p>
+<ul>
+<li>《Java虚拟机规范》中明确说明：<strong>尽管所有的方法区在逻辑上是属于堆的一部分，但一些简单的实现可能不会选择去进行垃圾收集或者进行压缩</strong>。但对于HotSpotJVM而言，方法区还有一个别名叫做<code>Non-Heap（非堆）</code>，目的就是要和堆分开。</li>
+<li>所以，<strong>方法区可以看作是一块独立于Java堆的内存空间。</strong></li>
+</ul>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220618183957063.png" alt=" "></p>
+<ul>
+<li><p>方法区主要存放的是 Class，而堆中主要存放的是实例化的对象</p>
+</li>
+<li><p>方法区（Method Area）与Java堆一样，是各个线程共享的内存区域。</p>
+</li>
+<li><p>方法区在JVM启动的时候被创建，并且它的实际的物理内存空间中和Java堆区一样都可以是不连续的。</p>
+</li>
+<li><p>方法区的大小，跟堆空间一样，可以选择固定大小或者可扩展。</p>
+</li>
+<li><p>方法区的大小决定了系统可以保存多少个类，如果系统定义了太多的类，导致方法区溢出，虚拟机同样会抛出内存溢出错误：<code>java.lang.OutofMemoryError:PermGen space(JDK8之前)</code>或者<code>java.lang.OutOfMemoryError:Metaspace(JDK8以及之后)</code></p>
+<ul>
+<li>加载大量的第三方的jar包</li>
+<li>Tomcat部署的工程过多（30~50个）</li>
+<li>大量动态的生成反射类</li>
+</ul>
+</li>
+<li><p>关闭JVM就会释放这个区域的内存。</p>
+</li>
+</ul>
+<h2 id="HotSpot方法区演进"><a href="#HotSpot方法区演进" class="headerlink" title="HotSpot方法区演进"></a>HotSpot方法区演进</h2><p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144200160.png"></p>
+<ul>
+<li><p>在 JDK7 及以前，习惯上把方法区，称为永久代。JDK8开始，使用元空间取代了永久代。</p>
+</li>
+<li><p>本质上，方法区和永久代并不等价。仅是对Hotspot而言的可以看作等价。《Java虚拟机规范》对如何实现方法区，不做统一要求。例如：BEAJRockit &#x2F; IBM J9 中不存在永久代的概念。</p>
+<ul>
+<li>现在来看，当年使用永久代，不是好的idea。导致Java程序更容易 OOM（超过-XX:MaxPermsize上限）</li>
+</ul>
+</li>
+<li><p>而到了JDK8，终于完全废弃了永久代的概念，改用与JRockit、J9一样在本地内存中实现的元空间（Metaspace）来代替</p>
+<p><img src="/JVM-021-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E6%A6%82%E8%BF%B0/image-20220619144421931.png"></p>
+</li>
+<li><p>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过元空间与永久代最大的区别在于：<strong>元空间不在虚拟机设置的内存中，而是使用本地内存</strong>。</p>
+</li>
+<li><p>永久代、元空间二者并不只是名字变了，内部结构也调整了</p>
+</li>
+<li><p>根据《Java虚拟机规范》的规定，如果方法区无法满足新的内存分配需求时，将抛出OOM异常</p>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-021-运行时数据区-方法区(Method Area)-概述</p><p><a href="https://blog.buubiu.com/JVM-021-运行时数据区-方法区-Method-Area-概述/">https://blog.buubiu.com/JVM-021-运行时数据区-方法区-Method-Area-概述/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-06-18</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%96%B9%E6%B3%95%E5%8C%BA/">方法区</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-022-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%96%B9%E6%B3%95%E5%8C%BA-Method-Area-%E8%AE%BE%E7%BD%AE%E6%96%B9%E6%B3%95%E5%8C%BA%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-022-运行时数据区-方法区(Method Area)-设置方法区大小和OOM</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-020-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90-%E4%BB%A3%E7%A0%81%E4%BC%98%E5%8C%96/"><span class="level-item">JVM-020-运行时数据区-堆(Heap)-逃逸分析-代码优化</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#栈、堆、方法区的交互关系"><span class="level-left"><span class="level-item">1</span><span class="level-item">栈、堆、方法区的交互关系</span></span></a></li><li><a class="level is-mobile" href="#对方法区的理解"><span class="level-left"><span class="level-item">2</span><span class="level-item">对方法区的理解</span></span></a></li><li><a class="level is-mobile" href="#HotSpot方法区演进"><span class="level-left"><span class="level-item">3</span><span class="level-item">HotSpot方法区演进</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序配置 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="全局配置app.json小程序根目录下的 app.json 文件用来对微信小程序进行全局配置。文件内容为一个 JSON 对象，有以下属性： 配置项"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序配置"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="全局配置app.json小程序根目录下的 app.json 文件用来对微信小程序进行全局配置。文件内容为一个 JSON 对象，有以下属性： 配置项"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/u1RIDs1636294470398.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/hdvnc61636296075817.png"><meta property="article:published_time" content="2021-11-07T14:00:40.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.940Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/u1RIDs1636294470398.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE/"},"headline":"微信小程序配置","image":["https://blog.buubiu.com/img/article/u1RIDs1636294470398.png","https://blog.buubiu.com/img/article/hdvnc61636296075817.png"],"datePublished":"2021-11-07T14:00:40.000Z","dateModified":"2024-01-25T15:08:05.940Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"全局配置app.json小程序根目录下的 app.json 文件用来对微信小程序进行全局配置。文件内容为一个 JSON 对象，有以下属性： 配置项"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%85%8D%E7%BD%AE/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-07T14:00:40.000Z" title="11/7/2021, 10:00:40 PM">2021-11-07</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.940Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">22 分钟读完 (大约3361个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序配置</h1><div class="content"><h2 id="全局配置app-json"><a href="#全局配置app-json" class="headerlink" title="全局配置app.json"></a>全局配置app.json</h2><p>小程序根目录下的 <code>app.json</code> 文件用来对微信小程序进行全局配置。文件内容为一个 JSON 对象，有以下属性：</p>
+<h3 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h3><span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#entryPagePath">entryPagePath</a></td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">小程序默认启动首页</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#pages">pages</a></td>
+<td align="left">string[]</td>
+<td align="left">是</td>
+<td align="left">页面路径列表</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#window">window</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">全局的默认窗口表现</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#tabBar">tabBar</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">底部 <code>tab</code> 栏的表现</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#networkTimeout">networkTimeout</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">网络超时时间</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#debug">debug</a></td>
+<td align="left">boolean</td>
+<td align="left">否</td>
+<td align="left">是否开启 debug 模式，默认关闭</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#functionalPages">functionalPages</a></td>
+<td align="left">boolean</td>
+<td align="left">否</td>
+<td align="left">是否启用插件功能页，默认关闭</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#subpackages">subpackages</a></td>
+<td align="left">Object[]</td>
+<td align="left">否</td>
+<td align="left">分包结构配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.7.3</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#workers">workers</a></td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left"><code>Worker</code> 代码放置的目录</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#requiredBackgroundModes">requiredBackgroundModes</a></td>
+<td align="left">string[]</td>
+<td align="left">否</td>
+<td align="left">需要在后台使用的能力，如「音乐播放」</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#plugins">plugins</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">使用到的插件</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.6</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#preloadRule">preloadRule</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">分包预下载规则</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.3.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#resizable">resizable</a></td>
+<td align="left">boolean</td>
+<td align="left">否</td>
+<td align="left">PC 小程序是否支持用户任意改变窗口大小（包括最大化窗口）；iPad 小程序是否支持屏幕旋转。默认关闭</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.3.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#usingComponents">usingComponents</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">全局<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/">自定义组件</a>配置</td>
+<td align="left">开发者工具 1.02.1810190</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#permission">permission</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">小程序接口权限相关设置</td>
+<td align="left">微信客户端 7.0.0</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#sitemapLocation">sitemapLocation</a></td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left">指明 sitemap.json 的位置</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#style">style</a></td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">指定使用升级后的weui样式</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#useextendedlib">useExtendedLib</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">指定需要引用的扩展库</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.1</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#entranceDeclare">entranceDeclare</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">微信消息用小程序打开</td>
+<td align="left">微信客户端7.0.9</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#darkmode">darkmode</a></td>
+<td align="left">boolean</td>
+<td align="left">否</td>
+<td align="left">小程序支持 DarkMode</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#themeLocation">themeLocation</a></td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">指明 theme.json 的位置，darkmode为true为必填</td>
+<td align="left">开发者工具 1.03.2004271</td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#lazyCodeLoading">lazyCodeLoading</a></td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">配置自定义组件代码按需注入</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#singlePage">singlePage</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">单页模式相关配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">supportedMaterials</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/material/support_material.html">聊天素材小程序打开</a>相关配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.14.3</a></td>
+</tr>
+<tr>
+<td align="left">serviceProviderTicket</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/operation/thirdparty/customized_service_platform_guidelines.html">定制化型服务商</a>票据</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html#embeddedAppIdList">embeddedAppIdList</a></td>
+<td align="left">string[]</td>
+<td align="left">否</td>
+<td align="left">内嵌小程序 appId</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="tabBar"><a href="#tabBar" class="headerlink" title="tabBar"></a>tabBar</h3><p>如果小程序是一个多 tab 应用（客户端窗口的底部或顶部有 tab 栏可以切换页面），可以通过 tabBar 配置项指定 tab 栏的表现，以及 tab 切换时显示的对应页面。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">默认值</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">color</td>
+<td align="left">HexColor</td>
+<td align="left">是</td>
+<td align="left"></td>
+<td align="left">tab 上的文字默认颜色，仅支持十六进制颜色</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">selectedColor</td>
+<td align="left">HexColor</td>
+<td align="left">是</td>
+<td align="left"></td>
+<td align="left">tab 上的文字选中时的颜色，仅支持十六进制颜色</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">backgroundColor</td>
+<td align="left">HexColor</td>
+<td align="left">是</td>
+<td align="left"></td>
+<td align="left">tab 的背景色，仅支持十六进制颜色</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">borderStyle</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">black</td>
+<td align="left">tabbar 上边框的颜色， 仅支持 <code>black</code> &#x2F; <code>white</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">list</td>
+<td align="left">Array</td>
+<td align="left">是</td>
+<td align="left"></td>
+<td align="left">tab 的列表，详见 <code>list</code> 属性说明，最少 2 个、最多 5 个 tab</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">position</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">bottom</td>
+<td align="left">tabBar 的位置，仅支持 <code>bottom</code> &#x2F; <code>top</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">custom</td>
+<td align="left">boolean</td>
+<td align="left">否</td>
+<td align="left">false</td>
+<td align="left">自定义 tabBar，见<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/ability/custom-tabbar.html">详情</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.5.0</a></td>
+</tr>
+</tbody></table>
+<p>其中 list 接受一个数组，<strong>只能配置最少 2 个、最多 5 个 tab</strong>。tab 按数组的顺序排序，每个项都是一个对象，其属性值如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">pagePath</td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left">页面路径，必须在 pages 中先定义</td>
+</tr>
+<tr>
+<td align="left">text</td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left">tab 上按钮文字</td>
+</tr>
+<tr>
+<td align="left">iconPath</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">图片路径，icon 大小限制为 40kb，建议尺寸为 81px * 81px，不支持网络图片。 <strong>当 <code>position</code> 为 <code>top</code> 时，不显示 icon。</strong></td>
+</tr>
+<tr>
+<td align="left">selectedIconPath</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">选中时的图片路径，icon 大小限制为 40kb，建议尺寸为 81px * 81px，不支持网络图片。 <strong>当 <code>position</code> 为 <code>top</code> 时，不显示 icon。</strong></td>
+</tr>
+</tbody></table>
+<p><img src="/../img/article/u1RIDs1636294470398.png"></p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight json"><figcaption><span>app.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;entryPagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/index/index&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;pages&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;pages/demo01/demo01&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;pages/classification/classification&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;pages/cart/cart&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;pages/my/my&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;pages/index/index&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;pages/logs/logs&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;tabBar&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;color&quot;</span><span class="punctuation">:</span> <span class="string">&quot;#bf2e2e&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;selectedColor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;#0e0cc1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;backgroundColor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;#0cc112&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;borderStyle&quot;</span><span class="punctuation">:</span> <span class="string">&quot;white&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;position&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bottom&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;list&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/index/index&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;首页&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;iconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/_home.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;selectedIconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/home.png&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/classification/classification&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;分类&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;iconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/_classification.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;selectedIconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/classification.png&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/cart/cart&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;购物车&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;iconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/_cart.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;selectedIconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/cart.png&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;pagePath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/my/my&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;我的&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;iconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/_my.png&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;selectedIconPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;icon/my.png&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;window&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;backgroundTextStyle&quot;</span><span class="punctuation">:</span><span class="string">&quot;dark&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;navigationBarBackgroundColor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;#5e6af3&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;navigationBarTitleText&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Buubiu&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;navigationBarTextStyle&quot;</span><span class="punctuation">:</span><span class="string">&quot;white&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;enablePullDownRefresh&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;style&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v2&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;sitemapLocation&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sitemap.json&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<img src="../img/article/hdvnc61636296075817.png" style="zoom:33%;" />
+
+<h2 id="页面配置"><a href="#页面配置" class="headerlink" title="页面配置"></a>页面配置</h2><p>每一个小程序页面也可以使用 <code>.json</code> 文件来对本页面的窗口表现进行配置。页面中配置项在当前页面会覆盖 <code>app.json</code> 的 <code>window</code> 中相同的配置项。文件内容为一个 JSON 对象，有以下属性：</p>
+<h3 id="配置项-1"><a href="#配置项-1" class="headerlink" title="配置项"></a>配置项</h3><table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">描述</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">navigationBarBackgroundColor</td>
+<td align="left">HexColor</td>
+<td align="left">#000000</td>
+<td align="left">导航栏背景颜色，如 <code>#000000</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">navigationBarTextStyle</td>
+<td align="left">string</td>
+<td align="left">white</td>
+<td align="left">导航栏标题颜色，仅支持 <code>black</code> &#x2F; <code>white</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">navigationBarTitleText</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">导航栏标题文字内容</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">navigationStyle</td>
+<td align="left">string</td>
+<td align="left">default</td>
+<td align="left">导航栏样式，仅支持以下值： <code>default</code> 默认样式 <code>custom</code> 自定义导航栏，只保留右上角胶囊按钮。参见注 1。</td>
+<td align="left">iOS&#x2F;Android 微信客户端 7.0.0，Windows 微信客户端不支持</td>
+</tr>
+<tr>
+<td align="left">backgroundColor</td>
+<td align="left">HexColor</td>
+<td align="left">#ffffff</td>
+<td align="left">窗口的背景色</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">backgroundTextStyle</td>
+<td align="left">string</td>
+<td align="left">dark</td>
+<td align="left">下拉 loading 的样式，仅支持 <code>dark</code> &#x2F; <code>light</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">backgroundColorTop</td>
+<td align="left">string</td>
+<td align="left">#ffffff</td>
+<td align="left">顶部窗口的背景色，仅 iOS 支持</td>
+<td align="left">微信客户端 6.5.16</td>
+</tr>
+<tr>
+<td align="left">backgroundColorBottom</td>
+<td align="left">string</td>
+<td align="left">#ffffff</td>
+<td align="left">底部窗口的背景色，仅 iOS 支持</td>
+<td align="left">微信客户端 6.5.16</td>
+</tr>
+<tr>
+<td align="left">enablePullDownRefresh</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">是否开启当前页面下拉刷新。 详见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/api/Page.html#onpulldownrefresh">Page.onPullDownRefresh</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">onReachBottomDistance</td>
+<td align="left">number</td>
+<td align="left">50</td>
+<td align="left">页面上拉触底事件触发时距页面底部距离，单位为px。 详见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/api/Page.html#onreachbottom">Page.onReachBottom</a></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">pageOrientation</td>
+<td align="left">string</td>
+<td align="left">portrait</td>
+<td align="left">屏幕旋转设置，支持 <code>auto</code> &#x2F; <code>portrait</code> &#x2F; <code>landscape</code> 详见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/resizable.html">响应显示区域变化</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a> (auto) &#x2F; <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.5.0</a> (landscape)</td>
+</tr>
+<tr>
+<td align="left">disableScroll</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">设置为 <code>true</code> 则页面整体不能上下滚动。 只在页面配置中有效，无法在 <code>app.json</code> 中设置</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">usingComponents</td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">页面<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/">自定义组件</a>配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.3</a></td>
+</tr>
+<tr>
+<td align="left">initialRenderingCache</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">页面<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/initial-rendering-cache.html">初始渲染缓存</a>配置，支持 <code>static</code> &#x2F; <code>dynamic</code></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">style</td>
+<td align="left">string</td>
+<td align="left">default</td>
+<td align="left">启用新版的组件样式</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.2</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html#singlePage">singlePage</a></td>
+<td align="left">Object</td>
+<td align="left">否</td>
+<td align="left">单页模式相关配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html#restartStrategy">restartStrategy</a></td>
+<td align="left">string</td>
+<td align="left">homePage</td>
+<td align="left">重新启动策略配置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.0</a></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>页面配置中只能设置 <code>app.json</code> 中 <code>window</code> 对应的配置项，以决定本页面的窗口表现，所以无需写 <code>window</code> 这个属性。</p>
+</blockquote>
+<ul>
+<li><p>注 1：关于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">navigationStyle</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>iOS&#x2F;Android 客户端 7.0.0 以下版本，<code>navigationStyle</code> 只在 <code>app.json</code> 中生效。</li>
+<li>iOS&#x2F;Android 客户端 6.7.2 版本开始，<code>navigationStyle: custom</code> 对 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 组件无效</li>
+<li>开启 custom 后，低版本客户端需要做好兼容。开发者工具基础库版本切到 1.7.0（不代表最低版本，只供调试用）可方便切到旧视觉</li>
+<li>Windows 客户端 3.0 及以上版本，为了给用户提供更符合桌面软件的使用体验，统一了小程序窗口的导航栏，<code>navigationStyle: custom</code> 不再生效</li>
+</ul>
+</li>
+</ul>
+<h3 id="singlePage"><a href="#singlePage" class="headerlink" title="singlePage"></a>singlePage</h3><blockquote>
+<p>基础库 2.11.3 及以上版本支持，目前<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share-timeline.html">分享到朋友圈 (Beta)</a> 后打开会进入单页模式</p>
+</blockquote>
+<p>单页模式相关配置</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">默认值</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">navigationBarFit</td>
+<td align="left">String</td>
+<td align="left">否</td>
+<td align="left">默认自动调整，若原页面是自定义导航栏，则为 float，否则为 squeezed</td>
+<td align="left">导航栏与页面的相交状态，值为 float 时表示导航栏浮在页面上，与页面相交；值为 squeezed 时表示页面被导航栏挤压，与页面不相交</td>
+</tr>
+</tbody></table>
+<h3 id="restartStrategy"><a href="#restartStrategy" class="headerlink" title="restartStrategy"></a>restartStrategy</h3><blockquote>
+<p>基础库 2.8.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/runtime/operating-mechanism.html#_2-1-%E9%87%8D%E6%96%B0%E5%90%AF%E5%8A%A8%E7%AD%96%E7%95%A5">重新启动策略</a>配置，与 <code>app.json</code> 中一致。</p>
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h3><figure class="highlight json"><figcaption><span>index.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;usingComponents&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;navigationBarBackgroundColor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;#d443ae&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;navigationBarTitleText&quot;</span><span class="punctuation">:</span> <span class="string">&quot;buubiu-首页&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;enablePullDownRefresh&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="sitemap配置"><a href="#sitemap配置" class="headerlink" title="sitemap配置"></a>sitemap配置</h2><p>微信现已开放小程序内搜索，开发者可以通过 <code>sitemap.json</code> 配置，或者管理后台页面收录开关来配置其小程序页面是否允许微信索引。当开发者允许微信索引时，微信会通过爬虫的形式，为小程序的页面内容建立索引。当用户的搜索词条触发该索引时，小程序的页面将可能展示在搜索结果中。 爬虫访问小程序内页面时，会携带特定的 user-agent：<code>mpcrawler</code> 及<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/scene-list.html">场景值</a>：<code>1129</code>。需要注意的是，若小程序爬虫发现的页面数据和真实用户的呈现不一致，那么该页面将不会进入索引中。</p>
+<p>小程序根目录下的 <code>sitemap.json</code> 文件用于配置小程序及其页面是否允许被微信索引，文件内容为一个 JSON 对象，如果没有 <code>sitemap.json</code> ，则默认为所有页面都允许被索引；<code>sitemap.json</code> 有以下属性：</p>
+<h3 id="配置项-2"><a href="#配置项-2" class="headerlink" title="配置项"></a>配置项</h3><table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/sitemap.html#rules">rules</a></td>
+<td align="left">Object[]</td>
+<td align="left">是</td>
+<td align="left">索引规则列表</td>
+</tr>
+</tbody></table>
+<h3 id="rules"><a href="#rules" class="headerlink" title="rules"></a>rules</h3><p>rules 配置项指定了索引规则，每项规则为一个JSON对象，属性如下所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">必填</th>
+<th align="left">默认值</th>
+<th align="left">取值</th>
+<th align="left">取值说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">action</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">“allow”</td>
+<td align="left">“allow”、”disallow”</td>
+<td align="left">命中该规则的页面是否能被索引</td>
+</tr>
+<tr>
+<td align="left">page</td>
+<td align="left">string</td>
+<td align="left">是</td>
+<td align="left"></td>
+<td align="left">“*”、页面的路径</td>
+<td align="left"><code>*</code> 表示所有页面，不能作为通配符使用</td>
+</tr>
+<tr>
+<td align="left">params</td>
+<td align="left">string[]</td>
+<td align="left">否</td>
+<td align="left">[]</td>
+<td align="left"></td>
+<td align="left">当 page 字段指定的页面在被本规则匹配时可能使用的页面参数名称的列表（不含参数值）</td>
+</tr>
+<tr>
+<td align="left">matching</td>
+<td align="left">string</td>
+<td align="left">否</td>
+<td align="left">“inclusive”</td>
+<td align="left">参考 <strong>matching 取值说明</strong></td>
+<td align="left">当 page 字段指定的页面在被本规则匹配时，此参数说明 params 匹配方式</td>
+</tr>
+<tr>
+<td align="left">priority</td>
+<td align="left">Number</td>
+<td align="left">否</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">优先级，值越大则规则越早被匹配，否则默认从上到下匹配</td>
+</tr>
+</tbody></table>
+<p><strong>matching 取值说明</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">exact</td>
+<td align="left">当小程序页面的参数列表等于 params 时，规则命中</td>
+</tr>
+<tr>
+<td align="left">inclusive</td>
+<td align="left">当小程序页面的参数列表包含 params 时，规则命中</td>
+</tr>
+<tr>
+<td align="left">exclusive</td>
+<td align="left">当小程序页面的参数列表与 params 交集为空时，规则命中</td>
+</tr>
+<tr>
+<td align="left">partial</td>
+<td align="left">当小程序页面的参数列表与 params 交集不为空时，规则命中</td>
+</tr>
+</tbody></table>
+<h3 id="配置示例-1"><a href="#配置示例-1" class="headerlink" title="配置示例"></a>配置示例</h3><p><strong>示例1</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;a&quot;</span><span class="punctuation">,</span> <span class="string">&quot;b&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;matching&quot;</span><span class="punctuation">:</span> <span class="string">&quot;exact&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;disallow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>path/to/page?a=1&amp;b=2</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page</code> &#x3D;&gt; 不被索引</li>
+<li><code>path/to/page?a=1</code> &#x3D;&gt; 不被索引</li>
+<li><code>path/to/page?a=1&amp;b=2&amp;c=3</code> &#x3D;&gt; 不被索引</li>
+<li>其他页面都会被索引</li>
+</ul>
+<p><strong>示例2</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;a&quot;</span><span class="punctuation">,</span> <span class="string">&quot;b&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;matching&quot;</span><span class="punctuation">:</span> <span class="string">&quot;inclusive&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;disallow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>path/to/page?a=1&amp;b=2</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page?a=1&amp;b=2&amp;c=3</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page</code> &#x3D;&gt; 不被索引</li>
+<li><code>path/to/page?a=1</code> &#x3D;&gt; 不被索引</li>
+<li>其他页面都会被索引</li>
+</ul>
+<p><strong>示例3</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;a&quot;</span><span class="punctuation">,</span> <span class="string">&quot;b&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;matching&quot;</span><span class="punctuation">:</span> <span class="string">&quot;exclusive&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;disallow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>path/to/page</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page?c=3</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page?a=1</code> &#x3D;&gt; 不被索引</li>
+<li><code>path/to/page?a=1&amp;b=2</code> &#x3D;&gt; 不被索引</li>
+<li>其他页面都会被索引</li>
+</ul>
+<p><strong>示例4</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;params&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;a&quot;</span><span class="punctuation">,</span> <span class="string">&quot;b&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;matching&quot;</span><span class="punctuation">:</span> <span class="string">&quot;partial&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;disallow&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/page&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>path/to/page?a=1</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page?a=1&amp;b=2</code> &#x3D;&gt; 优先索引</li>
+<li><code>path/to/page</code> &#x3D;&gt; 不被索引</li>
+<li><code>path/to/page?c=3</code> &#x3D;&gt; 不被索引</li>
+<li>其他页面都会被索引</li>
+</ul>
+<p><strong>注：没有 sitemap.json 则默认所有页面都能被索引</strong></p>
+<p><strong>注：<code>&#123;&quot;action&quot;: &quot;allow&quot;, &quot;page&quot;: &quot;\*&quot;&#125;</code> 是优先级最低的默认规则，未显式指明 “disallow” 的都默认被索引</strong></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序配置</p><p><a href="https://blog.buubiu.com/微信小程序配置/">https://blog.buubiu.com/微信小程序配置/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-07</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FWXML%E6%95%99%E7%A8%8B/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序WXML教程</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BA%94%E7%94%A8%E5%92%8C%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><span class="level-item">微信小程序应用和页面生命周期</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#全局配置app-json"><span class="level-left"><span class="level-item">1</span><span class="level-item">全局配置app.json</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#配置项"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">配置项</span></span></a></li><li><a class="level is-mobile" href="#tabBar"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">tabBar</span></span></a></li><li><a class="level is-mobile" href="#示例"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">示例</span></span></a></li></ul></li><li><a class="level is-mobile" href="#页面配置"><span class="level-left"><span class="level-item">2</span><span class="level-item">页面配置</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#配置项-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">配置项</span></span></a></li><li><a class="level is-mobile" href="#singlePage"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">singlePage</span></span></a></li><li><a class="level is-mobile" href="#restartStrategy"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">restartStrategy</span></span></a></li><li><a class="level is-mobile" href="#配置示例"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">配置示例</span></span></a></li></ul></li><li><a class="level is-mobile" href="#sitemap配置"><span class="level-left"><span class="level-item">3</span><span class="level-item">sitemap配置</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#配置项-2"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">配置项</span></span></a></li><li><a class="level is-mobile" href="#rules"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">rules</span></span></a></li><li><a class="level is-mobile" href="#配置示例-1"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">配置示例</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

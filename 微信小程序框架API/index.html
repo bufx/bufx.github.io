@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序框架API - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="微信小程序框架所提供的API接口也是相当完备的,如果说小程序组件是用来构建小程序的视图层,那么小 程序API则在小程序逻辑层担当重任。随着小程序版本的更新迭代,目前小程序框架 API分类已经达到了 19个大类,如下图所示。"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序框架API"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6API/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="微信小程序框架所提供的API接口也是相当完备的,如果说小程序组件是用来构建小程序的视图层,那么小 程序API则在小程序逻辑层担当重任。随着小程序版本的更新迭代,目前小程序框架 API分类已经达到了 19个大类,如下图所示。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/bIxgII1637903254436.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/gnw7Gu1637903966493.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/iHFJ5K1637904041549.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/vvQYAZ1637904337673.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/FtFr7Z1637904371623.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/RvRYW71637904424191.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/dogdBq1637904466542.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/jlKpYH1637904527109.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/hmv3KW1637904555042.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/0kNZjm1637904608117.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/MmJNk91637904647399.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/jXqWNV1637904712227.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/1JFYkf1637904744748.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/69OnoS1637904765910.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/tXtDjd1637904786622.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/dVGv9l1637904819605.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/fm5jR71637904843111.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/k7Xpki1637904907694.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/sj2XWU1637904937199.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/dlbfQS1637904974129.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/AksXVY1637904994115.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/Nr2ReF1637905075319.png"><meta property="article:published_time" content="2021-11-26T05:06:48.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.930Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/bIxgII1637903254436.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6API/"},"headline":"微信小程序框架API","image":["https://blog.buubiu.com/img/article/bIxgII1637903254436.png","https://blog.buubiu.com/img/article/gnw7Gu1637903966493.png","https://blog.buubiu.com/img/article/iHFJ5K1637904041549.png","https://blog.buubiu.com/img/article/vvQYAZ1637904337673.png","https://blog.buubiu.com/img/article/FtFr7Z1637904371623.png","https://blog.buubiu.com/img/article/RvRYW71637904424191.png","https://blog.buubiu.com/img/article/dogdBq1637904466542.png","https://blog.buubiu.com/img/article/jlKpYH1637904527109.png","https://blog.buubiu.com/img/article/hmv3KW1637904555042.png","https://blog.buubiu.com/img/article/0kNZjm1637904608117.png","https://blog.buubiu.com/img/article/MmJNk91637904647399.png","https://blog.buubiu.com/img/article/jXqWNV1637904712227.png","https://blog.buubiu.com/img/article/1JFYkf1637904744748.png","https://blog.buubiu.com/img/article/69OnoS1637904765910.png","https://blog.buubiu.com/img/article/tXtDjd1637904786622.png","https://blog.buubiu.com/img/article/dVGv9l1637904819605.png","https://blog.buubiu.com/img/article/fm5jR71637904843111.png","https://blog.buubiu.com/img/article/k7Xpki1637904907694.png","https://blog.buubiu.com/img/article/sj2XWU1637904937199.png","https://blog.buubiu.com/img/article/dlbfQS1637904974129.png","https://blog.buubiu.com/img/article/AksXVY1637904994115.png","https://blog.buubiu.com/img/article/Nr2ReF1637905075319.png"],"datePublished":"2021-11-26T05:06:48.000Z","dateModified":"2024-01-25T15:08:05.930Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"微信小程序框架所提供的API接口也是相当完备的,如果说小程序组件是用来构建小程序的视图层,那么小 程序API则在小程序逻辑层担当重任。随着小程序版本的更新迭代,目前小程序框架 API分类已经达到了 19个大类,如下图所示。"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6API/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-26T05:06:48.000Z" title="11/26/2021, 1:06:48 PM">2021-11-26</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.930Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">16 分钟读完 (大约2390个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序框架API</h1><div class="content"><p>微信小程序框架所提供的API接口也是相当完备的,如果说小程序组件是用来构建小程序的视图层,那么小 程序API则在小程序逻辑层担当重任。随着小程序版本的更新迭代,目前小程序框架 API分类已经达到了 19个大类,如下图所示。</p>
+<p><img src="/../img/article/bIxgII1637903254436.png"></p>
+<span id="more"></span>
+
+<p>当然这么多API并不需要读者一个个去详细研究,而是建议大家重点掌握其中常用的API如何查阅和使用,然 后即可触类旁通使用其他的API。其实查阅API有点类似于查词典,我们只需要知道如何去查阅的方法即可, 而没必要将整部词典学会,故而掌握查阅API定义以及如何使用才是至关重要的。 接下来,就开始重点讲解小程序框架中一些常用的API,通过这些API的学习和理解,希望读者能够对小程序 API如何查阅和使用形成一定的思维认知。</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>微信小程序基础API包含一些环境变量，转码，系统信息，更新，小程序生命周期，应用及事件，调试， 性能，加密等功能;</p>
+<p><img src="/../img/article/gnw7Gu1637903966493.png"></p>
+<h3 id="wx-getSystemInfo-获取系统信息实例"><a href="#wx-getSystemInfo-获取系统信息实例" class="headerlink" title="wx.getSystemInfo 获取系统信息实例"></a>wx.getSystemInfo 获取系统信息实例</h3><p><strong>wx.getSystemInfo(Object object)</strong></p>
+<blockquote>
+<p><strong>以 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/api.html#%E5%BC%82%E6%AD%A5-API-%E8%BF%94%E5%9B%9E-Promise">Promise 风格</a> 调用</strong>：支持</p>
+<p><strong>小程序插件</strong>：支持，需要小程序基础库版本不低于 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.6</a></p>
+<p><strong>微信 Windows 版</strong>：支持</p>
+<p><strong>微信 Mac 版</strong>：支持</p>
+</blockquote>
+<p>获取系统信息。<strong>由于历史原因，wx.getSystemInfo 是异步的调用格式，但是是同步返回，需要异步获取系统信息请使用 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/base/system/wx.getSystemInfoAsync.html">wx.getSystemInfoAsync</a>。</strong></p>
+<p><strong>参数</strong></p>
+<p><strong>Object object</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">success</td>
+<td align="left">function</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">接口调用成功的回调函数</td>
+</tr>
+<tr>
+<td align="left">fail</td>
+<td align="left">function</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">接口调用失败的回调函数</td>
+</tr>
+<tr>
+<td align="left">complete</td>
+<td align="left">function</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">接口调用结束的回调函数（调用成功、失败都会执行）</td>
+</tr>
+</tbody></table>
+<p><strong>object.success 回调函数</strong></p>
+<p><strong>参数</strong></p>
+<p><strong>Object res</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">brand</td>
+<td align="left">string</td>
+<td align="left">设备品牌</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.5.0</a></td>
+</tr>
+<tr>
+<td align="left">model</td>
+<td align="left">string</td>
+<td align="left">设备型号。新机型刚推出一段时间会显示unknown，微信会尽快进行适配。</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">pixelRatio</td>
+<td align="left">number</td>
+<td align="left">设备像素比</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">screenWidth</td>
+<td align="left">number</td>
+<td align="left">屏幕宽度，单位px</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">screenHeight</td>
+<td align="left">number</td>
+<td align="left">屏幕高度，单位px</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">windowWidth</td>
+<td align="left">number</td>
+<td align="left">可使用窗口宽度，单位px</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">windowHeight</td>
+<td align="left">number</td>
+<td align="left">可使用窗口高度，单位px</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">statusBarHeight</td>
+<td align="left">number</td>
+<td align="left">状态栏的高度，单位px</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+<tr>
+<td align="left">language</td>
+<td align="left">string</td>
+<td align="left">微信设置的语言</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">version</td>
+<td align="left">string</td>
+<td align="left">微信版本号</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">system</td>
+<td align="left">string</td>
+<td align="left">操作系统及版本</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">platform</td>
+<td align="left">string</td>
+<td align="left">客户端平台</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">fontSizeSetting</td>
+<td align="left">number</td>
+<td align="left">用户字体大小（单位px）。以微信客户端「我-设置-通用-字体大小」中的设置为准</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.5.0</a></td>
+</tr>
+<tr>
+<td align="left">SDKVersion</td>
+<td align="left">string</td>
+<td align="left">客户端基础库版本</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">benchmarkLevel</td>
+<td align="left">number</td>
+<td align="left">设备性能等级（仅 Android）。取值为：-2 或 0（该设备无法运行小游戏），-1（性能未知），&gt;&#x3D;1（设备性能值，该值越高，设备性能越好，目前最高不到50）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.8.0</a></td>
+</tr>
+<tr>
+<td align="left">albumAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信使用相册的开关（仅 iOS 有效）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">cameraAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信使用摄像头的开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">locationAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信使用定位的开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">microphoneAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信使用麦克风的开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">notificationAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信通知的开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">notificationAlertAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信通知带有提醒的开关（仅 iOS 有效）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">notificationBadgeAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信通知带有标记的开关（仅 iOS 有效）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">notificationSoundAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信通知带有声音的开关（仅 iOS 有效）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">phoneCalendarAuthorized</td>
+<td align="left">boolean</td>
+<td align="left">允许微信使用日历的开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.19.3</a></td>
+</tr>
+<tr>
+<td align="left">bluetoothEnabled</td>
+<td align="left">boolean</td>
+<td align="left">蓝牙的系统开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">locationEnabled</td>
+<td align="left">boolean</td>
+<td align="left">地理位置的系统开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">wifiEnabled</td>
+<td align="left">boolean</td>
+<td align="left">Wi-Fi 的系统开关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.0</a></td>
+</tr>
+<tr>
+<td align="left">safeArea</td>
+<td align="left">Object</td>
+<td align="left">在竖屏正方向下的安全区域</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.7.0</a></td>
+</tr>
+<tr>
+<td align="left">locationReducedAccuracy</td>
+<td align="left">boolean</td>
+<td align="left"><code>true</code> 表示模糊定位，<code>false</code> 表示精确定位，仅 iOS 支持</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">theme</td>
+<td align="left">string</td>
+<td align="left">系统当前主题，取值为<code>light</code>或<code>dark</code>，全局配置<code>&quot;darkmode&quot;:true</code>时才能获取，否则为 undefined （不支持小游戏）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.0</a></td>
+</tr>
+<tr>
+<td align="left">host</td>
+<td align="left">Object</td>
+<td align="left">当前小程序运行的宿主环境</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.3</a></td>
+</tr>
+<tr>
+<td align="left">enableDebug</td>
+<td align="left">boolean</td>
+<td align="left">是否已打开调试。可通过右上角菜单或 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/base/debug/wx.setEnableDebug.html">wx.setEnableDebug</a> 打开调试。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.15.0</a></td>
+</tr>
+<tr>
+<td align="left">deviceOrientation</td>
+<td align="left">string</td>
+<td align="left">设备方向</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>safeArea 的结构</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">left</td>
+<td align="left">number</td>
+<td align="left">安全区域左上角横坐标</td>
+</tr>
+<tr>
+<td align="left">right</td>
+<td align="left">number</td>
+<td align="left">安全区域右下角横坐标</td>
+</tr>
+<tr>
+<td align="left">top</td>
+<td align="left">number</td>
+<td align="left">安全区域左上角纵坐标</td>
+</tr>
+<tr>
+<td align="left">bottom</td>
+<td align="left">number</td>
+<td align="left">安全区域右下角纵坐标</td>
+</tr>
+<tr>
+<td align="left">width</td>
+<td align="left">number</td>
+<td align="left">安全区域的宽度，单位逻辑像素</td>
+</tr>
+<tr>
+<td align="left">height</td>
+<td align="left">number</td>
+<td align="left">安全区域的高度，单位逻辑像素</td>
+</tr>
+</tbody></table>
+<p><strong>theme 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dark</td>
+<td align="left">深色主题</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">light</td>
+<td align="left">浅色主题</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>host 的结构</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">appId</td>
+<td align="left">string</td>
+<td align="left">宿主 app 对应的 appId</td>
+</tr>
+</tbody></table>
+<p><strong>deviceOrientation 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">portrait</td>
+<td align="left">竖屏</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">landscape</td>
+<td align="left">横屏</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>示例代码</strong></p>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/WkUCgXmS7mqO">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/iHFJ5K1637904041549.png"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">wx.<span class="title function_">getSystemInfo</span>(&#123;</span><br><span class="line">  success (res) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">model</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">pixelRatio</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowWidth</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowHeight</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">language</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">version</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">platform</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> res = wx.<span class="title function_">getSystemInfoSync</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">model</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">pixelRatio</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowWidth</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">windowHeight</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">language</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">version</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">platform</span>)</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">  <span class="comment">// Do something when catch error</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h2><p>路由API主要提供一些页面跳转，关闭页面以及页面之间的通信接口;</p>
+<p><img src="/../img/article/vvQYAZ1637904337673.png"></p>
+<h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p>跳转API主要提供打开另外一个小程序，退出小程序和关闭小程序操作接口;</p>
+<p><img src="/../img/article/FtFr7Z1637904371623.png"></p>
+<h2 id="转发"><a href="#转发" class="headerlink" title="转发"></a>转发</h2><p>转发API，主要提供转发属性设置，打开分享弹窗，转发视频或者文件，以及显示和隐藏转发按钮，验证 私密消息等接口;</p>
+<p><img src="/../img/article/RvRYW71637904424191.png"></p>
+<h2 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h2><p>界面API主要提供交互，导航栏，背景，Tab Bar，字体，下拉刷新，滚动，动画，置顶，自定义组件， 菜单，窗口等接口!</p>
+<p><img src="/../img/article/dogdBq1637904466542.png"></p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>网络API主要提供发起请求，下载，上传，WebSocket，mDNS，TCP通信，UDP通信接口;</p>
+<p><img src="/../img/article/jlKpYH1637904527109.png"></p>
+<h2 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h2><p>支付API主要提供发起微信支付和创建自定义版交易组件订单等接口</p>
+<p><img src="/../img/article/hmv3KW1637904555042.png"></p>
+<h2 id="数据缓存"><a href="#数据缓存" class="headerlink" title="数据缓存"></a>数据缓存</h2><p>数据缓存API主要提供本地缓存的添加，获取，销毁以及内存中数据的操作和周期性更新接口;</p>
+<p><img src="/../img/article/0kNZjm1637904608117.png"></p>
+<h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><p>数据分析接口主要提供自定义分析数据上报，事件上报，监控等接口;</p>
+<p><img src="/../img/article/MmJNk91637904647399.png"></p>
+<h2 id="画布"><a href="#画布" class="headerlink" title="画布"></a>画布</h2><p>画布API主要提供画布相关接口。</p>
+<p><img src="/../img/article/jXqWNV1637904712227.png"></p>
+<h2 id="媒体"><a href="#媒体" class="headerlink" title="媒体"></a>媒体</h2><p>媒体API主要提供地图，图片，视频，音频，背景音频，实时音视频，录音，相机，富文本，音视频合 成，实时语音，画面录制器，视频解码器等接口;</p>
+<p><img src="/../img/article/1JFYkf1637904744748.png"></p>
+<h2 id="位置"><a href="#位置" class="headerlink" title="位置"></a>位置</h2><p>位置API主要提供位置相关接口</p>
+<p><img src="/../img/article/69OnoS1637904765910.png"></p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>文件API主要提供文件操作相关接口。</p>
+<p><img src="/../img/article/tXtDjd1637904786622.png"></p>
+<h2 id="开放接口"><a href="#开放接口" class="headerlink" title="开放接口"></a>开放接口</h2><p>开放接口API主要提供登录，账号信息，用户信息，授权，设置，收货地址，卡券，发票，生物认证，微信运动，订阅信息，微信红包，收藏，微信群等接口。</p>
+<p><img src="/../img/article/dVGv9l1637904819605.png"></p>
+<h2 id="设备"><a href="#设备" class="headerlink" title="设备"></a>设备</h2><p>设备API主要提供外围设备，iBeacon，NFC，Wi-Fi，日历，联系人，无障碍，低功耗蓝牙，电量，剪贴 板，网络，加密，屏幕，键盘，电话，加速计，罗盘，设备方向，陀螺仪，内存，扫码，震动等接口。</p>
+<p><img src="/../img/article/fm5jR71637904843111.png"></p>
+<h2 id="Worker"><a href="#Worker" class="headerlink" title="Worker"></a>Worker</h2><p>Worker API主要提供Worker线程操作接口;</p>
+<p><img src="/../img/article/k7Xpki1637904907694.png"></p>
+<h2 id="WXML"><a href="#WXML" class="headerlink" title="WXML"></a>WXML</h2><p>WXML API提供主要提供WXML节点相关操作接口;</p>
+<p><img src="/../img/article/sj2XWU1637904937199.png"></p>
+<h2 id="第三方平台"><a href="#第三方平台" class="headerlink" title="第三方平台"></a>第三方平台</h2><p>第三方平台API主要提供第三方平台相关调用接口。</p>
+<p><img src="/../img/article/dlbfQS1637904974129.png"></p>
+<h2 id="广告"><a href="#广告" class="headerlink" title="广告"></a>广告</h2><p>广告API主要提供广告操作相关API接口。</p>
+<p><img src="/../img/article/AksXVY1637904994115.png"></p>
+<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><p>AI API主要提供人工智能相关的API接口。</p>
+<p><img src="/../img/article/Nr2ReF1637905075319.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序框架API</p><p><a href="https://blog.buubiu.com/微信小程序框架API/">https://blog.buubiu.com/微信小程序框架API/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-26</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%90%8E%E7%AB%AFJava%E6%8E%A5%E5%8F%A3%E5%BC%80%E5%8F%91/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序后端Java接口开发</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6-%E5%8D%A0%E4%BD%8D%E7%BB%84%E4%BB%B6/"><span class="level-item">微信小程序自定义组件-占位组件</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#基础"><span class="level-left"><span class="level-item">1</span><span class="level-item">基础</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#wx-getSystemInfo-获取系统信息实例"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">wx.getSystemInfo 获取系统信息实例</span></span></a></li></ul></li><li><a class="level is-mobile" href="#路由"><span class="level-left"><span class="level-item">2</span><span class="level-item">路由</span></span></a></li><li><a class="level is-mobile" href="#跳转"><span class="level-left"><span class="level-item">3</span><span class="level-item">跳转</span></span></a></li><li><a class="level is-mobile" href="#转发"><span class="level-left"><span class="level-item">4</span><span class="level-item">转发</span></span></a></li><li><a class="level is-mobile" href="#界面"><span class="level-left"><span class="level-item">5</span><span class="level-item">界面</span></span></a></li><li><a class="level is-mobile" href="#网络"><span class="level-left"><span class="level-item">6</span><span class="level-item">网络</span></span></a></li><li><a class="level is-mobile" href="#支付"><span class="level-left"><span class="level-item">7</span><span class="level-item">支付</span></span></a></li><li><a class="level is-mobile" href="#数据缓存"><span class="level-left"><span class="level-item">8</span><span class="level-item">数据缓存</span></span></a></li><li><a class="level is-mobile" href="#数据分析"><span class="level-left"><span class="level-item">9</span><span class="level-item">数据分析</span></span></a></li><li><a class="level is-mobile" href="#画布"><span class="level-left"><span class="level-item">10</span><span class="level-item">画布</span></span></a></li><li><a class="level is-mobile" href="#媒体"><span class="level-left"><span class="level-item">11</span><span class="level-item">媒体</span></span></a></li><li><a class="level is-mobile" href="#位置"><span class="level-left"><span class="level-item">12</span><span class="level-item">位置</span></span></a></li><li><a class="level is-mobile" href="#文件"><span class="level-left"><span class="level-item">13</span><span class="level-item">文件</span></span></a></li><li><a class="level is-mobile" href="#开放接口"><span class="level-left"><span class="level-item">14</span><span class="level-item">开放接口</span></span></a></li><li><a class="level is-mobile" href="#设备"><span class="level-left"><span class="level-item">15</span><span class="level-item">设备</span></span></a></li><li><a class="level is-mobile" href="#Worker"><span class="level-left"><span class="level-item">16</span><span class="level-item">Worker</span></span></a></li><li><a class="level is-mobile" href="#WXML"><span class="level-left"><span class="level-item">17</span><span class="level-item">WXML</span></span></a></li><li><a class="level is-mobile" href="#第三方平台"><span class="level-left"><span class="level-item">18</span><span class="level-item">第三方平台</span></span></a></li><li><a class="level is-mobile" href="#广告"><span class="level-left"><span class="level-item">19</span><span class="level-item">广告</span></span></a></li><li><a class="level is-mobile" href="#AI"><span class="level-left"><span class="level-item">20</span><span class="level-item">AI</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

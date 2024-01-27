@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微服务统一登录认证JWT - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="摘要：用户登录后，我们把登录者的信息保存在服务端 session 中，并且给用户一个 cookie 值，记录对应的 session。微服务集群中的每个服务，对外提供的都是 Rest 风格的接口。加密过程中不需要使用密钥，输入明文后由系统直接经过加密算法处理成密文，这种加密后的数据是无法被解密的，无法根据密文推算出明文。secret 是签名的关键，因此一定要保密，我们放到鉴权中心保存，其它任何服务"><meta property="og:type" content="blog"><meta property="og:title" content="微服务统一登录认证JWT"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%9F%E4%B8%80%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81JWT/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="摘要：用户登录后，我们把登录者的信息保存在服务端 session 中，并且给用户一个 cookie 值，记录对应的 session。微服务集群中的每个服务，对外提供的都是 Rest 风格的接口。加密过程中不需要使用密钥，输入明文后由系统直接经过加密算法处理成密文，这种加密后的数据是无法被解密的，无法根据密文推算出明文。secret 是签名的关键，因此一定要保密，我们放到鉴权中心保存，其它任何服务"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://i.loli.net/2020/07/09/5GbQY4VtOwmgq1M.jpg"><meta property="og:image" content="https://i.loli.net/2020/07/09/5doN9GfWjc1AgMk.jpg"><meta property="og:image" content="https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg"><meta property="og:image" content="https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg"><meta property="og:image" content="https://i.loli.net/2020/07/09/5nR2ZfrKFzUCJsW.jpg"><meta property="article:published_time" content="2020-02-19T02:37:43.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.941Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微服务"><meta property="article:tag" content="认证"><meta property="article:tag" content="JWT"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://i.loli.net/2020/07/09/5GbQY4VtOwmgq1M.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%9F%E4%B8%80%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81JWT/"},"headline":"微服务统一登录认证JWT","image":["https://i.loli.net/2020/07/09/5GbQY4VtOwmgq1M.jpg","https://i.loli.net/2020/07/09/5doN9GfWjc1AgMk.jpg","https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg","https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg","https://i.loli.net/2020/07/09/5nR2ZfrKFzUCJsW.jpg"],"datePublished":"2020-02-19T02:37:43.000Z","dateModified":"2024-01-25T15:08:05.941Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"摘要：用户登录后，我们把登录者的信息保存在服务端 session 中，并且给用户一个 cookie 值，记录对应的 session。微服务集群中的每个服务，对外提供的都是 Rest 风格的接口。加密过程中不需要使用密钥，输入明文后由系统直接经过加密算法处理成密文，这种加密后的数据是无法被解密的，无法根据密文推算出明文。secret 是签名的关键，因此一定要保密，我们放到鉴权中心保存，其它任何服务"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%BB%9F%E4%B8%80%E7%99%BB%E5%BD%95%E8%AE%A4%E8%AF%81JWT/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-02-19T02:37:43.000Z" title="2/19/2020, 10:37:43 AM">2020-02-19</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.941Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></span><span class="level-item">15 分钟读完 (大约2239个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微服务统一登录认证JWT</h1><div class="content"><blockquote>
+<p>摘要：<br>用户登录后，我们把登录者的信息保存在服务端 session 中，并且给用户一个 cookie 值，记录对应的 session。微服务集群中的每个服务，对外提供的都是 Rest 风格的接口。加密过程中不需要使用密钥，输入明文后由系统直接经过加密算法处理成密文，这种加密后的数据是无法被解密的，无法根据密文推算出明文。secret 是签名的关键，因此一定要保密，我们放到鉴权中心保存，其它任何服务中都不能获取 secret。</p>
+</blockquote>
+<h2 id="无状态登录原理"><a href="#无状态登录原理" class="headerlink" title="无状态登录原理"></a>无状态登录原理</h2><h3 id="1-1-什么是有状态？"><a href="#1-1-什么是有状态？" class="headerlink" title="1.1.什么是有状态？"></a>1.1.什么是有状态？</h3><span id="more"></span>
+
+<p>有状态服务，即服务端需要记录每次会话的客户端信息，从而识别客户端身份，根据用户身份进行请求的处理，典型的设计如 tomcat 中的 session。例如登录：用户登录后，我们把登录者的信息保存在服务端 session 中，并且给用户一个 cookie 值，记录对应的 session。然后下次请求，用户携带 cookie 值来，我们就能识别到对应 session，从而找到用户的信息。</p>
+<p>缺点是什么？</p>
+<ul>
+<li><p>服务端保存大量数据，增加服务端压力</p>
+</li>
+<li><p>服务端保存用户状态，无法进行水平扩展</p>
+</li>
+<li><p>客户端请求依赖服务端，多次请求必须访问同一台服务器</p>
+</li>
+</ul>
+<h3 id="1-2-什么是无状态"><a href="#1-2-什么是无状态" class="headerlink" title="1.2.什么是无状态"></a>1.2.什么是无状态</h3><p>微服务集群中的每个服务，对外提供的都是 Rest 风格的接口。而 Rest 风格的一个最重要的规范就是：服务的无状态性，即：</p>
+<ul>
+<li><p>服务端不保存任何客户端请求者信息</p>
+</li>
+<li><p>客户端的每次请求必须具备自描述信息，通过这些信息识别客户端身份</p>
+</li>
+</ul>
+<p><strong>带来的好处是什么呢？</strong></p>
+<ul>
+<li><p>客户端请求不依赖服务端的信息，任何多次请求不需要必须访问到同一台服务</p>
+</li>
+<li><p>服务端的集群和状态对客户端透明</p>
+</li>
+<li><p>服务端可以任意的迁移和伸缩</p>
+</li>
+<li><p>减小服务端存储压力</p>
+</li>
+</ul>
+<h3 id="1-3-如何实现无状态"><a href="#1-3-如何实现无状态" class="headerlink" title="1.3.如何实现无状态"></a>1.3.如何实现无状态</h3><p><strong>无状态登录的流程：</strong></p>
+<ol>
+<li><p>当客户端第一次请求服务时，服务端对用户进行信息认证（登录）</p>
+</li>
+<li><p>认证通过，将用户信息进行加密形成 token，返回给客户端，作为登录凭证</p>
+</li>
+<li><p>以后每次请求，客户端都携带认证的 token</p>
+</li>
+<li><p>服务端对 token 进行解密，判断是否有效。</p>
+</li>
+</ol>
+<p>流程图：<br><img src='https://i.loli.net/2020/07/09/5GbQY4VtOwmgq1M.jpg' alt='5GbQY4VtOwmgq1M'/></p>
+<p>整个登录过程中，最关键的点是什么？</p>
+<p><strong>token 的安全性</strong></p>
+<p>token 是识别客户端身份的唯一标示，如果加密不够严密，被人伪造那就完蛋了。采用何种方式加密才是安全可靠的呢？我们将采用 JWT + RSA 非对称加密</p>
+<h3 id="1-4-JWT"><a href="#1-4-JWT" class="headerlink" title="1.4.JWT"></a>1.4.JWT</h3><h4 id="1-4-1-简介"><a href="#1-4-1-简介" class="headerlink" title="1.4.1.简介"></a>1.4.1.简介</h4><p>JWT，全称是 Json Web Token， 是 JSON 风格轻量级的授权和身份认证规范，可实现无状态、分布式的 Web 应用授权；<br>官网：<a target="_blank" rel="noopener" href="https://jwt.io/">https://jwt.io</a><br>GitHub 上 jwt 的 java 客户端：<a target="_blank" rel="noopener" href="https://github.com/jwtk/jjwt">https://github.com/jwtk/jjwt</a></p>
+<h4 id="1-4-2-数据格式"><a href="#1-4-2-数据格式" class="headerlink" title="1.4.2.数据格式"></a>1.4.2.数据格式</h4><p>JWT 包含三部分数据：Header：头部，通常头部有两部分信息：</p>
+<ul>
+<li><p>声明类型，这里是 JWT</p>
+</li>
+<li><p>加密算法，自定义</p>
+</li>
+</ul>
+<p>我们会对头部进行 base64 加密（可解密），得到第一部分数据 Payload：<strong>载荷，就是有效数据，一般包含下面信息：</strong></p>
+<ul>
+<li><p>用户身份信息（注意，这里因为采用 base64 加密，可解密，因此不要存放敏感信息）</p>
+</li>
+<li><p>注册声明：如 token 的签发时间，过期时间，签发人等</p>
+</li>
+</ul>
+<p>这部分也会采用 base64 加密，得到第二部分数据</p>
+<p><strong>Signature：签名，是整个数据的认证信息。一般根据前两步的数据，再加上服务的密钥（secret）（不要泄漏，最好周期性更换），通过加密算法生成。用于验证整个数据完整和可靠性</strong></p>
+<p>生成的数据格式：<br><img src='https://i.loli.net/2020/07/09/5doN9GfWjc1AgMk.jpg' alt='5doN9GfWjc1AgMk'/><br>可以看到分为 3 段，每段就是上面的一部分数据</p>
+<h4 id="1-4-3-JWT-交互流程"><a href="#1-4-3-JWT-交互流程" class="headerlink" title="1.4.3.JWT 交互流程"></a>1.4.3.JWT 交互流程</h4><p>流程图：<br><img src='https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg' alt='52DowHEnIRmtPxl'/><br>步骤翻译：</p>
+<ol>
+<li><p>用户登录</p>
+</li>
+<li><p>服务的认证，通过后根据 secret 生成 token</p>
+</li>
+<li><p>将生成的 token 返回给浏览器</p>
+</li>
+<li><p>用户每次请求携带 token</p>
+</li>
+<li><p>服务端利用公钥解读 jwt 签名，判断签名有效后，从 Payload 中获取用户信息</p>
+</li>
+<li><p>处理请求，返回响应结果</p>
+</li>
+</ol>
+<p>因为 JWT 签发的 token 中已经包含了用户的身份信息，并且每次请求都会携带，这样服务的就无需保存用户信息，甚至无需去数据库查询，完全符合了 Rest 的无状态规范。扩展：彻底理解 cookie，session，token</p>
+<h4 id="1-4-4-非对称加密"><a href="#1-4-4-非对称加密" class="headerlink" title="1.4.4.非对称加密"></a>1.4.4.非对称加密</h4><p>加密技术是对信息进行编码和解码的技术，编码是把原来可读信息（又称明文）译成代码形式（又称密文），其逆过程就是解码（解密），加密技术的要点是加密算法，加密算法可以分为三类：对称加密，如 AES</p>
+<ul>
+<li><p><strong>基本原理：</strong> 将明文分成 N 个组，然后使用密钥对各个组进行加密，形成各自的密文，最后把所有的分组密文进行合并，形成最终的密文。</p>
+</li>
+<li><p><strong>优势：</strong> 算法公开、计算量小、加密速度快、加密效率高</p>
+</li>
+<li><p><strong>缺陷：</strong> 双方都使用同样密钥，安全性得不到保证</p>
+</li>
+</ul>
+<p><strong>非对称加密，如 RSA</strong></p>
+<ul>
+<li><p><strong>基本原理：</strong> 同时生成两把密钥：私钥和公钥，私钥隐秘保存，公钥可以下发给信任客户端</p>
+</li>
+<li><p><strong>私钥加密，</strong> 持有私钥或公钥才可以解密</p>
+</li>
+<li><p><strong>公钥加密，</strong> 持有私钥才可解密</p>
+</li>
+<li><p><strong>优点：</strong> 安全，难以破解</p>
+</li>
+<li><p><strong>缺点：</strong> 算法比较耗时</p>
+</li>
+</ul>
+<p><strong>不可逆加密，如 MD5，SHA</strong></p>
+<ul>
+<li><strong>基本原理：</strong> 加密过程中不需要使用密钥，输入明文后由系统直接经过加密算法处理成密文，这种加密后的数据是无法被解密的，无法根据密文推算出明文。</li>
+</ul>
+<p><strong>RSA 算法历史：</strong><br>1977 年，三位数学家 Rivest、Shamir 和 Adleman 设计了一种算法，可以实现非对称加密。这种算法用他们三个人的名字缩写：RSA</p>
+<p><strong>结合 Zuul 的鉴权流程</strong></p>
+<p>我们逐步演进系统架构设计。需要注意的是：secret 是签名的关键，因此一定要保密，我们放到鉴权中心保存，其它任何服务中都不能获取 secret。</p>
+<h4 id="1-5-1-没有-RSA-加密时"><a href="#1-5-1-没有-RSA-加密时" class="headerlink" title="1.5.1.没有 RSA 加密时"></a>1.5.1.没有 RSA 加密时</h4><p>在微服务架构中，我们可以把服务的鉴权操作放到网关中，将未通过鉴权的请求直接拦截，如图：<br><img src='https://i.loli.net/2020/07/09/52DowHEnIRmtPxl.jpg' alt='52DowHEnIRmtPxl'/></p>
+<ol>
+<li><p>用户请求登录</p>
+</li>
+<li><p>Zuul 将请求转发到授权中心，请求授权</p>
+</li>
+<li><p>授权中心校验完成，颁发 JWT 凭证</p>
+</li>
+<li><p>客户端请求其它功能，携带 JWT</p>
+</li>
+<li><p>Zuul 将 jwt 交给授权中心校验，通过后放行</p>
+</li>
+<li><p>用户请求到达微服务</p>
+</li>
+<li><p>微服务将 jwt 交给鉴权中心，鉴权同时解析用户信息</p>
+</li>
+<li><p>鉴权中心返回用户数据给微服务</p>
+</li>
+<li><p>微服务处理请求，返回响应</p>
+</li>
+</ol>
+<p>发现什么问题了？</p>
+<p>每次鉴权都需要访问鉴权中心，系统间的网络请求频率过高，效率略差，鉴权中心的压力较大。</p>
+<p><strong>结合 RSA 的鉴权</strong></p>
+<p>直接看图：<br><img src='https://i.loli.net/2020/07/09/5nR2ZfrKFzUCJsW.jpg' alt='5nR2ZfrKFzUCJsW'/></p>
+<ul>
+<li><p>我们首先利用 RSA 生成公钥和私钥。私钥保存在授权中心，公钥保存在 Zuul 和各个微服务</p>
+</li>
+<li><p>用户请求登录</p>
+</li>
+<li><p>授权中心校验，通过后用私钥对 JWT 进行签名加密</p>
+</li>
+<li><p>返回 jwt 给用户</p>
+</li>
+<li><p>用户携带 JWT 访问</p>
+</li>
+<li><p>Zuul 直接通过公钥解密 JWT，进行验证，验证通过则放行</p>
+</li>
+<li><p>请求到达微服务，微服务直接用公钥解析 JWT，获取用户信息，无需访问授权中心</p>
+</li>
+</ul>
+<blockquote>
+<p>来源：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIxODQxMjc0MA==&mid=2247500683&idx=1&sn=1ad63c970e08ae99978c82d628008e9d&chksm=97e86020a09fe936d86811c26d33314779e5177eb2e4f367f6203db96325a7f6bb8bef7e7fe7&mpshare=1&scene=1&srcid=&sharer_sharetime=1582114106398&sharer_shareid=f338cc331a976ce0a70f3d7d541f6afe%23rd">微服务统一登录认证怎么做？JWT？</a></p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微服务统一登录认证JWT</p><p><a href="https://blog.buubiu.com/微服务统一登录认证JWT/">https://blog.buubiu.com/微服务统一登录认证JWT/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-02-19</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%AE%A4%E8%AF%81/">认证</a><a class="link-muted mr-2" rel="tag" href="/tags/JWT/">JWT</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/centos7%E8%AE%BE%E7%BD%AEhostname/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">centos7设置hostname</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E4%BA%9A%E9%A9%AC%E9%80%8Aaws-%E5%AE%89%E8%A3%85docker-%E5%92%8Cssr/"><span class="level-item">亚马逊aws 安装docker 和ssr</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#无状态登录原理"><span class="level-left"><span class="level-item">1</span><span class="level-item">无状态登录原理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-1-什么是有状态？"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">1.1.什么是有状态？</span></span></a></li><li><a class="level is-mobile" href="#1-2-什么是无状态"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">1.2.什么是无状态</span></span></a></li><li><a class="level is-mobile" href="#1-3-如何实现无状态"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">1.3.如何实现无状态</span></span></a></li><li><a class="level is-mobile" href="#1-4-JWT"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">1.4.JWT</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-4-1-简介"><span class="level-left"><span class="level-item">1.4.1</span><span class="level-item">1.4.1.简介</span></span></a></li><li><a class="level is-mobile" href="#1-4-2-数据格式"><span class="level-left"><span class="level-item">1.4.2</span><span class="level-item">1.4.2.数据格式</span></span></a></li><li><a class="level is-mobile" href="#1-4-3-JWT-交互流程"><span class="level-left"><span class="level-item">1.4.3</span><span class="level-item">1.4.3.JWT 交互流程</span></span></a></li><li><a class="level is-mobile" href="#1-4-4-非对称加密"><span class="level-left"><span class="level-item">1.4.4</span><span class="level-item">1.4.4.非对称加密</span></span></a></li><li><a class="level is-mobile" href="#1-5-1-没有-RSA-加密时"><span class="level-left"><span class="level-item">1.4.5</span><span class="level-item">1.5.1.没有 RSA 加密时</span></span></a></li></ul></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

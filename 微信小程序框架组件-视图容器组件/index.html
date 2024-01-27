@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序框架组件-视图容器组件 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="视图容器view 基础库 1.0.0 开始支持，低版本需做兼容处理。  视图容器(View)是小程序框架组件中最常见的基础组件,它的作用跟 HTML中的DIV功能非常相似,用来布 局 WXML界面。    属性 类型 默认值 必填 说明 最低版本    hover-class string none 否 指定按下去的样式类。当 hover-class&amp;#x3D;&amp;quot;none&amp;quot; 时，没有点击"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序框架组件-视图容器组件"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A7%86%E5%9B%BE%E5%AE%B9%E5%99%A8%E7%BB%84%E4%BB%B6/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="视图容器view 基础库 1.0.0 开始支持，低版本需做兼容处理。  视图容器(View)是小程序框架组件中最常见的基础组件,它的作用跟 HTML中的DIV功能非常相似,用来布 局 WXML界面。    属性 类型 默认值 必填 说明 最低版本    hover-class string none 否 指定按下去的样式类。当 hover-class&amp;#x3D;&amp;quot;none&amp;quot; 时，没有点击"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/7pHYmt1636531528419.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/qG3j2v1636533029282.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/IcSlmE1636533099473.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/9otzIX1636533824606.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/sD5tWo1636533779858.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/L8Iy5t1636535607965.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/g9umFO1636536593944.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/EpxPqT1636537073108.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/wtNrSU1636537351557.png"><meta property="article:published_time" content="2021-11-10T07:54:45.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.935Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/7pHYmt1636531528419.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A7%86%E5%9B%BE%E5%AE%B9%E5%99%A8%E7%BB%84%E4%BB%B6/"},"headline":"微信小程序框架组件-视图容器组件","image":["https://blog.buubiu.com/img/article/7pHYmt1636531528419.png","https://blog.buubiu.com/img/article/qG3j2v1636533029282.png","https://blog.buubiu.com/img/article/IcSlmE1636533099473.png","https://blog.buubiu.com/img/article/9otzIX1636533824606.png","https://blog.buubiu.com/img/article/sD5tWo1636533779858.png","https://blog.buubiu.com/img/article/L8Iy5t1636535607965.png","https://blog.buubiu.com/img/article/g9umFO1636536593944.png","https://blog.buubiu.com/img/article/EpxPqT1636537073108.png","https://blog.buubiu.com/img/article/wtNrSU1636537351557.png"],"datePublished":"2021-11-10T07:54:45.000Z","dateModified":"2024-01-25T15:08:05.935Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"视图容器view 基础库 1.0.0 开始支持，低版本需做兼容处理。  视图容器(View)是小程序框架组件中最常见的基础组件,它的作用跟 HTML中的DIV功能非常相似,用来布 局 WXML界面。    属性 类型 默认值 必填 说明 最低版本    hover-class string none 否 指定按下去的样式类。当 hover-class&#x3D;&quot;none&quot; 时，没有点击"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A7%86%E5%9B%BE%E5%AE%B9%E5%99%A8%E7%BB%84%E4%BB%B6/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-10T07:54:45.000Z" title="11/10/2021, 3:54:45 PM">2021-11-10</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.935Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">32 分钟读完 (大约4767个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序框架组件-视图容器组件</h1><div class="content"><h2 id="视图容器view"><a href="#视图容器view" class="headerlink" title="视图容器view"></a>视图容器view</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>视图容器(View)是小程序框架组件中最常见的基础组件,它的作用跟 HTML中的DIV功能非常相似,用来布 局 WXML界面。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">hover-class</td>
+<td align="left">string</td>
+<td align="left">none</td>
+<td align="left">否</td>
+<td align="left">指定按下去的样式类。当 <code>hover-class=&quot;none&quot;</code> 时，没有点击态效果</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-stop-propagation</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">指定是否阻止本节点的祖先节点出现点击态</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.5.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-start-time</td>
+<td align="left">number</td>
+<td align="left">50</td>
+<td align="left">否</td>
+<td align="left">按住后多久出现点击态，单位毫秒</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-stay-time</td>
+<td align="left">number</td>
+<td align="left">400</td>
+<td align="left">否</td>
+<td align="left">手指松开后点击态保留时间，单位毫秒</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="案例一-设置长按点击效果，以及时间"><a href="#案例一-设置长按点击效果，以及时间" class="headerlink" title="案例一:设置长按点击效果，以及时间;"></a>案例一:设置长按点击效果，以及时间;</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--pages/viewTest/viewTest.wxml--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">hover-class</span>=<span class="string">&quot;hc&quot;</span> <span class="attr">hover-start-time</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">hover-stay-time</span>=<span class="string">&quot;2000&quot;</span>&gt;</span>buubiu<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* pages/viewTest/viewTest.wxss */</span></span><br><span class="line"><span class="selector-class">.hc</span>&#123;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/7pHYmt1636531528419.png"></p>
+<h3 id="案例二-flex布局"><a href="#案例二-flex布局" class="headerlink" title="案例二:flex布局"></a>案例二:flex布局</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/Fr3Wq6mS7ZlE">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/qG3j2v1636533029282.png"></p>
+<p>视图容器分类:</p>
+<p><img src="/../img/article/IcSlmE1636533099473.png"></p>
+<h2 id="可滚动视图区域scroll-view"><a href="#可滚动视图区域scroll-view" class="headerlink" title="可滚动视图区域scroll-view"></a>可滚动视图区域scroll-view</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>可滚动视图区域。使用竖向滚动时，需要给<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html">scroll-view</a>一个固定高度，通过 WXSS 设置 height。组件属性的长度单位默认为px，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a>起支持传入单位(rpx&#x2F;px)。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">scroll-x</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">允许横向滚动</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">scroll-y</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">允许纵向滚动</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">upper-threshold</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">50</td>
+<td align="left">否</td>
+<td align="left">距顶部&#x2F;左边多远时，触发 scrolltoupper 事件</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">lower-threshold</td>
+<td align="left">number&#x2F;string</td>
+<td align="left">50</td>
+<td align="left">否</td>
+<td align="left">距底部&#x2F;右边多远时，触发 scrolltolower 事件</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">scroll-top</td>
+<td align="left">number&#x2F;string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">设置竖向滚动条位置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">scroll-left</td>
+<td align="left">number&#x2F;string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">设置横向滚动条位置</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">scroll-into-view</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">值应为某子元素id（id不能以数字开头）。设置哪个方向可滚动，则在哪个方向滚动到该元素</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">scroll-with-animation</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">在设置滚动条位置时使用动画过渡</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">enable-back-to-top</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">iOS点击顶部状态栏、安卓双击标题栏时，滚动条返回顶部，只支持竖向</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">enable-flex</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">启用 flexbox 布局。开启后，当前节点声明了 <code>display: flex</code> 就会成为 flex container，并作用于其孩子节点。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.7.3</a></td>
+</tr>
+<tr>
+<td align="left">scroll-anchoring</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">开启 scroll anchoring 特性，即控制滚动位置不随内容变化而抖动，仅在 iOS 下生效，安卓下可参考 CSS <code>overflow-anchor</code> 属性。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.2</a></td>
+</tr>
+<tr>
+<td align="left">refresher-enabled</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">开启自定义下拉刷新</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">refresher-threshold</td>
+<td align="left">number</td>
+<td align="left">45</td>
+<td align="left">否</td>
+<td align="left">设置自定义下拉刷新阈值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">refresher-default-style</td>
+<td align="left">string</td>
+<td align="left">“black”</td>
+<td align="left">否</td>
+<td align="left">设置自定义下拉刷新默认样式，支持设置 &#96;black</td>
+<td align="left">white</td>
+</tr>
+<tr>
+<td align="left">refresher-background</td>
+<td align="left">string</td>
+<td align="left">“#FFF”</td>
+<td align="left">否</td>
+<td align="left">设置自定义下拉刷新区域背景颜色</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">refresher-triggered</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">设置当前下拉刷新状态，true 表示下拉刷新已经被触发，false 表示下拉刷新未被触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">enhanced</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">启用 scroll-view 增强特性，启用后可通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/ui/scroll/ScrollViewContext.html">ScrollViewContext</a> 操作 scroll-view</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">bounces</td>
+<td align="left">boolean</td>
+<td align="left">true</td>
+<td align="left">否</td>
+<td align="left">iOS 下 scroll-view 边界弹性控制 (同时开启 enhanced 属性后生效)</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">show-scrollbar</td>
+<td align="left">boolean</td>
+<td align="left">true</td>
+<td align="left">否</td>
+<td align="left">滚动条显隐控制 (同时开启 enhanced 属性后生效)</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">paging-enabled</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">分页滑动效果 (同时开启 enhanced 属性后生效)</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">fast-deceleration</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">滑动减速速率控制 (同时开启 enhanced 属性后生效)</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">binddragstart</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滑动开始事件 (同时开启 enhanced 属性后生效) detail { scrollTop, scrollLeft }</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">binddragging</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滑动事件 (同时开启 enhanced 属性后生效) detail { scrollTop, scrollLeft }</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">binddragend</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滑动结束事件 (同时开启 enhanced 属性后生效) detail { scrollTop, scrollLeft, velocity }</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.0</a></td>
+</tr>
+<tr>
+<td align="left">bindscrolltoupper</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滚动到顶部&#x2F;左边时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">bindscrolltolower</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滚动到底部&#x2F;右边时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">bindscroll</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">滚动时触发，event.detail &#x3D; {scrollLeft, scrollTop, scrollHeight, scrollWidth, deltaX, deltaY}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">bindrefresherpulling</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">自定义下拉刷新控件被下拉</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">bindrefresherrefresh</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">自定义下拉刷新被触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">bindrefresherrestore</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">自定义下拉刷新被复位</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+<tr>
+<td align="left">bindrefresherabort</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">自定义下拉刷新被中止</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.1</a></td>
+</tr>
+</tbody></table>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/BuZXR5mD7yl2">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/9otzIX1636533824606.png"></p>
+<h2 id="滑块视图容器swiper"><a href="#滑块视图容器swiper" class="headerlink" title="滑块视图容器swiper"></a>滑块视图容器swiper</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>滑块视图容器。其中只可放置<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/swiper-item.html">swiper-item</a>组件，否则会导致未定义的行为。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">indicator-dots</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否显示面板指示点</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">indicator-color</td>
+<td align="left">color</td>
+<td align="left">rgba(0, 0, 0, .3)</td>
+<td align="left">否</td>
+<td align="left">指示点颜色</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">indicator-active-color</td>
+<td align="left">color</td>
+<td align="left">#000000</td>
+<td align="left">否</td>
+<td align="left">当前选中的指示点颜色</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">autoplay</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否自动切换</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">current</td>
+<td align="left">number</td>
+<td align="left">0</td>
+<td align="left">否</td>
+<td align="left">当前所在滑块的 index</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">interval</td>
+<td align="left">number</td>
+<td align="left">5000</td>
+<td align="left">否</td>
+<td align="left">自动切换时间间隔</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">duration</td>
+<td align="left">number</td>
+<td align="left">500</td>
+<td align="left">否</td>
+<td align="left">滑动动画时长</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">circular</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否采用衔接滑动</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">vertical</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">滑动方向是否为纵向</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">previous-margin</td>
+<td align="left">string</td>
+<td align="left">“0px”</td>
+<td align="left">否</td>
+<td align="left">前边距，可用于露出前一项的一小部分，接受 px 和 rpx 值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+<tr>
+<td align="left">next-margin</td>
+<td align="left">string</td>
+<td align="left">“0px”</td>
+<td align="left">否</td>
+<td align="left">后边距，可用于露出后一项的一小部分，接受 px 和 rpx 值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+<tr>
+<td align="left">snap-to-edge</td>
+<td align="left">boolean</td>
+<td align="left">“false”</td>
+<td align="left">否</td>
+<td align="left">当 swiper-item 的个数大于等于 2，关闭 circular 并且开启 previous-margin 或 next-margin 的时候，可以指定这个边距是否应用到第一个、最后一个元素</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.12.1</a></td>
+</tr>
+<tr>
+<td align="left">display-multiple-items</td>
+<td align="left">number</td>
+<td align="left">1</td>
+<td align="left">否</td>
+<td align="left">同时显示的滑块数量</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+<tr>
+<td align="left">easing-function</td>
+<td align="left">string</td>
+<td align="left">“default”</td>
+<td align="left">否</td>
+<td align="left">指定 swiper 切换缓动动画类型</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.5</a></td>
+</tr>
+<tr>
+<td align="left">bindchange</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">current 改变时会触发 change 事件，event.detail &#x3D; {current, source}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">bindtransition</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">swiper-item 的位置发生改变时会触发 transition 事件，event.detail &#x3D; {dx: dx, dy: dy}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.3</a></td>
+</tr>
+<tr>
+<td align="left">bindanimationfinish</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">动画结束时会触发 animationfinish 事件，event.detail 同上</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+</tbody></table>
+<p><strong>easing-function 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">default</td>
+<td align="left">默认缓动函数</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">linear</td>
+<td align="left">线性动画</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">easeInCubic</td>
+<td align="left">缓入动画</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">easeOutCubic</td>
+<td align="left">缓出动画</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">easeInOutCubic</td>
+<td align="left">缓入缓出动画</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong><code>change</code>事件 <code>source</code> 返回值</strong></p>
+<p>从 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a> 开始，<code>change</code>事件增加 <code>source</code>字段，表示导致变更的原因，可能值如下：</p>
+<ol>
+<li><code>autoplay</code> 自动播放导致swiper变化；</li>
+<li><code>touch</code> 用户划动引起swiper变化；</li>
+<li>其它原因将用空字符串表示。</li>
+</ol>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/SeizywmX6gY0">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/sD5tWo1636533779858.png"></p>
+<h2 id="swiper-item"><a href="#swiper-item" class="headerlink" title="swiper-item"></a>swiper-item</h2><blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>仅可放置在<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/swiper.html">swiper</a>组件中，宽高自动设置为100%。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">item-id</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">该 swiper-item 的标识符</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+<tr>
+<td align="left">skip-hidden-item-layout</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否跳过未显示的滑块布局，设为 true 可优化复杂情况下的滑动性能，但会丢失隐藏状态滑块的布局信息</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.0</a></td>
+</tr>
+</tbody></table>
+<h2 id="可移动的视图容器movable-view"><a href="#可移动的视图容器movable-view" class="headerlink" title="可移动的视图容器movable-view"></a>可移动的视图容器movable-view</h2><blockquote>
+<p>基础库 1.2.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>可移动的视图容器，在页面中可以拖拽滑动。<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/movable-view.html">movable-view</a>必须在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/movable-area.html">movable-area</a> 组件中，并且必须是直接子节点，否则不能移动。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">direction</td>
+<td align="left">string</td>
+<td align="left">none</td>
+<td align="left">否</td>
+<td align="left">movable-view的移动方向，属性值有all、vertical、horizontal、none</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">inertia</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">movable-view是否带有惯性</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">out-of-bounds</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">超过可移动区域后，movable-view是否还可以移动</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">x</td>
+<td align="left">number&#x2F;string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">定义x轴方向的偏移，如果x的值不在可移动范围内，会自动移动到可移动范围；改变x的值会触发动画；单位支持px（默认）、rpx；</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">y</td>
+<td align="left">number&#x2F;string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">定义y轴方向的偏移，如果y的值不在可移动范围内，会自动移动到可移动范围；改变y的值会触发动画；单位支持px（默认）、rpx；</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">damping</td>
+<td align="left">number</td>
+<td align="left">20</td>
+<td align="left">否</td>
+<td align="left">阻尼系数，用于控制x或y改变时的动画和过界回弹的动画，值越大移动越快</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">friction</td>
+<td align="left">number</td>
+<td align="left">2</td>
+<td align="left">否</td>
+<td align="left">摩擦系数，用于控制惯性滑动的动画，值越大摩擦力越大，滑动越快停止；必须大于0，否则会被设置成默认值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.2.0</a></td>
+</tr>
+<tr>
+<td align="left">disabled</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否禁用</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">scale</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否支持双指缩放，默认缩放手势生效区域是在movable-view内</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">scale-min</td>
+<td align="left">number</td>
+<td align="left">0.5</td>
+<td align="left">否</td>
+<td align="left">定义缩放倍数最小值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">scale-max</td>
+<td align="left">number</td>
+<td align="left">10</td>
+<td align="left">否</td>
+<td align="left">定义缩放倍数最大值</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">scale-value</td>
+<td align="left">number</td>
+<td align="left">1</td>
+<td align="left">否</td>
+<td align="left">定义缩放倍数，取值范围为 0.5 - 10</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">animation</td>
+<td align="left">boolean</td>
+<td align="left">true</td>
+<td align="left">否</td>
+<td align="left">是否使用动画</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">bindchange</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">拖动过程中触发的事件，event.detail &#x3D; {x, y, source}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">bindscale</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">缩放过程中触发的事件，event.detail &#x3D; {x, y, scale}，x和y字段在<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a>之后支持</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">htouchmove</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">初次手指触摸后移动为横向的移动时触发，如果catch此事件，则意味着touchmove事件也被catch</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">vtouchmove</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">初次手指触摸后移动为纵向的移动时触发，如果catch此事件，则意味着touchmove事件也被catch</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+</tbody></table>
+<p><strong><code>bindchange</code> 返回的 <code>source</code> 表示产生移动的原因</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">touch</td>
+<td align="left">拖动</td>
+</tr>
+<tr>
+<td align="left">touch-out-of-bounds</td>
+<td align="left">超出移动范围</td>
+</tr>
+<tr>
+<td align="left">out-of-bounds</td>
+<td align="left">超出移动范围后的回弹</td>
+</tr>
+<tr>
+<td align="left">friction</td>
+<td align="left">惯性</td>
+</tr>
+<tr>
+<td align="left">空字符串</td>
+<td align="left">setData</td>
+</tr>
+</tbody></table>
+<h2 id="movable-area"><a href="#movable-area" class="headerlink" title="movable-area"></a>movable-area</h2><blockquote>
+<p>基础库 1.2.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/movable-view.html">movable-view</a>的可移动区域。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">scale-area</td>
+<td align="left">Boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">当里面的movable-view设置为支持双指缩放时，设置此值可将缩放手势生效区域修改为整个movable-area</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+</tbody></table>
+<h3 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/1g3lR6mv73lm">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/L8Iy5t1636535607965.png"></p>
+<h2 id="覆盖在原生组件之上的文本视图cover-view"><a href="#覆盖在原生组件之上的文本视图cover-view" class="headerlink" title="覆盖在原生组件之上的文本视图cover-view"></a>覆盖在原生组件之上的文本视图cover-view</h2><blockquote>
+<p>基础库 1.4.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>覆盖在原生组件之上的文本视图。</p>
+<p>目前<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/native-component.html">原生组件</a>均已支持同层渲染，建议使用 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/view.html">view</a> 替代。可覆盖的原生组件包括 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/map.html">map</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/video.html">video</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/canvas.html">canvas</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/camera.html">camera</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/live-player.html">live-player</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/live-pusher.html">live-pusher</a></p>
+<p>只支持嵌套 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/cover-view.html">cover-view</a>、<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/cover-image.html">cover-image</a>，可在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/cover-view.html">cover-view</a> 中使用 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/button.html">button</a>。组件属性的长度单位默认为px，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a>起支持传入单位(rpx&#x2F;px)。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">scroll-top</td>
+<td align="left">number&#x2F;string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">设置顶部滚动偏移量，仅在设置了 overflow-y: scroll 成为滚动元素后生效</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+</tbody></table>
+<h2 id="示例代码-3"><a href="#示例代码-3" class="headerlink" title="示例代码"></a>示例代码</h2><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/PE0P46m47plJ">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/g9umFO1636536593944.png"></p>
+<h2 id="覆盖在原生组件之上的图片视图cover-image"><a href="#覆盖在原生组件之上的图片视图cover-image" class="headerlink" title="覆盖在原生组件之上的图片视图cover-image"></a>覆盖在原生组件之上的图片视图cover-image</h2><blockquote>
+<p>基础库 1.4.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>覆盖在原生组件之上的图片视图。</p>
+<p>目前<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/native-component.html">原生组件</a>均已支持同层渲染，建议使用 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/image.html">image</a> 替代。可覆盖的原生组件同<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/cover-view.html">cover-view</a>，支持嵌套在<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/cover-view.html">cover-view</a>里。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">src</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">图标路径，支持临时路径、网络地址（1.6.0起支持）、云文件ID（2.2.3起支持）。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">referrer-policy</td>
+<td align="left">string</td>
+<td align="left">no-referrer</td>
+<td align="left">否</td>
+<td align="left">格式固定为 <code>https://servicewechat.com/&#123;appid&#125;/&#123;version&#125;/page-frame.html</code>，其中 {appid} 为小程序的 appid，{version} 为小程序的版本号，版本号为 0 表示为开发版、体验版以及审核版本，版本号为 devtools 表示为开发者工具，其余为正式版本；</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.13.0</a></td>
+</tr>
+<tr>
+<td align="left">bindload</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">图片加载成功时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">图片加载失败时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+</tbody></table>
+<p><strong>referrer-policy 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">origin</td>
+<td align="left">发送完整的referrer</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">no-referrer</td>
+<td align="left">不发送</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h4 id="支持的格式"><a href="#支持的格式" class="headerlink" title="支持的格式"></a>支持的格式</h4><table>
+<thead>
+<tr>
+<th align="left">格式</th>
+<th align="left">iOS</th>
+<th align="left">Android</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">JPG</td>
+<td align="left">√</td>
+<td align="left">√</td>
+</tr>
+<tr>
+<td align="left">PNG</td>
+<td align="left">√</td>
+<td align="left">√</td>
+</tr>
+<tr>
+<td align="left">SVG</td>
+<td align="left">x</td>
+<td align="left">x</td>
+</tr>
+<tr>
+<td align="left">WEBP</td>
+<td align="left">√</td>
+<td align="left">√</td>
+</tr>
+<tr>
+<td align="left">GIF</td>
+<td align="left">√</td>
+<td align="left">√</td>
+</tr>
+<tr>
+<td align="left">BASE64</td>
+<td align="left">x</td>
+<td align="left">x</td>
+</tr>
+</tbody></table>
+<p><img src="/../img/article/EpxPqT1636537073108.png"></p>
+<h2 id="共享元素share-element"><a href="#共享元素share-element" class="headerlink" title="共享元素share-element"></a>共享元素share-element</h2><blockquote>
+<p>基础库 2.16.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>共享元素。</p>
+<p>共享元素是一种动画形式，类似于 <a target="_blank" rel="noopener" href="https://flutterchina.club/animations/hero-animations/">flutter Hero</a>动画，表现为元素像是在页面间穿越一样。该组件需与 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/page-container.html">page-container</a> 组件结合使用。</p>
+<p>使用时需在当前页放置 <code>share-element</code> 组件，同时在 <code>page-container</code> 容器中放置对应的 <code>share-element</code> 组件，对应关系通过属性值 <code>key</code> 映射。当设置 <code>page-container</code> 显示时，<code>transform</code> 属性为 <code>true</code> 的共享元素会产生动画。当前页面容器退出时，会产生返回动画。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">key</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">是</td>
+<td align="left">映射标记</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.16.0</a></td>
+</tr>
+<tr>
+<td align="left">transform</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">是否进行动画</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.16.0</a></td>
+</tr>
+<tr>
+<td align="left">duration</td>
+<td align="left">number</td>
+<td align="left">300</td>
+<td align="left">否</td>
+<td align="left">动画时长，单位毫秒</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.16.0</a></td>
+</tr>
+<tr>
+<td align="left">easing-function</td>
+<td align="left">string</td>
+<td align="left">ease-out</td>
+<td align="left">否</td>
+<td align="left"><code>css</code>缓动函数</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.16.0</a></td>
+</tr>
+</tbody></table>
+<h2 id="示例代码-4"><a href="#示例代码-4" class="headerlink" title="示例代码"></a>示例代码</h2><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/NqVP7ImA73ou">在开发者工具中预览效果</a></p>
+<p><img src="/../img/article/wtNrSU1636537351557.png"></p>
+<h2 id="规则匹配match-media"><a href="#规则匹配match-media" class="headerlink" title="规则匹配match-media"></a>规则匹配match-media</h2><blockquote>
+<p>基础库 2.11.1 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>media query 匹配检测节点。可以指定一组 media query 规则，满足时，这个节点才会被展示。</p>
+<p>通过这个节点可以实现“页面宽高在某个范围时才展示某个区域”这样的效果。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">min-width</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面最小宽度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">max-width</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面最大宽度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">width</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面宽度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">min-height</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面最小高度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">max-height</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面最大高度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">height</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">页面高度（ px 为单位）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+<tr>
+<td align="left">orientation</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">屏幕方向（ <code>landscape</code> 或 <code>portrait</code> ）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.11.1</a></td>
+</tr>
+</tbody></table>
+<h2 id="示例代码-5"><a href="#示例代码-5" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">match-media</span> <span class="attr">min-width</span>=<span class="string">&quot;300&quot;</span> <span class="attr">max-width</span>=<span class="string">&quot;600&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span>&gt;</span>当页面宽度在 300 ~ 500 px 之间时展示这里<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">match-media</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">match-media</span> <span class="attr">min-height</span>=<span class="string">&quot;400&quot;</span> <span class="attr">orientation</span>=<span class="string">&quot;landscape&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span>&gt;</span>当页面高度不小于 400 px 且屏幕方向为纵向时展示这里<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">match-media</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序框架组件-视图容器组件</p><p><a href="https://blog.buubiu.com/微信小程序框架组件-视图容器组件/">https://blog.buubiu.com/微信小程序框架组件-视图容器组件/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-10</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80%E5%86%85%E5%AE%B9/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序框架组件-组件基础内容</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/"><span class="level-item">微信小程序框架组件简单介绍</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#视图容器view"><span class="level-left"><span class="level-item">1</span><span class="level-item">视图容器view</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#案例一-设置长按点击效果，以及时间"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">案例一:设置长按点击效果，以及时间;</span></span></a></li><li><a class="level is-mobile" href="#案例二-flex布局"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">案例二:flex布局</span></span></a></li></ul></li><li><a class="level is-mobile" href="#可滚动视图区域scroll-view"><span class="level-left"><span class="level-item">2</span><span class="level-item">可滚动视图区域scroll-view</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#滑块视图容器swiper"><span class="level-left"><span class="level-item">3</span><span class="level-item">滑块视图容器swiper</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-1"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#swiper-item"><span class="level-left"><span class="level-item">4</span><span class="level-item">swiper-item</span></span></a></li><li><a class="level is-mobile" href="#可移动的视图容器movable-view"><span class="level-left"><span class="level-item">5</span><span class="level-item">可移动的视图容器movable-view</span></span></a></li><li><a class="level is-mobile" href="#movable-area"><span class="level-left"><span class="level-item">6</span><span class="level-item">movable-area</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-2"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#覆盖在原生组件之上的文本视图cover-view"><span class="level-left"><span class="level-item">7</span><span class="level-item">覆盖在原生组件之上的文本视图cover-view</span></span></a></li><li><a class="level is-mobile" href="#示例代码-3"><span class="level-left"><span class="level-item">8</span><span class="level-item">示例代码</span></span></a></li><li><a class="level is-mobile" href="#覆盖在原生组件之上的图片视图cover-image"><span class="level-left"><span class="level-item">9</span><span class="level-item">覆盖在原生组件之上的图片视图cover-image</span></span></a><ul class="menu-list"><ul class="menu-list"><li><a class="level is-mobile" href="#支持的格式"><span class="level-left"><span class="level-item">9.1.1</span><span class="level-item">支持的格式</span></span></a></li></ul></ul></li><li><a class="level is-mobile" href="#共享元素share-element"><span class="level-left"><span class="level-item">10</span><span class="level-item">共享元素share-element</span></span></a></li><li><a class="level is-mobile" href="#示例代码-4"><span class="level-left"><span class="level-item">11</span><span class="level-item">示例代码</span></span></a></li><li><a class="level is-mobile" href="#规则匹配match-media"><span class="level-left"><span class="level-item">12</span><span class="level-item">规则匹配match-media</span></span></a></li><li><a class="level is-mobile" href="#示例代码-5"><span class="level-left"><span class="level-item">13</span><span class="level-item">示例代码</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

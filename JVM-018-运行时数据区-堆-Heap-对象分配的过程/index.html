@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-018-运行时数据区-堆(Heap)-对象分配的过程 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="概述 为新对象分配内存是一件非常严谨和复杂的任务，JVM的设计者们不仅需要考虑内存如何分配、在哪里分配等问题，并且由于内存分配算法与内存回收算法密切相关，所以还需要考虑GC执行完内存回收后是否会在内存空间中产生内存碎片。"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-018-运行时数据区-堆(Heap)-对象分配的过程"><meta property="og:url" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="概述 为新对象分配内存是一件非常严谨和复杂的任务，JVM的设计者们不仅需要考虑内存如何分配、在哪里分配等问题，并且由于内存分配算法与内存回收算法密切相关，所以还需要考虑GC执行完内存回收后是否会在内存空间中产生内存碎片。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615144435773.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152007418.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152059431.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152525123.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615155110149.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615160404669.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615170931436.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123058712.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123139912.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213030277.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213309458.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616215811922.png"><meta property="article:published_time" content="2022-06-15T03:23:48.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.048Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="堆"><meta property="article:tag" content="对象分配的过程"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615144435773.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/"},"headline":"JVM-018-运行时数据区-堆(Heap)-对象分配的过程","image":["https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615144435773.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152007418.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152059431.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152525123.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615155110149.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615160404669.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615170931436.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123058712.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123139912.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213030277.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213309458.png","https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616215811922.png"],"datePublished":"2022-06-15T03:23:48.000Z","dateModified":"2024-01-25T15:08:05.048Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"概述 为新对象分配内存是一件非常严谨和复杂的任务，JVM的设计者们不仅需要考虑内存如何分配、在哪里分配等问题，并且由于内存分配算法与内存回收算法密切相关，所以还需要考虑GC执行完内存回收后是否会在内存空间中产生内存碎片。"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-15T03:23:48.000Z" title="6/15/2022, 11:23:48 AM">2022-06-15</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.048Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%A0%86/">堆</a></span><span class="level-item">25 分钟读完 (大约3808个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-018-运行时数据区-堆(Heap)-对象分配的过程</h1><div class="content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615144435773.png"></p>
+<p>为新对象分配内存是一件非常严谨和复杂的任务，JVM的设计者们不仅需要考虑内存如何分配、在哪里分配等问题，并且由于内存分配算法与内存回收算法密切相关，所以还需要考虑GC执行完内存回收后是否会在内存空间中产生内存碎片。</p>
+<span id="more"></span>
+
+<h2 id="对象分配过程"><a href="#对象分配过程" class="headerlink" title="对象分配过程"></a>对象分配过程</h2><h3 id="对象分配的一般过程"><a href="#对象分配的一般过程" class="headerlink" title="对象分配的一般过程"></a>对象分配的一般过程</h3><p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152007418.png"></p>
+<ol>
+<li>new 的对象先放伊甸园区。此区有大小限制。</li>
+<li>当伊甸园的空间填满时，程序又需要创建对象，JVM 的垃圾回收器将对伊甸园区进行垃圾回收，这个垃圾回收操作<code>叫做 Minor GC 或者 YGC(Young GC)  </code>，目的是将伊甸园区的不再被其他对象所引用的对象进行销毁；再加载新的对象放到伊甸园区。</li>
+<li>然后将伊甸园中的剩余对象<strong>移动到幸存者0区（或者叫做 to 区</strong>），此时把对象的年龄标记为1<ul>
+<li>我们把幸存者区为空的区叫做 to 区，非空的叫做 from 区</li>
+<li>最初始的话，会随机选个区为to区</li>
+<li>总之：<strong>谁是空区谁就是to区</strong></li>
+</ul>
+</li>
+</ol>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152059431.png"></p>
+<p>​          所以说：<strong>在 YGC 后，伊甸园区肯定是空的了</strong></p>
+<ol start="4">
+<li>如果下一次伊甸园区又满了，再次触发垃圾回收YGC，此时除了将伊甸园中的剩余对象移动到幸存者1区外（这些对象的年龄记为1），还有上次幸存下来的放到幸存者0区的，如果没有被回收，也会被放到幸存者1区（这些对象的年龄记为2）。</li>
+<li>如果再次经历垃圾回收，此时会重新放回幸存者0区，接着再去幸存者1区，反复移动</li>
+</ol>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615152525123.png"></p>
+<ol start="6">
+<li><p>当幸存者区的对象的年龄超过15，或者说反复移动15次以上，JVM 就会把这些对象晋升（Promotion）到养老区。</p>
+<ul>
+<li>这个 15 次数可以设置，默认是 15 次。</li>
+<li>可以设置参数： <code>-XX:MaxTenuringThreshold=&lt;N&gt;</code>进行设置。</li>
+</ul>
+</li>
+<li><p>在养老区，相对悠闲。当养老区内存不足时，会再次<code>触发GC（Major GC 或者 OGC(Old GC)）</code>，进行养老区的内存清理。</p>
+</li>
+<li><p><strong>若养老区执行了 Major GC 之后发现依然无法进行对象的保存，就会产生 OOM 异常</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.OutOfMemoryError: Java heap space</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>总结：</p>
+<ul>
+<li><code>针对幸存者 s0,s1 区：复制之后有交换，谁空谁是 to。</code></li>
+<li><code>关于垃圾回收：频繁在新生区收集，很少在养老区收集，几乎不在 永久区/元空间 收集。</code></li>
+</ul>
+<h3 id="对象分配的特殊情况"><a href="#对象分配的特殊情况" class="headerlink" title="对象分配的特殊情况"></a>对象分配的特殊情况</h3><p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615155110149.png"></p>
+<ol>
+<li><p>如果来了一个新对象，先看看 Eden 是否放的下？</p>
+<ul>
+<li>如果 Eden 放得下，则直接放到 Eden 区</li>
+<li>如果 Eden 放不下，则触发 Minor GC(YGC) ，执行垃圾回收，看看还能不能放下？</li>
+</ul>
+</li>
+<li><p>将对象放到老年区有两种情况：</p>
+<ul>
+<li>如果 Eden 执行了 Minor GC(YGC)  还是无法放不下该对象，说明是超大对象，直接放到老年代</li>
+<li>那万一老年代都放不下，则先触发 FGC|Major GC(Old GC)(这里把FGC和OGC混着用了)，再看看能不能放下，放得下最好，但如果还是放不下，那只能报 OOM</li>
+</ul>
+</li>
+<li><p>如果 Eden 区满了，将对象往幸存区复制时，发现幸存区放不下，那只能让他们直接晋升至老年区</p>
+</li>
+</ol>
+<h3 id="对象分配示意图"><a href="#对象分配示意图" class="headerlink" title="对象分配示意图"></a>对象分配示意图</h3><p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615160404669.png"></p>
+<h2 id="JVM调试工具"><a href="#JVM调试工具" class="headerlink" title="JVM调试工具"></a>JVM调试工具</h2><ol>
+<li>JDK命令行</li>
+<li>Eclipse：Memory Analyzer Tool</li>
+<li>Jconsole</li>
+<li>Visual VM（实时监控，推荐）</li>
+<li>Jprofiler（IDEA插件）</li>
+<li>Java Flight Recorder（实时监控）</li>
+<li>GCViewer</li>
+<li>GCEasy</li>
+</ol>
+<h2 id="Minor-GC、Major-GC、Full-GC"><a href="#Minor-GC、Major-GC、Full-GC" class="headerlink" title="Minor GC、Major GC、Full GC"></a>Minor GC、Major GC、Full GC</h2><p>JVM 在进行 GC 时，并非每次都对上面三个内存（新生代、老年代和方法区（永久代））区域一起回收的，大部分时候回收的都是指新生代。</p>
+<p>针对Hotspot VM的实现，它里面的GC按照回收区域又分为两大种类型：一种是<code>部分收集（Partial GC）</code>，一种是<code>整堆收集（Full GC）</code></p>
+<h3 id="部分收集（Partial-GC）"><a href="#部分收集（Partial-GC）" class="headerlink" title="部分收集（Partial GC）"></a>部分收集（Partial GC）</h3><p>定义：<strong>不是完整收集整个Java堆的垃圾收集</strong>。其中又分为：</p>
+<ul>
+<li><strong>新生代收集（Minor GC&#x2F;Young GC）</strong>：只是新生代（Eden，s0，s1）的垃圾收集</li>
+<li><strong>老年代收集（Major GC&#x2F;Old GC）</strong>：只是老年代的圾收集。<ul>
+<li>目前，只有<strong>CMS GC</strong>会有单独收集老年代的行为。</li>
+<li><code>注意，很多时候Major GC会和Full GC混淆使用，需要具体分辨是老年代回收还是整堆回收。</code></li>
+</ul>
+</li>
+<li><strong>混合收集（Mixed GC）</strong>：收集整个新生代以及部分老年代的垃圾收集。<ul>
+<li>目前，只有 <strong>G1 GC</strong> 会有这种行为。</li>
+</ul>
+</li>
+</ul>
+<h3 id="整堆收集（Full-GC）"><a href="#整堆收集（Full-GC）" class="headerlink" title="整堆收集（Full GC）"></a>整堆收集（Full GC）</h3><p>定义：<strong>收集整个 Java 堆和方法区的垃圾收集。</strong></p>
+<h2 id="GC策略的触发机制"><a href="#GC策略的触发机制" class="headerlink" title="GC策略的触发机制"></a>GC策略的触发机制</h2><h3 id="年轻代GC"><a href="#年轻代GC" class="headerlink" title="年轻代GC"></a>年轻代GC</h3><p>年轻代GC（Minor GC）触发机制：</p>
+<ul>
+<li><p>当年轻代空间不足时，就会触发Minor GC，这里的年轻代满指的是Eden代满，Survivor满不会引发GC，在Eden区满的时候，会顺带触发s0区的GC。（每次Minor GC会清理年轻代的内存）</p>
+</li>
+<li><p>因为Java对象<strong>大多都具备朝生夕灭</strong>的特性，所以Minor GC非常频繁，一般回收速度也比较快。这一定义既清晰又易于理解。</p>
+</li>
+<li><p>Minor GC会引发STW（Stop The World），暂停其它用户的线程，等垃圾回收结束，用户线程才恢复运行</p>
+</li>
+</ul>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220615170931436.png"></p>
+<h3 id="老年代GC"><a href="#老年代GC" class="headerlink" title="老年代GC"></a>老年代GC</h3><p>老年代GC（Major GC&#x2F;Old GC&#x2F;Full GC）触发机制：</p>
+<ul>
+<li>指发生在老年代的 GC，对象从老年代消失时，就表示 Major Gc 或 Full GC 发生了</li>
+<li>出现了 Major GC，经常会伴随至少一次的 Minor GC（但非绝对的，在 Parallel Scavenge 收集器的收集策略里就有直接进行 MajorGC 的策略选择过程）。</li>
+<li>Major GC 的速度一般会比 Minor GC 慢10倍以上，STW的时间更长。</li>
+<li>如果 Major GC 后，内存还不足，就报 OOM 了。</li>
+</ul>
+<h3 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h3><p>Full GC 触发机制，有以下五种情况：</p>
+<ol>
+<li>调用 System.gc() 时，系统建议执行 Full GC，但是不必然执行</li>
+<li>老年代空间不足</li>
+<li>方法区空间不足</li>
+<li>通过 Minor GC 后进入老年代的平均大小大于老年代的可用内存</li>
+<li>由 Eden 区、survivor space0（From Space）区向 survivor space1（To Space）区复制时，对象大小大于 To Space 可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</li>
+</ol>
+<p>说明：<strong>Full GC 是开发或调优中尽量要避免的。这样STW时间会短一些</strong></p>
+<h2 id="堆空间分代思想"><a href="#堆空间分代思想" class="headerlink" title="堆空间分代思想"></a>堆空间分代思想</h2><p><strong>为什么要把Java堆分代？不分代就不能正常工作了吗？</strong></p>
+<p>经研究，不同对象的生命周期不同。70%-99%的对象是临时对象。</p>
+<ul>
+<li>新生代：有Eden、两块大小相同的survivor（又称为from&#x2F;to或s0&#x2F;s1）构成，to总为空。</li>
+<li>老年代：存放新生代中经历多次GC仍然存活的对象。</li>
+<li>其实不分代完全可以，分代的唯一理由就是优化GC性能。如果没有分代，那所有的对象都在一块，就如同把一个学校的人都关在一个教室。GC的时候要找到哪些对象没用，这样就会对堆的所有区域进行扫描。而很多对象都是朝生夕死的，如果分代的话，把新创建的对象放到某一地方，当GC的时候先把这块存储“朝生夕死”对象的区域进行回收，这样就会腾出很大的空间出来。</li>
+</ul>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123058712.png"></p>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616123139912.png"></p>
+<h2 id="为对象分配内存TLAB"><a href="#为对象分配内存TLAB" class="headerlink" title="为对象分配内存TLAB"></a>为对象分配内存TLAB</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><ol>
+<li>堆区是线程共享区域，任何线程都可以访问到堆区中的共享数据</li>
+<li>由于对象实例的创建在JVM中非常频繁，因此在并发环境下从堆区中划分内存空间是线程不安全的</li>
+<li>为避免多个线程操作同一地址，需要使用加锁等机制，进而影响分配速度</li>
+</ol>
+<h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213030277.png"></p>
+<ol>
+<li><code>TLAB：Thread Local Allocation Buffer</code></li>
+<li>从内存模型而不是垃圾收集的角度，对Eden区域继续进行划分，JVM为<strong>每个线程分配了一个私有缓存区域</strong>，它包含在Eden空间内。</li>
+<li>多线程同时分配内存时，使用TLAB可以避免一系列的非线程安全问题，同时还能够提升内存分配的吞吐量，因此我们可以将这种内存分配方式称之为<strong>快速分配策略</strong>。</li>
+<li>基本上所有OpenJDK衍生出来的JVM都提供了TLAB的设计。</li>
+</ol>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><ol>
+<li>尽管不是所有的对象实例都能够在TLAB中成功分配内存，但<strong>JVM确实是将TLAB作为内存分配的首选</strong>。</li>
+<li>在程序中，开发人员可以通过选项“**-XX:UseTLAB**”设置是否开启TLAB空间，默认是开启的。</li>
+<li>默认情况下，TLAB空间的内存非常小，**仅占有整个Eden空间的1%**，当然我们可以通过选项<code>-XX:TLABWasteTargetPercent</code>设置TLAB空间所占用Eden空间的百分比大小。</li>
+<li>一旦对象在TLAB空间分配内存失败时，JVM就会尝试着通过<strong>使用加锁机制确保数据操作的原子性</strong>，从而直接在Eden空间中分配内存。</li>
+</ol>
+<p><strong>TLAB分配过程如下：</strong></p>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616213309458.png"></p>
+<h2 id="对象分配总结"><a href="#对象分配总结" class="headerlink" title="对象分配总结"></a>对象分配总结</h2><ol>
+<li>如果对象在Eden出生并经过第一次Minor GC后仍然存活，并且能被Survivor容纳的话，将被移动到Survivor空间中，并将对象年龄设为1。</li>
+<li>对象在Survivor区中每熬过一次MinorGC，年龄就增加1岁，当它的年龄增加到一定程度（默认为15岁，其实每个JVM、每个GC都有所不同）时，就会被晋升到老年代</li>
+<li>对象晋升老年代的年龄阀值，可以通过选项**-XX:MaxTenuringThreshold**来设置</li>
+</ol>
+<p><strong>针对不同年龄段的对象分配策略（或对象提升(Promotion)规则如下所示：</strong></p>
+<ol>
+<li><strong>优先分配到Eden</strong></li>
+<li><strong>大对象直接分配到老年代</strong><ul>
+<li>尽量避免程序中出现过多的大对象</li>
+</ul>
+</li>
+<li><strong>长期存活的对象分配到老年代</strong></li>
+<li><strong>动态对象年龄判断</strong><ul>
+<li>如果Survivor区中相同年龄的所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象可以直接进入老年代，无须等到MaxTenuringThreshold中要求的年龄。</li>
+</ul>
+</li>
+<li><strong>空间分配担保</strong><ul>
+<li><code>-XX:HandlePromotionFailure</code>：（见下面解释）</li>
+</ul>
+</li>
+</ol>
+<h2 id="堆空间常用参数设置总结"><a href="#堆空间常用参数设置总结" class="headerlink" title="堆空间常用参数设置总结"></a>堆空间常用参数设置总结</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html</a></p>
+<ul>
+<li><p><code>-XX:+PrintFlagsInitial</code> : 查看所有的参数的默认初始值</p>
+</li>
+<li><p><code>-XX:+PrintFlagsFinal </code> ：查看所有的参数的最终值（可能会存在修改，不再是初始值）</p>
+<ul>
+<li><p>修改后显示的值会有一个冒号 :&#x3D;</p>
+<p><img src="/JVM-018-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/image-20220616215811922.png"></p>
+</li>
+<li><p>具体查看某个参数的命令行指令：<code>jinfo -flag SurvivorRatio 进程id</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><code>-Xms</code>：初始堆空间内存 （默认为物理内存的1&#x2F;64）</p>
+</li>
+<li><p><code>-Xmx</code>：最大堆空间内存（默认为物理内存的1&#x2F;4）</p>
+</li>
+<li><p><code>-Xmn</code>：设置新生代的大小。(初始值及最大值)</p>
+</li>
+<li><p><code>-XX:NewRatio</code>：配置新生代与老年代在堆结构的占比</p>
+</li>
+<li><p><code>-XX:SurvivorRatio</code>：设置新生代中Eden和S0&#x2F;S1空间的比例</p>
+<ul>
+<li>如果S0&#x2F;S1区分配的比较小的话，不合理，因为对象等不到年龄为15就会被送到老年代了，这样导致 Minor GC&#x2F;YGC 失去意义了。</li>
+<li>如果S0&#x2F;S1区分配的比较大的话，也不合理，因为Eden区较小的话，则 Minor GC&#x2F;YGC 出现的频率就会变高，而GC频率高的话，STW（用户线程停止操作）的总体时间也会高，最后会影响整体的性能。</li>
+</ul>
+</li>
+<li><p><code>-XX:MaxTenuringThreshold</code>：设置新生代垃圾的最大年龄</p>
+</li>
+<li><p><code>-XX:+PrintGCDetails</code>：输出详细的GC处理日志</p>
+</li>
+<li><p>打印gc简要信息：① <code>-XX:+PrintGC</code>  或者   ② <code>-verbose:gc</code></p>
+</li>
+<li><p><code>-XX:HandlePromotionFailure</code>：是否设置空间分配担保</p>
+<p>参数说明：</p>
+<ul>
+<li>在发生Minor GC之前，虚拟机会<strong>检查老年代最大可用的连续空间是否大于新生代所有对象的总空间</strong>。<ul>
+<li>如果大于，则此次Minor GC是安全的，正常 Minor GC 即可。</li>
+<li>但如果小于，则虚拟机会查看<code>-XX:HandlePromotionFailure</code>设置值是否允担保失败。<ol>
+<li>如果HandlePromotionFailure&#x3D;true，那么会继续<strong>检查老年代最大可用连续空间是否大于历次晋升到老年代的对象的平均大小</strong>。<ul>
+<li>如果大于，则尝试进行一次Minor GC，但这次Minor GC依然是有风险的；在这步，若小于了，则会进行 Old GC。</li>
+<li>如果小于，则进行一次Full GC。</li>
+</ul>
+</li>
+<li>如果HandlePromotionFailure&#x3D;false，则进行一次Full GC。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>JDK 1.5 默认关闭，JDK 1.6 默认开启</li>
+<li>在JDK6 Update 24之后，HandlePromotionFailure参数不会再影响到虚拟机的空间分配担保策略，观察openJDK中的源码变化，虽然源码中还定义了HandlePromotionFailure参数，但是在代码中已经不会再使用它。</li>
+<li>JDK6 Update 24之后的规则变为<strong>只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行Minor GC</strong>，否则将进行Full GC。</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-018-运行时数据区-堆(Heap)-对象分配的过程</p><p><a href="https://blog.buubiu.com/JVM-018-运行时数据区-堆-Heap-对象分配的过程/">https://blog.buubiu.com/JVM-018-运行时数据区-堆-Heap-对象分配的过程/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-06-15</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%A0%86/">堆</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/">对象分配的过程</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-019-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90-Escape-Analysis/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-019-运行时数据区-堆(Heap)-逃逸分析(Escape Analysis)</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-017-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%B9%B4%E8%BD%BB%E4%BB%A3%E5%92%8C%E8%80%81%E5%B9%B4%E4%BB%A3/"><span class="level-item">JVM-017-运行时数据区-堆(Heap)-年轻代和老年代</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#概述"><span class="level-left"><span class="level-item">1</span><span class="level-item">概述</span></span></a></li><li><a class="level is-mobile" href="#对象分配过程"><span class="level-left"><span class="level-item">2</span><span class="level-item">对象分配过程</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#对象分配的一般过程"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">对象分配的一般过程</span></span></a></li><li><a class="level is-mobile" href="#对象分配的特殊情况"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">对象分配的特殊情况</span></span></a></li><li><a class="level is-mobile" href="#对象分配示意图"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">对象分配示意图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#JVM调试工具"><span class="level-left"><span class="level-item">3</span><span class="level-item">JVM调试工具</span></span></a></li><li><a class="level is-mobile" href="#Minor-GC、Major-GC、Full-GC"><span class="level-left"><span class="level-item">4</span><span class="level-item">Minor GC、Major GC、Full GC</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#部分收集（Partial-GC）"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">部分收集（Partial GC）</span></span></a></li><li><a class="level is-mobile" href="#整堆收集（Full-GC）"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">整堆收集（Full GC）</span></span></a></li></ul></li><li><a class="level is-mobile" href="#GC策略的触发机制"><span class="level-left"><span class="level-item">5</span><span class="level-item">GC策略的触发机制</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#年轻代GC"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">年轻代GC</span></span></a></li><li><a class="level is-mobile" href="#老年代GC"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">老年代GC</span></span></a></li><li><a class="level is-mobile" href="#Full-GC"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">Full GC</span></span></a></li></ul></li><li><a class="level is-mobile" href="#堆空间分代思想"><span class="level-left"><span class="level-item">6</span><span class="level-item">堆空间分代思想</span></span></a></li><li><a class="level is-mobile" href="#为对象分配内存TLAB"><span class="level-left"><span class="level-item">7</span><span class="level-item">为对象分配内存TLAB</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#背景"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">背景</span></span></a></li><li><a class="level is-mobile" href="#概述-1"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">概述</span></span></a></li><li><a class="level is-mobile" href="#使用说明"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">使用说明</span></span></a></li></ul></li><li><a class="level is-mobile" href="#对象分配总结"><span class="level-left"><span class="level-item">8</span><span class="level-item">对象分配总结</span></span></a></li><li><a class="level is-mobile" href="#堆空间常用参数设置总结"><span class="level-left"><span class="level-item">9</span><span class="level-item">堆空间常用参数设置总结</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java基础知识 基础语法-常用API - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="String 相关字符型常量和字符串常量的区别  形式上: 字符常量是单引号引起的一个字符 字符串常量是双引号引起的若干个字符 含义上: 字符常量相当于一个整形值(ASCII 值),可以参加表达式运算 字符串常量代表一个地址值(该字符串在内存中存放位置) 占内存大小 字符常量只占一个字节 字符串常量占若干个字节(至少一个字符结束标志)"><meta property="og:type" content="blog"><meta property="og:title" content="Java基础知识 基础语法-常用API"><meta property="og:url" content="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E5%B8%B8%E7%94%A8API/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="String 相关字符型常量和字符串常量的区别  形式上: 字符常量是单引号引起的一个字符 字符串常量是双引号引起的若干个字符 含义上: 字符常量相当于一个整形值(ASCII 值),可以参加表达式运算 字符串常量代表一个地址值(该字符串在内存中存放位置) 占内存大小 字符常量只占一个字节 字符串常量占若干个字节(至少一个字符结束标志)"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/og_image.png"><meta property="article:published_time" content="2020-07-21T05:40:23.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.858Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Java"><meta property="article:tag" content="面试题"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E5%B8%B8%E7%94%A8API/"},"headline":"Java基础知识 基础语法-常用API","image":["https://blog.buubiu.com/img/og_image.png"],"datePublished":"2020-07-21T05:40:23.000Z","dateModified":"2024-01-25T15:08:05.858Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"String 相关字符型常量和字符串常量的区别  形式上: 字符常量是单引号引起的一个字符 字符串常量是双引号引起的若干个字符 含义上: 字符常量相当于一个整形值(ASCII 值),可以参加表达式运算 字符串常量代表一个地址值(该字符串在内存中存放位置) 占内存大小 字符常量只占一个字节 字符串常量占若干个字节(至少一个字符结束标志)"}</script><link rel="canonical" href="https://blog.buubiu.com/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E5%B8%B8%E7%94%A8API/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-07-21T05:40:23.000Z" title="7/21/2020, 1:40:23 PM">2020-07-21</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.858Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Java/">Java</a></span><span class="level-item">17 分钟读完 (大约2585个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Java基础知识 基础语法-常用API</h1><div class="content"><h2 id="String-相关"><a href="#String-相关" class="headerlink" title="String 相关"></a>String 相关</h2><p><strong>字符型常量和字符串常量的区别</strong></p>
+<ol>
+<li>形式上: 字符常量是<code>单引号</code>引起的一个字符 字符串常量是<code>双引号</code>引起的若干个字符</li>
+<li>含义上: 字符常量相当于一个<code>整形值</code>(ASCII 值),可以参加表达式运算 字符串常量代表一个<code>地址值</code>(该字符串在内存中存放位置)</li>
+<li>占内存大小 字符常量只占一个字节 字符串常量占若干个字节(至少一个字符结束标志)</li>
+</ol>
+<span id="more"></span>
+
+<hr>
+<p><strong>什么是字符串常量池？</strong></p>
+<p>字符串常量池位于<code>堆内存</code>中，专门用来存储字符串常量，可以提高内存的使用率，避免开辟多块空间存储相同的字符串，在创建字符串时 JVM 会首先检查字符串常量池，如果该字符串已经存在池中，则返回它的引用，如果不存在，则实例化一个字符串放到池中，并返回其引用。</p>
+<hr>
+<p><strong>String 是最基本的数据类型吗</strong></p>
+<p>不是。Java 中的基本数据类型只有 <code>8</code> 个 ：<code>byte、short、int、long、float、double、char、boolean</code>；<strong>除了基本类型（primitive type），剩下的都是引用类型（referencetype）</strong>，Java 5 以后引入的<strong>枚举类型也算是一种比较特殊的引用类型。</strong></p>
+<p>这是很基础的东西，但是很多初学者却容易忽视，Java 的 8 种基本数据类型中不包括 String，基本数据类型中用来描述文本数据的是 char，但是它只能表示单个字符，比如 ‘a’,‘好’ 之类的，如果要描述一段文本，就需要用多个 char 类型的变量，也就是一个 char 类型数组，比如“你好” 就是长度为 2 的数组 char[] chars &#x3D; {‘你’,‘好’};</p>
+<p>但是使用数组过于麻烦，所以就有了 String，<strong>String 底层就是一个 char 类型的数组</strong>，只是使用的时候开发者不需要直接操作底层数组，用更加简便的方式即可完成对字符串的使用。</p>
+<hr>
+<p><strong>String 有哪些特性</strong></p>
+<ul>
+<li><strong>不变性：</strong> String 是只读字符串，是一个典型的 immutable 对象，对它进行任何操作，其实都是创建一个新的对象，再把引用指向该对象。不变模式的主要作用在于当一个对象需要被多线程共享并频繁访问时，可以保证数据的一致性。</li>
+</ul>
+<ul>
+<li><strong>常量池优化：</strong> String 对象创建之后，会在字符串常量池中进行缓存，如果下次创建同样的对象时，会直接返回缓存的引用。</li>
+</ul>
+<ul>
+<li><strong>final：</strong> 使用 final 来定义 String 类，表示 String 类不能被继承，提高了系统的安全性。</li>
+</ul>
+<hr>
+<p><strong>String 为什么是不可变的吗？</strong></p>
+<p>简单来说就是 String 类利用了 final 修饰的 char 类型数组存储字符，源码如下图所以：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The value is used for character storage. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">char</span> value[];</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>String 真的是不可变的吗？</strong></p>
+<p>我觉得如果别人问这个问题的话，回答不可变就可以了。 下面只是给大家看两个有代表性的例子：</p>
+<p><strong>1) String 不可变但不代表引用不可以变</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">str = str + <span class="string">&quot; World&quot;</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;str=&quot;</span> + str);</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str=Hello World</span><br></pre></td></tr></table></figure>
+
+<p>解析：</p>
+<p>实际上，原来 String 的内容是不变的，只是 str 由原来指向”Hello”的内存地址转为指向”Hello World”的内存地址而已，也就是说多开辟了一块内存区域给”Hello World”字符串。</p>
+<p><strong>2) 通过反射是可以修改所谓的“不可变”对象</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建字符串&quot;Hello World&quot;， 并赋给引用s</span></span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> <span class="string">&quot;Hello World&quot;</span>;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;s = &quot;</span> + s); <span class="comment">// Hello World</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取String类中的value字段</span></span><br><span class="line"><span class="type">Field</span> <span class="variable">valueFieldOfString</span> <span class="operator">=</span> String.class.getDeclaredField(<span class="string">&quot;value&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变value属性的访问权限</span></span><br><span class="line">valueFieldOfString.setAccessible(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取s对象上的value属性的值</span></span><br><span class="line"><span class="type">char</span>[] value = (<span class="type">char</span>[]) valueFieldOfString.get(s);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 改变value所引用的数组中的第5个字符</span></span><br><span class="line">value[<span class="number">5</span>] = <span class="string">&#x27;_&#x27;</span>;</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;s = &quot;</span> + s); <span class="comment">// Hello_World</span></span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = Hello <span class="type">World</span></span><br><span class="line"><span class="variable">s</span> <span class="operator">=</span> Hello_World</span><br></pre></td></tr></table></figure>
+
+<p>解析：</p>
+<p>用反射可以访问私有成员， 然后反射出 String 对象中的 value 属性， 进而改变通过获得的 value 引用改变数组的结构。但是一般我们不会这么做，这里只是简单提一下有这个东西。</p>
+<hr>
+<p><strong>是否可以继承 String 类</strong></p>
+<p>String 类是 final 类，不可以被继承。</p>
+<hr>
+<p><strong>String str&#x3D;”i”与 String str&#x3D;new String(“i”)一样吗？</strong></p>
+<p>不一样，因为内存的分配方式不一样。String str&#x3D;”i”的方式，java 虚拟机会将其分配到<code>常量池</code>中；而 String str&#x3D;new String(“i”) 则会被分到<code>堆内存</code>中。</p>
+<hr>
+<p><strong>String s &#x3D; new String(“xyz”);创建了几个字符串对象</strong></p>
+<p>两个对象，一个是静态区的”xyz”，一个是用 new 创建在堆上的对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">str1</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>; <span class="comment">//str1指向静态区</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);  <span class="comment">//str2指向堆上的对象</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str3</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">str4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">System.out.println(str1.equals(str2)); <span class="comment">//true</span></span><br><span class="line">System.out.println(str2.equals(str4)); <span class="comment">//true</span></span><br><span class="line">System.out.println(str1 == str3); <span class="comment">//true</span></span><br><span class="line">System.out.println(str1 == str2); <span class="comment">//false</span></span><br><span class="line">System.out.println(str2 == str4); <span class="comment">//false</span></span><br><span class="line">System.out.println(str2 == <span class="string">&quot;hello&quot;</span>); <span class="comment">//false</span></span><br><span class="line">str2 = str1;</span><br><span class="line">System.out.println(str2 == <span class="string">&quot;hello&quot;</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>如何将字符串反转？</strong></p>
+<p>使用 <code>StringBuilder</code> 或者 <code>stringBuffer</code> 的 <code>reverse()</code> 方法。</p>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StringBuffer reverse</span></span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">stringBuffer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line">stringBuffer. append(<span class="string">&quot;abcdefg&quot;</span>);</span><br><span class="line">System. out. println(stringBuffer. reverse()); <span class="comment">// gfedcba</span></span><br><span class="line"><span class="comment">// StringBuilder reverse</span></span><br><span class="line"><span class="type">StringBuilder</span> <span class="variable">stringBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">stringBuilder. append(<span class="string">&quot;abcdefg&quot;</span>);</span><br><span class="line">System. out. println(stringBuilder. reverse()); <span class="comment">// gfedcba</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>数组有没有 length()方法？String 有没有 length()方法</strong></p>
+<p>数组没有 length()方法 ，有 length 的属性。String 有 length()方法。JavaScript 中，获得字符串的长度是通过 length 属性得到的，这一点容易和 Java 混淆。</p>
+<hr>
+<p><strong>String 类的常用方法都有那些？</strong></p>
+<ul>
+<li>indexOf()：返回指定字符的索引。</li>
+<li>charAt()：返回指定索引处的字符。</li>
+<li>replace()：字符串替换。</li>
+<li>trim()：去除字符串两端空白。</li>
+<li>split()：分割字符串，返回一个分割后的字符串数组。</li>
+<li>getBytes()：返回字符串的 byte 类型数组。</li>
+<li>length()：返回字符串长度。</li>
+<li>toLowerCase()：将字符串转成小写字母。</li>
+<li>toUpperCase()：将字符串转成大写字符。</li>
+<li>substring()：截取字符串。</li>
+<li>equals()：字符串比较。</li>
+</ul>
+<hr>
+<p><strong>在使用 HashMap 的时候，用 String 做 key 有什么好处？</strong></p>
+<p>HashMap 内部实现是通过 key 的 hashcode 来确定 value 的存储位置，因为字符串是不可变的，所以当创建字符串时，它的 hashcode 被缓存下来，不需要再次计算，所以相比于其他对象更快。</p>
+<hr>
+<p><strong>String 和 StringBuffer、StringBuilder 的区别是什么？String 为什么是不可变的</strong></p>
+<p><strong>可变性</strong></p>
+<p>String 类中使用字符数组保存字符串，<code>private final char value[]</code>，所以 string 对象是不可变的。StringBuilder 与 StringBuffer 都继承自 AbstractStringBuilder 类，在 AbstractStringBuilder 中也是使用字符数组保存字符串，<code>char[] value</code>，这两种对象都是可变的。</p>
+<p><strong>线程安全性</strong></p>
+<p><code>String</code> 中的对象是不可变的，也就可以理解为常量，<code>线程安全</code>。AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，如 <code>expandCapacity、append、insert、indexOf</code> 等公共方法。<code>StringBuffer</code> 对方法加了同步锁或者对调用的方法加了同步锁，所以是<code>线程安全的</code>。<code>StringBuilder</code> 并没有对方法进行加同步锁，所以是<code>非线程安全的</code>。</p>
+<p><strong>性能</strong></p>
+<p>每次对 String 类型进行改变的时候，都会生成一个新的 String 对象，然后将指针指向新的 String 对象。StringBuffer 每次都会对 StringBuffer 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 StirngBuilder 相比使用 StringBuffer 仅能获得 10%~15% 左右的性能提升，但却要冒多线程不安全的风险。</p>
+<p><strong>对于三者使用的总结</strong></p>
+<ul>
+<li><p>如果要操作少量的数据用 &#x3D; <code>String</code></p>
+</li>
+<li><p>单线程操作字符串缓冲区 下操作大量数据 &#x3D; <code>StringBuilder</code></p>
+</li>
+<li><p>多线程操作字符串缓冲区 下操作大量数据 &#x3D; <code>StringBuffer</code></p>
+</li>
+</ul>
+<hr>
+<h2 id="Date-相关"><a href="#Date-相关" class="headerlink" title="Date 相关"></a>Date 相关</h2><blockquote>
+<p>待补充</p>
+</blockquote>
+<hr>
+<h2 id="包装类相关"><a href="#包装类相关" class="headerlink" title="包装类相关"></a>包装类相关</h2><p><strong>自动装箱与拆箱</strong></p>
+<ul>
+<li><p><strong>装箱：</strong> 将基本类型用它们对应的引用类型包装起来；</p>
+</li>
+<li><p><strong>拆箱：</strong> 将包装类型转换为基本数据类型；</p>
+</li>
+</ul>
+<hr>
+<p><strong>int 和 Integer 有什么区别</strong></p>
+<p>Java 是一个近乎纯洁的面向对象编程语言，但是为了编程的方便还是引入了基本数据类型，但是为了能够将这些基本数据类型当成对象操作，Java 为每一个基本数据类型都引入了对应的包装类型（<code>wrapper class</code>），int 的包装类就是 Integer，从 Java 5 开始引入了自动装箱&#x2F;拆箱机制，使得二者可以相互转换。</p>
+<p>Java 为每个原始类型提供了包装类型：</p>
+<p><strong>原始类型:</strong> <code>boolean，char，byte，short，int，long，float，double</code></p>
+<p><strong>包装类型：</strong><code>Boolean，Character，Byte，Short，Integer，Long，Float，Double</code></p>
+<hr>
+<p><strong>Integer a&#x3D; 127 与 Integer b &#x3D; 127 相等吗</strong></p>
+<p>对于对象引用类型：&#x3D;&#x3D;比较的是对象的内存地址。<br>对于基本数据类型：&#x3D;&#x3D;比较的是值。</p>
+<p>如果整型字面量的值在<code>-128</code> 到 <code>127</code> 之间，那么自动装箱时不会 new 新的 Integer 对象，而是直接引用常量池中的 Integer 对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">3</span>;  <span class="comment">// 将3自动装箱成Integer类型</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line">    System.out.println(a == b); <span class="comment">// false 两个引用没有引用同一对象</span></span><br><span class="line">    System.out.println(a == c); <span class="comment">// true a自动拆箱成int类型再和c比较</span></span><br><span class="line">    System.out.println(b == c); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">    <span class="type">Integer</span> <span class="variable">a1</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">    <span class="type">Integer</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">    System.out.println(a1 == b1); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">    <span class="type">Integer</span> <span class="variable">a2</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">    <span class="type">Integer</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">    System.out.println(a2 == b2); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>解析：</p>
+<p>因为 a1、b1 超过范围，所以 a1&#x3D;&#x3D;b1 的结果是 false</p>
+<p><font color=gray size=2>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ThinkWon">https://blog.csdn.net/ThinkWon</a></font></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Java基础知识 基础语法-常用API</p><p><a href="https://blog.buubiu.com/Java基础知识-基础语法-常用API/">https://blog.buubiu.com/Java基础知识-基础语法-常用API/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-07-21</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Java/">Java</a><a class="link-muted mr-2" rel="tag" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Java%E8%99%9A%E6%8B%9F%E6%9C%BAJVM%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Java虚拟机(JVM)问题总结</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"><span class="level-item">Java基础知识 基础语法-网络编程</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#String-相关"><span class="level-left"><span class="level-item">1</span><span class="level-item">String 相关</span></span></a></li><li><a class="level is-mobile" href="#Date-相关"><span class="level-left"><span class="level-item">2</span><span class="level-item">Date 相关</span></span></a></li><li><a class="level is-mobile" href="#包装类相关"><span class="level-left"><span class="level-item">3</span><span class="level-item">包装类相关</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

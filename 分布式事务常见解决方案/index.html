@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>分布式事务常见解决方案 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="分布式事务问题模拟当多个服务调用过程中，其中一个或者多个服务执行失败，出现异常情况的时候，导致数据不一致性， 这样就出现了分布式事务问题； 我们来模拟下这个问题，我们运行过程中，让账户扣钱操作执行失败；"><meta property="og:type" content="blog"><meta property="og:title" content="分布式事务常见解决方案"><meta property="og:url" content="https://blog.buubiu.com/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%B8%B8%E8%A7%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="分布式事务问题模拟当多个服务调用过程中，其中一个或者多个服务执行失败，出现异常情况的时候，导致数据不一致性， 这样就出现了分布式事务问题； 我们来模拟下这个问题，我们运行过程中，让账户扣钱操作执行失败；"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/4n2c5f1627458871640.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/0iDZ1W1627459852841.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/EPYN7t1627459910769.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/TIQfM61627459975778.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/QmM2bv1627460032723.png"><meta property="article:published_time" content="2021-07-28T07:54:00.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.916Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Seata"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/4n2c5f1627458871640.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%B8%B8%E8%A7%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"},"headline":"分布式事务常见解决方案","image":["https://blog.buubiu.com/img/article/4n2c5f1627458871640.png","https://blog.buubiu.com/img/article/0iDZ1W1627459852841.png","https://blog.buubiu.com/img/article/EPYN7t1627459910769.png","https://blog.buubiu.com/img/article/TIQfM61627459975778.png","https://blog.buubiu.com/img/article/QmM2bv1627460032723.png"],"datePublished":"2021-07-28T07:54:00.000Z","dateModified":"2024-01-25T15:08:05.916Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"分布式事务问题模拟当多个服务调用过程中，其中一个或者多个服务执行失败，出现异常情况的时候，导致数据不一致性， 这样就出现了分布式事务问题； 我们来模拟下这个问题，我们运行过程中，让账户扣钱操作执行失败；"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%B8%B8%E8%A7%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-07-28T07:54:00.000Z" title="7/28/2021, 3:54:00 PM">2021-07-28</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.916Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Seata/">Seata</a></span><span class="level-item">29 分钟读完 (大约4304个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">分布式事务常见解决方案</h1><div class="content"><h2 id="分布式事务问题模拟"><a href="#分布式事务问题模拟" class="headerlink" title="分布式事务问题模拟"></a>分布式事务问题模拟</h2><p>当多个服务调用过程中，其中一个或者多个服务执行失败，出现异常情况的时候，导致数据不一致性，</p>
+<p>这样就出现了分布式事务问题；</p>
+<p>我们来模拟下这个问题，我们运行过程中，让账户扣钱操作执行失败；</p>
+<p><img src="/../img/article/4n2c5f1627458871640.png"></p>
+<span id="more"></span>
+
+<p>我们修改<code>seata-account </code>里面<code>AccountController</code> 类的<code>decrease</code> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 给指定用户账户扣钱</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> amount</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> userId</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="meta">@PostMapping(&quot;/decrease&quot;)</span></span><br><span class="line">	<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">decrease</span><span class="params">(<span class="meta">@RequestParam(&quot;amount&quot;)</span>Integer amount,<span class="meta">@RequestParam(&quot;userId&quot;)</span>Integer userId)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;amount:&quot;</span>+amount+<span class="string">&quot;,userId:&quot;</span>+userId);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(userId==<span class="literal">null</span> || userId==<span class="number">1</span>)&#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;模拟异常&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		Map&lt;String,Object&gt; map=<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">		map.put(<span class="string">&quot;amount&quot;</span>,amount);</span><br><span class="line">		map.put(<span class="string">&quot;userId&quot;</span>,userId);</span><br><span class="line">		accountService.decrease(map);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当userId&#x3D;1的时候，模拟抛出异常，这时候我们去查看数据库发现，t_order表有数据，订单已经生成了；</p>
+<p>再看t_account表，数据没变化；</p>
+<p>这样的话，就导致了业务上的数据不一致性问题，也就是分布式事务问题，我们需要解决这个问题；</p>
+<h2 id="分布式事务常见解决方案"><a href="#分布式事务常见解决方案" class="headerlink" title="分布式事务常见解决方案"></a>分布式事务常见解决方案</h2><h3 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h3><p>CAP理论：一个分布式系统不可能同时满足一致性，可用性和分区容错性这个三个基本需求，最多只能</p>
+<p>同时满足其中两项</p>
+<ul>
+<li><p>一致性(C)：数据在多个副本之间是否能够保持一致的特性。</p>
+</li>
+<li><p>可用性(A)：是指系统提供的服务必须一致处于可用状态，对于每一个用户的请求总是在有限的时间内返</p>
+</li>
+</ul>
+<p>  回结果，超过时间就认为系统是不可用的</p>
+<ul>
+<li><p>分区容错性(P)：分布式系统在遇到任何网络分区故障的时候，仍然需要能够保证对外提供满足一致性和</p>
+<p>可用性的服务，除非整个网络环境都发生故障。</p>
+</li>
+</ul>
+<h3 id="CAP定理的应用"><a href="#CAP定理的应用" class="headerlink" title="CAP定理的应用"></a>CAP定理的应用</h3><ol>
+<li><p>放弃P(CA)：如果希望能够避免系统出现分区容错性问题，一种较为简单的做法就是将所有的数据(或者</p>
+<p>是与事物先相关的数据)都放在一个分布式节点上，这样虽然无法保证100%系统不会出错，但至少不会</p>
+<p>碰到由于网络分区带来的负面影响</p>
+</li>
+<li><p>放弃A(CP):其做法是一旦系统遇到网络分区或其他故障时，那受到影响的服务需要等待一定的时间，应</p>
+<p>用等待期间系统无法对外提供正常的服务，即不可用</p>
+</li>
+<li><p>放弃C(AP):这里说的放弃一致性，并不是完全不需要数据一致性，是指放弃数据的强一致性，保留数据</p>
+<p>的最终一致性</p>
+</li>
+</ol>
+<h3 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h3><p>BASE是基本可用，软状态，最终一致性。是对CAP中一致性和可用性权限的结果，是基于CAP定理演化而来的，核心思想是即使无法做到强一致性，但每个应用都可以根据自身的业务特定，采用适当的方式来使系统达到最终一致性</p>
+<h3 id="2PC提交"><a href="#2PC提交" class="headerlink" title="2PC提交"></a>2PC提交</h3><p>二阶段提交协议是将事务的提交过程分成提交事务请求和执行事务提交两个阶段进行处理。</p>
+<h4 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h4><ul>
+<li><p>事务询问：协调者向所有的参与者发送事务内容，询问是否可以执行事务提交操作，并开始等待各参与者的响应</p>
+</li>
+<li><p>执行事务：各参与者节点执行事务操作，并将Undo和Redo信息记入事务日志中</p>
+</li>
+<li><p>如果参与者成功执事务操作，就反馈给协调者Yes响应，表示事物可以执行，如果没有成功执行事务，就反馈给协调者No响应，表示事务不可以执行</p>
+</li>
+<li><p>二阶段提交一些的阶段一夜被称为投票阶段，即各参与者投票票表明是否可以继续执行接下去的事务提交操作</p>
+</li>
+</ul>
+<h4 id="阶段二：执行事务提交"><a href="#阶段二：执行事务提交" class="headerlink" title="阶段二：执行事务提交"></a>阶段二：执行事务提交</h4><ul>
+<li><p>假如协调者从所有的参与者或得反馈都是Yes响应，那么就会执行事务提交。</p>
+</li>
+<li><p>发送提交请求：协调者向所有参与者节点发出Commit请求</p>
+</li>
+<li><p>事务提交：参与者接受到Commit请求后，会正式执行事务提交操作，并在完成提交之后放弃整个事务执行期间占用的事务资源</p>
+</li>
+<li><p>反馈事务提交结果:参与者在完成事物提交之后，向协调者发送ACK消息</p>
+</li>
+<li><p>完成事务：协调者接收到所有参与者反馈的ACK消息后，完成事务</p>
+</li>
+</ul>
+<h4 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h4><ul>
+<li><p>假如任何一个参与者向协调者反馈了No响应，或者在等待超时之后，协调者尚无法接收到所有参与者的反馈响应，那么就中断事务。</p>
+</li>
+<li><p>发送回滚请求：协调者向所有参与者节点发出Rollback请求</p>
+</li>
+<li><p>事务回滚：参与者接收到Rollback请求后，会利用其在阶段一种记录的Undo信息执行事物回滚操作，并在完成回滚之后释放事务执行期间占用的资源。</p>
+</li>
+<li><p>反馈事务回滚结果：参与则在完成事务回滚之后，向协调者发送ACK消息</p>
+</li>
+<li><p>中断事务：协调者接收到所有参与者反馈的ACk消息后，完成事务中断</p>
+</li>
+</ul>
+<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><ul>
+<li><p>优点：原理简单，实现方便</p>
+</li>
+<li><p>缺点：同步阻塞，单点问题，脑裂，保守</p>
+</li>
+</ul>
+<h3 id="3PC提交"><a href="#3PC提交" class="headerlink" title="3PC提交"></a>3PC提交</h3><ul>
+<li><p>三阶段提交，也叫三阶段提交协议，是二阶段提交（2PC）的改进版本。</p>
+</li>
+<li><p>与两阶段提交不同的是，三阶段提交有两个改动点。</p>
+<ul>
+<li>引入超时机制：同时在协调者和参与者中都引入超时机制。</li>
+<li>在第一阶段和第二阶段中插入一个准备阶段：保证了在最后提交阶段之前各参与节点的状态是一致的。</li>
+</ul>
+</li>
+<li><p>三阶段提交就有CanCommit、PreCommit、DoCommit三个阶段。</p>
+</li>
+</ul>
+<h3 id="TCC分布式事务"><a href="#TCC分布式事务" class="headerlink" title="TCC分布式事务"></a>TCC分布式事务</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><ul>
+<li><p>TCC是服务化的两阶段编程模型，其Try、Confirm、Cancel，3个方法均由业务编码实现</p>
+</li>
+<li><p>TCC要求每个分支事务实现三个操作：预处理Try,确认Confirm,撤销Cancel。</p>
+</li>
+<li><p>Try操作做业务检查及资源预留,</p>
+</li>
+<li><p>Confirm做业务确认操作</p>
+</li>
+<li><p>Cancel实现一个与Try相反的操作即回滚操作。</p>
+</li>
+<li><p>TM首先发起所有的分支事务Try操作，任何一个分支事务的Try操作执行失败，TM将会发起所有分支事务的Cancel操作，若Try操作全部成功，TM将会发起所有分支事务的Confirm操作,其中Confirm&#x2F;Cancel操作若执行失败,TM会进行重试。</p>
+</li>
+</ul>
+<h4 id="TCC的三个阶段"><a href="#TCC的三个阶段" class="headerlink" title="TCC的三个阶段"></a>TCC的三个阶段</h4><ul>
+<li><p>Try阶段是做业务检查(一致性)及资源预留(隔离),此阶段仅是一个初步操作，它和后续的Confirmy一起才能构成一个完整的业务逻辑</p>
+</li>
+<li><p>Confirm阶段是做确认提交，Try阶段所有分支事务执行成功后开始执行Confirm，通常情况下，采用TCC则认为Confirm阶段是不会出错的,即：只要Try成功，Confirm一定成功，若Confirm阶段真的出错，需要引入重试机制或人工处理</p>
+</li>
+<li><p>Cancel阶段是在业务执行错误需要回滚到状态下执行分支事务的取消，预留资源的释放，通常情况下，采用TCC则认为Cancel阶段也一定是真功的,若Cance阶段真的出错，需要引入重试机制或人工处理</p>
+</li>
+<li><p>TM事务管理器：TM事务管理器可以实现为独立的服务，也可以让全局事务发起方充当TM的角色,TM独立出来是为了公用组件，是为了考虑系统结构和软件的复用</p>
+</li>
+<li><p>TM在发起全局事务时生成全局事务记录，全局事务ID贯穿整个分布式事务调用链条，用来记录事务上下文，追踪和记录状态，用于Confirm和cacel失败需要进行重试,因此需要实现幂等</p>
+</li>
+</ul>
+<h4 id="TCC的三种异常处理情况"><a href="#TCC的三种异常处理情况" class="headerlink" title="TCC的三种异常处理情况"></a>TCC的三种异常处理情况</h4><h5 id="幂等处理"><a href="#幂等处理" class="headerlink" title="幂等处理"></a>幂等处理</h5><ul>
+<li><p>因为网络抖动等原因，分布式事务框架可能会重复调用同一个分布式事务中的一个分支事务的二阶段接口。所以分支事务的二阶段接口Confirm&#x2F;Cancel需要能够保证幂等性。如果二阶段接口不能保证幂等性，则会产生严重的问题，造成资源的重复使用或者重复释放，进而导致业务故障。</p>
+</li>
+<li><p>对于幂等类型的问题，通常的手段是引入幂等字段进行防重放攻击。对于分布式事务框架中的幂等问题，同样可以祭出这一利器。</p>
+</li>
+<li><p>幂等记录的插入时机是参与者的Try方法，此时的分支事务状态会被初始化为INIT。然后当二阶段的Confirm&#x2F;Cancel执行时会将其状态置为CONFIRMED&#x2F;ROLLBACKED。</p>
+</li>
+<li><p>当TC重复调用二阶段接口时，参与者会先获取事务状态控制表的对应记录查看其事务状态。如果状态已经为CONFIRMED&#x2F;ROLLBACKED，那么表示参与者已经处理完其分内之事，不需要再次执行，可以直接返回幂等成功的结果给TC，帮助其推进分布式事务。</p>
+</li>
+</ul>
+<h5 id="空回滚"><a href="#空回滚" class="headerlink" title="空回滚"></a>空回滚</h5><ul>
+<li>当没有调用参与方Try方法的情况下，就调用了二阶段的Cancel方法，Cancel方法需要有办法识别出此时Try有没有执行。如果Try还没执行，表示这个Cancel操作是无效的，即本次Cancel属于空回滚；如果Try已经执行，那么执行的是正常的回滚逻辑。</li>
+<li>要应对空回滚的问题，就需要让参与者在二阶段的Cancel方法中有办法识别到一阶段的Try是否已经执行。很显然，可以继续利用事务状态控制表来实现这个功能。</li>
+<li>当Try方法被成功执行后，会插入一条记录，标识该分支事务处于INIT状态。所以后续当二阶段的Cancel方法被调用时，可以通过查询控制表的对应记录进行判断。如果记录存在且状态为INIT，就表示一阶段已成功执行，可以正常执行回滚操作，释放预留的资源；如果记录不存在则表示一阶段未执行，本次为空回滚，不释放任何资源。</li>
+</ul>
+<h5 id="资源悬挂"><a href="#资源悬挂" class="headerlink" title="资源悬挂"></a>资源悬挂</h5><p>问题：TC回滚事务调用二阶段完成空回滚后，一阶段执行成功</p>
+<p>解决：事务状态控制记录作为控制手段，二阶段发现无记录时插入记录，一阶段执行时检查记录是否存在</p>
+<h4 id="TCC和2PC比较"><a href="#TCC和2PC比较" class="headerlink" title="TCC和2PC比较"></a>TCC和2PC比较</h4><ul>
+<li><p>2PC通常都是在跨库的DB层面，而TCC则在应用层面处理，需要通过业务逻辑实现，这种分布式事务的实现方式优势在于，可以让应用自己定义数据操作的粒度，使得降低锁冲突，提高吞吐量成为可能</p>
+</li>
+<li><p>而不足之处则在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现Try，confirm,cancel三个操作。此外，其实现难度也比较大，需要按照网络状态，系统故障的不同失败原因实现不同的回滚策略</p>
+</li>
+</ul>
+<h3 id="消息队列实现可靠消息最终一致性"><a href="#消息队列实现可靠消息最终一致性" class="headerlink" title="消息队列实现可靠消息最终一致性"></a>消息队列实现可靠消息最终一致性</h3><ul>
+<li><p>可靠消息最终一致性就是保证消息从生产方经过消息中间件传递到消费方的一致性</p>
+</li>
+<li><p>RocketMQ主要解决了两个功能：本地事务与消息发送的原子性问题。事务参与方接收消息的可靠性</p>
+</li>
+<li><p>可靠消息最终一致性事务适合执行周期长且实时性要求不高的场景，引入消息机制后，同步的事务操作变为基于消息执行的异步操作，避免分布式事务中的同步阻塞操作的影响，并实现了两个服务的解耦</p>
+</li>
+</ul>
+<p><img src="/../img/article/0iDZ1W1627459852841.png"></p>
+<h3 id="最大努力通知"><a href="#最大努力通知" class="headerlink" title="最大努力通知"></a>最大努力通知</h3><h4 id="最大努力通知与可靠消息一致性有什么不同"><a href="#最大努力通知与可靠消息一致性有什么不同" class="headerlink" title="最大努力通知与可靠消息一致性有什么不同"></a>最大努力通知与可靠消息一致性有什么不同</h4><ul>
+<li><p>可靠消息一致性，发起通知方需要保证将消息发出去，并且将消息发送到接收通知方，消息的可靠性由发起通知方保证</p>
+</li>
+<li><p>最大努力通知，发起通知方尽最大的努力将业务处理结果通知为接收通知方，但是消息可能接收不到，此时需要接收通知方主动调用发起通知方的接口查询业务，通知可靠性关键在于接收通知方</p>
+</li>
+</ul>
+<h4 id="两者的应用场景"><a href="#两者的应用场景" class="headerlink" title="两者的应用场景"></a>两者的应用场景</h4><ul>
+<li><p>可靠消息一致性关注的是交易过程的事务一致，以异步的方式完成交易</p>
+</li>
+<li><p>最大努力通知关注的是交易后的通知事务，即将交易结果可靠的通知出去</p>
+</li>
+</ul>
+<h4 id="基于MQ的ack机制实现最大努力通知"><a href="#基于MQ的ack机制实现最大努力通知" class="headerlink" title="基于MQ的ack机制实现最大努力通知"></a>基于MQ的ack机制实现最大努力通知</h4><h5 id="方案一："><a href="#方案一：" class="headerlink" title="方案一："></a>方案一：</h5><p><img src="/../img/article/EPYN7t1627459910769.png"></p>
+<ul>
+<li><p>利用MQ的ack机制由MQ向接收通知方发送消息通知，发起方将普通消息发送到MQ</p>
+</li>
+<li><p>接收通知监听MQ，接收消息，业务处理完成回应ACK</p>
+</li>
+<li><p>接收通知方如果没有回应ACK则MQ会重复通知，按照时间间隔的方式，逐步拉大通知间隔</p>
+</li>
+<li><p>此方案适用于内部微服务之间的通知，不适应与通知外部平台</p>
+</li>
+</ul>
+<h5 id="方案二："><a href="#方案二：" class="headerlink" title="方案二："></a>方案二：</h5><p>增加一个通知服务区进行通知，提供外部第三方时适用</p>
+<p><img src="/../img/article/TIQfM61627459975778.png"></p>
+<h2 id="分布式事务方案对比分析"><a href="#分布式事务方案对比分析" class="headerlink" title="分布式事务方案对比分析"></a>分布式事务方案对比分析</h2><ul>
+<li><p>2PC 最大的一个诟病是一个阻塞协议。RM在执行分支事务后需要等待TM的决定，此时服务会阻塞锁定资源。由于其阻塞机制和最差时间复杂度高，因此，这种设计不能适应随着事务涉及的服务数量增加而扩展的需要，很难用于并发较高以及子事务生命周期较长的分布式服务中</p>
+</li>
+<li><p>如果拿TCC事务的处理流程与2PC两阶段提交做比较，2PC通常都是在跨库的DB层面，而TCC则在应用层面处理，需要通过业务逻辑来实现。这种分布式事务的优势在于，可以让应用自定义数据操作的粒度，使得降低锁冲突，提高吞吐量成为可能。而不足之处在于对应用的侵入性非常强，业务逻辑的每个分支都需要实现三个操作。此外，其实现难度也比较大，需要按照网络状态，系统故障等不同失败原因实现不同的策略。</p>
+</li>
+<li><p>可靠消息最终一致性事务适合执行周期长且实时性要求不高的场景。引入消息机制后，同步的事务操作变为基于消息执行的异步操作，避免了分布式事务中的同步阻塞操作的影响，并实现了两个服务的解耦，典型的场景：注册送积分，登陆送优惠券等</p>
+</li>
+<li><p>最大努力通知是分布式事务中要求最低的一种，适用于一些最终一致性时间敏感度低的业务，允许发起通知方业务处理失败，在接收通知方收到通知后积极进行失败处理，无论发起通知方如何处理结果都不会影响到接收通知方的后续处理，发起通知方需提供查询执行情况接口，用于接收通知方校对结果，典型的应用场景：银行通知，支付结果通知等。</p>
+</li>
+</ul>
+<p><img src="/../img/article/QmM2bv1627460032723.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>分布式事务常见解决方案</p><p><a href="https://blog.buubiu.com/分布式事务常见解决方案/">https://blog.buubiu.com/分布式事务常见解决方案/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-07-28</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Seata/">Seata</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/seata%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">seata原理详解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%88%86%E5%B8%83%E5%BC%8F%E5%9F%BA%E7%A1%80%E6%A1%88%E4%BE%8B%E6%90%AD%E5%BB%BA/"><span class="level-item">分布式基础案例搭建</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#分布式事务问题模拟"><span class="level-left"><span class="level-item">1</span><span class="level-item">分布式事务问题模拟</span></span></a></li><li><a class="level is-mobile" href="#分布式事务常见解决方案"><span class="level-left"><span class="level-item">2</span><span class="level-item">分布式事务常见解决方案</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#CAP理论"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">CAP理论</span></span></a></li><li><a class="level is-mobile" href="#CAP定理的应用"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">CAP定理的应用</span></span></a></li><li><a class="level is-mobile" href="#BASE理论"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">BASE理论</span></span></a></li><li><a class="level is-mobile" href="#2PC提交"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">2PC提交</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#阶段一：提交事务请求"><span class="level-left"><span class="level-item">2.4.1</span><span class="level-item">阶段一：提交事务请求</span></span></a></li><li><a class="level is-mobile" href="#阶段二：执行事务提交"><span class="level-left"><span class="level-item">2.4.2</span><span class="level-item">阶段二：执行事务提交</span></span></a></li><li><a class="level is-mobile" href="#中断事务"><span class="level-left"><span class="level-item">2.4.3</span><span class="level-item">中断事务</span></span></a></li><li><a class="level is-mobile" href="#优缺点"><span class="level-left"><span class="level-item">2.4.4</span><span class="level-item">优缺点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3PC提交"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">3PC提交</span></span></a></li><li><a class="level is-mobile" href="#TCC分布式事务"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">TCC分布式事务</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#定义"><span class="level-left"><span class="level-item">2.6.1</span><span class="level-item">定义</span></span></a></li><li><a class="level is-mobile" href="#TCC的三个阶段"><span class="level-left"><span class="level-item">2.6.2</span><span class="level-item">TCC的三个阶段</span></span></a></li><li><a class="level is-mobile" href="#TCC的三种异常处理情况"><span class="level-left"><span class="level-item">2.6.3</span><span class="level-item">TCC的三种异常处理情况</span></span></a></li><li><a class="level is-mobile" href="#TCC和2PC比较"><span class="level-left"><span class="level-item">2.6.4</span><span class="level-item">TCC和2PC比较</span></span></a></li></ul></li><li><a class="level is-mobile" href="#消息队列实现可靠消息最终一致性"><span class="level-left"><span class="level-item">2.7</span><span class="level-item">消息队列实现可靠消息最终一致性</span></span></a></li><li><a class="level is-mobile" href="#最大努力通知"><span class="level-left"><span class="level-item">2.8</span><span class="level-item">最大努力通知</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#最大努力通知与可靠消息一致性有什么不同"><span class="level-left"><span class="level-item">2.8.1</span><span class="level-item">最大努力通知与可靠消息一致性有什么不同</span></span></a></li><li><a class="level is-mobile" href="#两者的应用场景"><span class="level-left"><span class="level-item">2.8.2</span><span class="level-item">两者的应用场景</span></span></a></li><li><a class="level is-mobile" href="#基于MQ的ack机制实现最大努力通知"><span class="level-left"><span class="level-item">2.8.3</span><span class="level-item">基于MQ的ack机制实现最大努力通知</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#分布式事务方案对比分析"><span class="level-left"><span class="level-item">3</span><span class="level-item">分布式事务方案对比分析</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序框架组件-开放能力组件 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="简介开放能力组件大多为新增组件,且使用频率较低,属于相对比较冷门的组件。可以先简单了解一下。"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序框架组件-开放能力组件"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B%E7%BB%84%E4%BB%B6/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="简介开放能力组件大多为新增组件,且使用频率较低,属于相对比较冷门的组件。可以先简单了解一下。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/MlGYms1636704512162.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/EYBcZy1636705022490.png"><meta property="article:published_time" content="2021-11-12T08:01:34.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.933Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/MlGYms1636704512162.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B%E7%BB%84%E4%BB%B6/"},"headline":"微信小程序框架组件-开放能力组件","image":["https://blog.buubiu.com/img/article/MlGYms1636704512162.png","https://blog.buubiu.com/img/article/EYBcZy1636705022490.png"],"datePublished":"2021-11-12T08:01:34.000Z","dateModified":"2024-01-25T15:08:05.933Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"简介开放能力组件大多为新增组件,且使用频率较低,属于相对比较冷门的组件。可以先简单了解一下。"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%BC%80%E6%94%BE%E8%83%BD%E5%8A%9B%E7%BB%84%E4%BB%B6/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-12T08:01:34.000Z" title="11/12/2021, 4:01:34 PM">2021-11-12</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.933Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">31 分钟读完 (大约4641个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序框架组件-开放能力组件</h1><div class="content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>开放能力组件大多为新增组件,且使用频率较低,属于相对比较冷门的组件。可以先简单了解一下。</p>
+<span id="more"></span>
+
+<h2 id="open-data-展示开放数据-组件"><a href="#open-data-展示开放数据-组件" class="headerlink" title="open-data 展示开放数据 组件"></a>open-data 展示开放数据 组件</h2><blockquote>
+<p>基础库 1.4.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>用于展示微信开放的数据。</p>
+<p>小程序插件中不能使用。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">type</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">开放数据类型</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">open-gid</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当 type&#x3D;”groupName” 时生效, 群id</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">lang</td>
+<td align="left">string</td>
+<td align="left">en</td>
+<td align="left">否</td>
+<td align="left">当 type&#x3D;”user*” 时生效，以哪种语言展示 userInfo</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">default-text</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">数据为空时的默认文案</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.1</a></td>
+</tr>
+<tr>
+<td align="left">default-avatar</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">用户头像为空时的默认图片，支持相对路径和网络图片路径</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.1</a></td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">群名称或用户信息为空时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.1</a></td>
+</tr>
+</tbody></table>
+<p><strong>type 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">groupName</td>
+<td align="left">拉取群名称</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.4.0</a></td>
+</tr>
+<tr>
+<td align="left">userNickName</td>
+<td align="left">用户昵称</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userAvatarUrl</td>
+<td align="left">用户头像</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userGender</td>
+<td align="left">用户性别</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userCity</td>
+<td align="left">用户所在城市</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userProvince</td>
+<td align="left">用户所在省份</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userCountry</td>
+<td align="left">用户所在国家</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+<tr>
+<td align="left">userLanguage</td>
+<td align="left">用户的语言</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.90</a></td>
+</tr>
+</tbody></table>
+<p><strong>lang 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">en</td>
+<td align="left">英文</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">zh_CN</td>
+<td align="left">简体中文</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">zh_TW</td>
+<td align="left">繁体中文</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip"><a href="#Bug-amp-Tip" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>：只有当前用户在此群内才能拉取到群名称</li>
+<li><code>tip</code>：关于open-gid的获取请使用 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/share/wx.getShareInfo.html">wx.getShareInfo</a></li>
+</ol>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/vbdmRcmV67YB">在开发者工具中预览效果</a></p>
+<figure class="highlight xml"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">open-data</span> <span class="attr">type</span>=<span class="string">&quot;groupName&quot;</span> <span class="attr">open-gid</span>=<span class="string">&quot;xxxxxx&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">open-data</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">open-data</span> <span class="attr">type</span>=<span class="string">&quot;userAvatarUrl&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">open-data</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">open-data</span> <span class="attr">type</span>=<span class="string">&quot;userGender&quot;</span> <span class="attr">lang</span>=<span class="string">&quot;zh_CN&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">open-data</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> app = <span class="title function_">getApp</span>()</span><br><span class="line"></span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">data</span>: &#123;</span><br><span class="line"></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">onLoad</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;代码片段是一种迷你、可分享的小程序或小游戏项目，可用于分享小程序和小游戏的开发经验、展示组件和 API 的使用、复现开发问题和 Bug 等。可点击以下链接查看代码片段的详细文档：&#x27;</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;https://mp.weixin.qq.com/debug/wxadoc/dev/devtools/devtools.html&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/MlGYms1636704512162.png"></p>
+<h2 id="web-view-网页容器-组件"><a href="#web-view-网页容器-组件" class="headerlink" title="web-view 网页容器 组件"></a>web-view 网页容器 组件</h2><blockquote>
+<p>基础库 1.6.4 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>承载网页的容器。会自动铺满整个小程序页面，<strong>个人类型的小程序暂不支持使用。</strong></p>
+<p>客户端 6.7.2 版本开始，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html"><code>navigationStyle: custom</code></a> 对 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 组件无效</p>
+<p>小程序插件中不能使用。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">src</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">webview 指向网页的链接。可打开关联的公众号的文章，其它网页需登录<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/">小程序管理后台</a>配置业务域名。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+<tr>
+<td align="left">bindmessage</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">网页向小程序 postMessage 时，会在特定时机（小程序后退、组件销毁、分享）触发并收到消息。e.detail &#x3D; { data }，data是多次 postMessage 的参数组成的数组</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+<tr>
+<td align="left">bindload</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">网页加载成功时候触发此事件。e.detail &#x3D; { src }</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">网页加载失败的时候触发此事件。e.detail &#x3D; { src }</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+</tbody></table>
+<h3 id="相关接口-1"><a href="#相关接口-1" class="headerlink" title="相关接口 1"></a>相关接口 1</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a>网页中可使用<a target="_blank" rel="noopener" href="https://res.wx.qq.com/open/js/jweixin-1.3.2.js">JSSDK 1.3.2</a>提供的接口返回小程序页面。 支持的接口有：</p>
+<table>
+<thead>
+<tr>
+<th align="left">接口名</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">wx.miniProgram.navigateTo</td>
+<td align="left">参数与小程序接口一致</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.navigateBack</td>
+<td align="left">参数与小程序接口一致</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.4</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.switchTab</td>
+<td align="left">参数与小程序接口一致</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.5</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.reLaunch</td>
+<td align="left">参数与小程序接口一致</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.5</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.redirectTo</td>
+<td align="left">参数与小程序接口一致</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.6.5</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.postMessage</td>
+<td align="left">向小程序发送消息，会在特定时机（小程序后退、组件销毁、分享）触发组件的message事件</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.7.1</a></td>
+</tr>
+<tr>
+<td align="left">wx.miniProgram.getEnv</td>
+<td align="left">获取当前环境</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.7.1</a></td>
+</tr>
+</tbody></table>
+<h4 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h4><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/aRVmcimz66Yb">在开发者工具中预览效果</a></p>
+<figure class="highlight xml"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-body&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page-section page-section-gap&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">web-view</span> <span class="attr">src</span>=<span class="string">&quot;https://mp.weixin.qq.com/&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">web-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Page</span>(&#123;&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/EYBcZy1636705022490.png"></p>
+<h3 id="相关接口-2"><a href="#相关接口-2" class="headerlink" title="相关接口 2"></a>相关接口 2</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a>网页中**仅支持以下<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115">JSSDK接口</a>**：</p>
+<table>
+<thead>
+<tr>
+<th align="left">接口模块</th>
+<th align="left">接口说明</th>
+<th align="left">具体接口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">判断客户端是否支持js</td>
+<td align="left"></td>
+<td align="left">checkJSApi</td>
+</tr>
+<tr>
+<td align="left">图像接口</td>
+<td align="left">拍照或上传</td>
+<td align="left">chooseImage</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">预览图片</td>
+<td align="left">previewImage</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">上传图片</td>
+<td align="left">uploadImage</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">下载图片</td>
+<td align="left">downloadImage</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">获取本地图片</td>
+<td align="left">getLocalImgData</td>
+</tr>
+<tr>
+<td align="left">音频接口</td>
+<td align="left">开始录音</td>
+<td align="left">startRecord</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">停止录音</td>
+<td align="left">stopRecord</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">监听录音自动停止</td>
+<td align="left">onVoiceRecordEnd</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">播放语音</td>
+<td align="left">playVoice</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">暂停播放</td>
+<td align="left">pauseVoice</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">停止播放</td>
+<td align="left">stopVoice</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">监听语音播放完毕</td>
+<td align="left">onVoicePlayEnd</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">上传接口</td>
+<td align="left">uploadVoice</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">下载接口</td>
+<td align="left">downloadVoice</td>
+</tr>
+<tr>
+<td align="left">智能接口</td>
+<td align="left">识别音频</td>
+<td align="left">translateVoice</td>
+</tr>
+<tr>
+<td align="left">设备信息</td>
+<td align="left">获取网络状态</td>
+<td align="left">getNetworkType</td>
+</tr>
+<tr>
+<td align="left">地理位置</td>
+<td align="left">使用内置地图打开地点</td>
+<td align="left">openLocation</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">获取地理位置</td>
+<td align="left">getLocation</td>
+</tr>
+<tr>
+<td align="left">摇一摇周边</td>
+<td align="left">开启ibeacon</td>
+<td align="left">startSearchBeacons</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">关闭ibeacon</td>
+<td align="left">stopSearchBeacons</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">监听ibeacon</td>
+<td align="left">onSearchBeacons</td>
+</tr>
+<tr>
+<td align="left">微信扫一扫</td>
+<td align="left">调起微信扫一扫</td>
+<td align="left">scanQRCode</td>
+</tr>
+<tr>
+<td align="left">微信卡券</td>
+<td align="left">拉取使用卡券列表</td>
+<td align="left">chooseCard</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">批量添加卡券接口</td>
+<td align="left">addCard</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">查看微信卡包的卡券</td>
+<td align="left">openCard</td>
+</tr>
+<tr>
+<td align="left">长按识别</td>
+<td align="left">小程序圆形码</td>
+<td align="left">无</td>
+</tr>
+</tbody></table>
+<h3 id="相关接口-3"><a href="#相关接口-3" class="headerlink" title="相关接口 3"></a>相关接口 3</h3><p>用户分享时可获取当前<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a>的URL，即在<code>onShareAppMessage</code>回调中返回<code>webViewUrl</code>参数。</p>
+<h4 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码"></a>示例代码</h4><p>示例代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="title function_">onShareAppMessage</span>(<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(options.<span class="property">webViewUrl</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="相关接口-4"><a href="#相关接口-4" class="headerlink" title="相关接口 4"></a>相关接口 4</h3><p>在网页内可通过<code>window.__wxjs_environment</code>变量判断是否在小程序环境，建议在<code>WeixinJSBridgeReady</code>回调中使用，也可以使用<a target="_blank" rel="noopener" href="https://res.wx.qq.com/open/js/jweixin-1.3.2.js">JSSDK 1.3.2</a>提供的<code>getEnv</code>接口。</p>
+<h4 id="示例代码-3"><a href="#示例代码-3" class="headerlink" title="示例代码"></a>示例代码</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// web-view下的页面内</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">ready</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">window</span>.<span class="property">__wxjs_environment</span> === <span class="string">&#x27;miniprogram&#x27;</span>) <span class="comment">// true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable language_">window</span>.<span class="property">WeixinJSBridge</span> || !<span class="title class_">WeixinJSBridge</span>.<span class="property">invoke</span>) &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;WeixinJSBridgeReady&#x27;</span>, ready, <span class="literal">false</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="title function_">ready</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">wx.<span class="property">miniProgram</span>.<span class="title function_">getEnv</span>(<span class="keyword">function</span>(<span class="params">res</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res.<span class="property">miniprogram</span>) <span class="comment">// true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="相关接口-5"><a href="#相关接口-5" class="headerlink" title="相关接口 5"></a>相关接口 5</h3><p>从微信<code>7.0.0</code>开始，可以通过判断<code>userAgent</code>中包含<code>miniProgram</code>字样来判断小程序web-view环境。</p>
+<h3 id="相关接口-6"><a href="#相关接口-6" class="headerlink" title="相关接口 6"></a>相关接口 6</h3><p>从微信<code>7.0.3</code>开始，webview内可以通过判断下面的方式判断小程序是否在前台：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">WeixinJSBridge</span>.<span class="title function_">on</span>(<span class="string">&#x27;onPageStateChange&#x27;</span>, <span class="keyword">function</span>(<span class="params">res</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;res is active&#x27;</span>, res.<span class="property">active</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Bug-amp-Tip-1"><a href="#Bug-amp-Tip-1" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>：<strong>网页内 iframe 的域名也需要配置到域名白名单。</strong></li>
+<li><code>tip</code>：开发者工具上，可以在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 组件上通过右键 - 调试，打开 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 组件的调试。</li>
+<li><code>tip</code>：每个页面只能有一个 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a>，<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 会自动铺满整个页面，并覆盖其他组件。</li>
+<li><code>tip</code>：<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 网页与小程序之间不支持除 JSSDK 提供的接口之外的通信。</li>
+<li><code>tip</code>：在 iOS 中，若存在JSSDK接口调用无响应的情况，可在 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html">web-view</a> 的 src 后面加个#wechat_redirect解决。</li>
+<li><code>tip</code>：避免在链接中带有中文字符，在 iOS 中会有打开白屏的问题，建议加一下 encodeURIComponent</li>
+</ol>
+<h2 id="ad-广告-组件"><a href="#ad-广告-组件" class="headerlink" title="ad 广告 组件"></a>ad 广告 组件</h2><blockquote>
+<p>基础库 1.9.94 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>Banner 广告。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">unit-id</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">是</td>
+<td align="left">广告单元id，可在<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/">小程序管理后台</a>的流量主模块新建</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.9.94</a></td>
+</tr>
+<tr>
+<td align="left">ad-intervals</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告自动刷新的间隔时间，单位为秒，参数值必须大于等于30（该参数不传入时 Banner 广告不会自动刷新）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.3.1</a></td>
+</tr>
+<tr>
+<td align="left">ad-type</td>
+<td align="left">string</td>
+<td align="left">banner</td>
+<td align="left">否</td>
+<td align="left">广告类型，默认为展示banner，可通过设置该属性为<code>video</code>展示视频广告, <code>grid</code>为格子广告</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.0</a></td>
+</tr>
+<tr>
+<td align="left">ad-theme</td>
+<td align="left">string</td>
+<td align="left">white</td>
+<td align="left">否</td>
+<td align="left"></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.8.0</a></td>
+</tr>
+<tr>
+<td align="left">bindload</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告加载成功的回调</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.1</a></td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告加载失败的回调，event.detail &#x3D; {errCode: 1002}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.2.1</a></td>
+</tr>
+<tr>
+<td align="left">bindclose</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告关闭的回调</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.6.5</a></td>
+</tr>
+</tbody></table>
+<h3 id="错误码信息与解决方案表"><a href="#错误码信息与解决方案表" class="headerlink" title="错误码信息与解决方案表"></a>错误码信息与解决方案表</h3><p>错误码是通过binderror回调获取到的错误信息。</p>
+<table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="left">异常情况</th>
+<th align="left">理由</th>
+<th align="left">解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1000</td>
+<td align="left">后端错误调用失败</td>
+<td align="left">该项错误不是开发者的异常情况</td>
+<td align="left">一般情况下忽略一段时间即可恢复。</td>
+</tr>
+<tr>
+<td align="left">1001</td>
+<td align="left">参数错误</td>
+<td align="left">使用方法错误</td>
+<td align="left">可以前往developers.weixin.qq.com确认具体教程（小程序和小游戏分别有各自的教程，可以在顶部选项中，“设计”一栏的右侧进行切换。</td>
+</tr>
+<tr>
+<td align="left">1002</td>
+<td align="left">广告单元无效</td>
+<td align="left">可能是拼写错误、或者误用了其他APP的广告ID</td>
+<td align="left">请重新前往mp.weixin.qq.com确认广告位ID。</td>
+</tr>
+<tr>
+<td align="left">1003</td>
+<td align="left">内部错误</td>
+<td align="left">该项错误不是开发者的异常情况</td>
+<td align="left">一般情况下忽略一段时间即可恢复。</td>
+</tr>
+<tr>
+<td align="left">1004</td>
+<td align="left">无适合的广告</td>
+<td align="left">广告不是每一次都会出现，这次没有出现可能是由于该用户不适合浏览广告</td>
+<td align="left">属于正常情况，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1005</td>
+<td align="left">广告组件审核中</td>
+<td align="left">你的广告正在被审核，无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认审核状态，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1006</td>
+<td align="left">广告组件被驳回</td>
+<td align="left">你的广告审核失败，无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认审核状态，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1007</td>
+<td align="left">广告组件被驳回</td>
+<td align="left">你的广告能力已经被封禁，封禁期间无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认小程序广告封禁状态。</td>
+</tr>
+<tr>
+<td align="left">1008</td>
+<td align="left">广告单元已关闭</td>
+<td align="left">该广告位的广告能力已经被关闭</td>
+<td align="left">请前往mp.weixin.qq.com重新打开对应广告位的展现。</td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip-2"><a href="#Bug-amp-Tip-2" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>：在无广告展示时，<code>ad</code> 标签不会占用高度</li>
+<li><code>tip</code>：<code>ad</code> 组件不支持触发 <code>bindtap</code> 等触摸相关事件</li>
+<li><code>tip</code>：目前可以给 <code>ad</code> 标签设置 wxss 样式调整广告宽度，以使广告与页面更融洽，但请遵循<a target="_blank" rel="noopener" href="https://wximg.qq.com/wxp/pdftool/get.html?id=rynYA8o3f&pa=10&name=miniprogramAds_supplier_guidance">小程序流量主应用规范</a></li>
+<li><code>tip</code>：监听到error回调后，开发者可以针对性的处理，比如隐藏广告组件的父容器，以保证用户体验，但不要移除广告组件，否则将无法收到bindload的回调。</li>
+</ol>
+<h2 id="ad-custom-原生模板广告-组件"><a href="#ad-custom-原生模板广告-组件" class="headerlink" title="ad-custom 原生模板广告 组件"></a>ad-custom 原生模板广告 组件</h2><blockquote>
+<p>基础库 2.10.4 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>原生模板 广告。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">unit-id</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">是</td>
+<td align="left">广告单元id，可在<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/">小程序管理后台</a>的流量主模块新建</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.4</a></td>
+</tr>
+<tr>
+<td align="left">ad-intervals</td>
+<td align="left">number</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告自动刷新的间隔时间，单位为秒，参数值必须大于等于30（该参数不传入时 模板 广告不会自动刷新）</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.4</a></td>
+</tr>
+<tr>
+<td align="left">bindload</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告加载成功的回调</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.4</a></td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">eventhandle</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">广告加载失败的回调，event.detail &#x3D; {errCode: 1002}</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.10.4</a></td>
+</tr>
+</tbody></table>
+<h3 id="错误码信息与解决方案表-1"><a href="#错误码信息与解决方案表-1" class="headerlink" title="错误码信息与解决方案表"></a>错误码信息与解决方案表</h3><p>错误码是通过binderror回调获取到的错误信息。</p>
+<table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="left">异常情况</th>
+<th align="left">理由</th>
+<th align="left">解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1000</td>
+<td align="left">后端错误调用失败</td>
+<td align="left">该项错误不是开发者的异常情况</td>
+<td align="left">一般情况下忽略一段时间即可恢复。</td>
+</tr>
+<tr>
+<td align="left">1001</td>
+<td align="left">参数错误</td>
+<td align="left">使用方法错误</td>
+<td align="left">可以前往developers.weixin.qq.com确认具体教程（小程序和小游戏分别有各自的教程，可以在顶部选项中，“设计”一栏的右侧进行切换。</td>
+</tr>
+<tr>
+<td align="left">1002</td>
+<td align="left">广告单元无效</td>
+<td align="left">可能是拼写错误、或者误用了其他APP的广告ID</td>
+<td align="left">请重新前往mp.weixin.qq.com确认广告位ID。</td>
+</tr>
+<tr>
+<td align="left">1003</td>
+<td align="left">内部错误</td>
+<td align="left">该项错误不是开发者的异常情况</td>
+<td align="left">一般情况下忽略一段时间即可恢复。</td>
+</tr>
+<tr>
+<td align="left">1004</td>
+<td align="left">无适合的广告</td>
+<td align="left">广告不是每一次都会出现，这次没有出现可能是由于该用户不适合浏览广告</td>
+<td align="left">属于正常情况，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1005</td>
+<td align="left">广告组件审核中</td>
+<td align="left">你的广告正在被审核，无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认审核状态，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1006</td>
+<td align="left">广告组件被驳回</td>
+<td align="left">你的广告审核失败，无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认审核状态，且开发者需要针对这种情况做形态上的兼容。</td>
+</tr>
+<tr>
+<td align="left">1007</td>
+<td align="left">广告组件被驳回</td>
+<td align="left">你的广告能力已经被封禁，封禁期间无法展现广告</td>
+<td align="left">请前往mp.weixin.qq.com确认小程序广告封禁状态。</td>
+</tr>
+<tr>
+<td align="left">1008</td>
+<td align="left">广告单元已关闭</td>
+<td align="left">该广告位的广告能力已经被关闭</td>
+<td align="left">请前往mp.weixin.qq.com重新打开对应广告位的展现。</td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip-3"><a href="#Bug-amp-Tip-3" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>：在无广告展示时，<code>ad-custom</code> 标签不会占用高度</li>
+<li><code>tip</code>：<code>ad-custom</code> 组件不支持触发 <code>bindtap</code> 等触摸相关事件</li>
+<li><code>tip</code>：目前可以给 <code>ad-custom</code> 标签设置 wxss 样式调整广告宽度，以使广告与页面更融洽，但请遵循<a target="_blank" rel="noopener" href="https://wximg.qq.com/wxp/pdftool/get.html?id=rynYA8o3f&pa=10&name=miniprogramAds_supplier_guidance">小程序流量主应用规范</a></li>
+<li><code>tip</code>：监听到error回调后，开发者可以针对性的处理，比如隐藏广告组件的父容器，以保证用户体验，但不要移除广告组件，否则将无法收到bindload的回调</li>
+<li><code>tip</code>：不同模板涉及一些不同的使用场景，具体方式请参考模板编辑器</li>
+</ol>
+<h2 id="official-account-公众号关注-组件"><a href="#official-account-公众号关注-组件" class="headerlink" title="official-account 公众号关注 组件"></a>official-account 公众号关注 组件</h2><blockquote>
+<p>基础库 2.3.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>公众号关注组件。当用户扫<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/qr-code.html?t=19032815">小程序码</a>打开小程序时，开发者可在小程序内配置公众号关注组件，方便用户快捷关注公众号，可嵌套在原生组件内。</p>
+<p>基础库 <code>2.18.1</code> 起，公众号关注组件显示场景值变更如下：</p>
+<p>小程序场景值命中以下值时，可展示关注公众号组件：</p>
+<ol>
+<li>1011 扫描二维码</li>
+<li>1017 前往小程序体验版的入口页</li>
+<li>1025 扫描一维码</li>
+<li>1047 扫描小程序码</li>
+<li>1124 扫“一物一码”打开小程序</li>
+</ol>
+<p>小程序热启动场景值命中以下值时，冷启动场景值在【1011、1017、1025、1047、1124】中，可展示关注公众号组件：</p>
+<ol>
+<li>1001 发现栏小程序主入口，「最近使用」列表</li>
+<li>1038 从另一个小程序返回</li>
+<li>1041 从插件小程序返回小程序</li>
+<li>1089 微信聊天主界面下拉，「最近使用」栏</li>
+<li>1090 长按小程序右上角菜单唤出最近使用历史</li>
+<li>1104 微信聊天主界面下拉，「我的小程序」栏</li>
+<li>1131 浮窗</li>
+<li>1187 新版浮窗，微信8.0起</li>
+</ol>
+<h3 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h3><ol>
+<li>使用组件前，需前往小程序后台，在“设置”-&gt;“关注公众号”中设置要展示的公众号。<strong>注：设置的公众号需与小程序主体一致。</strong></li>
+<li>在一个小程序的生命周期内，只有从以下场景进入小程序，才具有展示引导关注公众号组件的能力:<ul>
+<li>当小程序从扫小程序码场景（场景值1047，场景值1124）打开时</li>
+<li>当小程序从聊天顶部场景（场景值1089）中的「最近使用」内打开时，若小程序之前未被销毁，则该组件保持上一次打开小程序时的状态</li>
+<li>当从其他小程序返回小程序（场景值1038）时，若小程序之前未被销毁，则该组件保持上一次打开小程序时的状态</li>
+</ul>
+</li>
+<li>为便于开发者调试，基础库 <code>2.7.3</code> 版本起开发版小程序增加以下场景展示公众号组件：<ul>
+<li>开发版小程序从扫二维码（场景值 1011）打开 — 体验版小程序打开</li>
+</ul>
+</li>
+<li>组件限定最小宽度为300px，高度为定值84px。</li>
+<li>每个页面只能配置一个该组件。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">bindload</td>
+<td align="left">EventHandle</td>
+<td align="left">组件加载成功时触发</td>
+</tr>
+<tr>
+<td align="left">binderror</td>
+<td align="left">EventHandle</td>
+<td align="left">组件加载失败时触发</td>
+</tr>
+</tbody></table>
+<h3 id="detail-对象"><a href="#detail-对象" class="headerlink" title="detail 对象"></a>detail 对象</h3><table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">类型</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">status</td>
+<td align="left">Number</td>
+<td align="left">状态码</td>
+</tr>
+<tr>
+<td align="left">errMsg</td>
+<td align="left">String</td>
+<td align="left">错误信息</td>
+</tr>
+</tbody></table>
+<h3 id="status-有效值"><a href="#status-有效值" class="headerlink" title="status 有效值"></a>status 有效值</h3><table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-2</td>
+<td align="left">网络错误</td>
+</tr>
+<tr>
+<td align="left">-1</td>
+<td align="left">数据解析错误</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">加载成功</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">小程序关注公众号功能被封禁</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">关联公众号被封禁</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">关联关系解除或未选中关联公众号</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">未开启关注公众号功能</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">场景值错误</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">重复创建</td>
+</tr>
+</tbody></table>
+<h3 id="示例代码-4"><a href="#示例代码-4" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">official-account</span>&gt;</span><span class="tag">&lt;/<span class="name">official-account</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序框架组件-开放能力组件</p><p><a href="https://blog.buubiu.com/微信小程序框架组件-开放能力组件/">https://blog.buubiu.com/微信小程序框架组件-开放能力组件/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%8E%9F%E7%94%9F%E7%BB%84%E4%BB%B6%E8%AF%B4%E6%98%8E/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序框架组件-原生组件说明</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E7%94%BB%E5%B8%83%E7%BB%84%E4%BB%B6/"><span class="level-item">微信小程序框架组件-画布组件</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#简介"><span class="level-left"><span class="level-item">1</span><span class="level-item">简介</span></span></a></li><li><a class="level is-mobile" href="#open-data-展示开放数据-组件"><span class="level-left"><span class="level-item">2</span><span class="level-item">open-data 展示开放数据 组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Bug-amp-Tip"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">Bug &amp; Tip</span></span></a></li><li><a class="level is-mobile" href="#示例代码"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#web-view-网页容器-组件"><span class="level-left"><span class="level-item">3</span><span class="level-item">web-view 网页容器 组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#相关接口-1"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">相关接口 1</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-1"><span class="level-left"><span class="level-item">3.1.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#相关接口-2"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">相关接口 2</span></span></a></li><li><a class="level is-mobile" href="#相关接口-3"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">相关接口 3</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-2"><span class="level-left"><span class="level-item">3.3.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#相关接口-4"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">相关接口 4</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#示例代码-3"><span class="level-left"><span class="level-item">3.4.1</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#相关接口-5"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">相关接口 5</span></span></a></li><li><a class="level is-mobile" href="#相关接口-6"><span class="level-left"><span class="level-item">3.6</span><span class="level-item">相关接口 6</span></span></a></li><li><a class="level is-mobile" href="#Bug-amp-Tip-1"><span class="level-left"><span class="level-item">3.7</span><span class="level-item">Bug &amp; Tip</span></span></a></li></ul></li><li><a class="level is-mobile" href="#ad-广告-组件"><span class="level-left"><span class="level-item">4</span><span class="level-item">ad 广告 组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#错误码信息与解决方案表"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">错误码信息与解决方案表</span></span></a></li><li><a class="level is-mobile" href="#Bug-amp-Tip-2"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">Bug &amp; Tip</span></span></a></li></ul></li><li><a class="level is-mobile" href="#ad-custom-原生模板广告-组件"><span class="level-left"><span class="level-item">5</span><span class="level-item">ad-custom 原生模板广告 组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#错误码信息与解决方案表-1"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">错误码信息与解决方案表</span></span></a></li><li><a class="level is-mobile" href="#Bug-amp-Tip-3"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">Bug &amp; Tip</span></span></a></li></ul></li><li><a class="level is-mobile" href="#official-account-公众号关注-组件"><span class="level-left"><span class="level-item">6</span><span class="level-item">official-account 公众号关注 组件</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Tips"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">Tips</span></span></a></li><li><a class="level is-mobile" href="#detail-对象"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">detail 对象</span></span></a></li><li><a class="level is-mobile" href="#status-有效值"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">status 有效值</span></span></a></li><li><a class="level is-mobile" href="#示例代码-4"><span class="level-left"><span class="level-item">6.4</span><span class="level-item">示例代码</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

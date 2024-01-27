@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>TypeScript 循环 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。 编程语言提供了更为复杂执行路径的多种控制结构。 循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的流程图："><meta property="og:type" content="blog"><meta property="og:title" content="TypeScript 循环"><meta property="og:url" content="https://blog.buubiu.com/TypeScript-%E5%BE%AA%E7%8E%AF/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。 编程语言提供了更为复杂执行路径的多种控制结构。 循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的流程图："><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/oFG88H1629361190019.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/8p5KfV1629361360564.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/fL1nrq1629362464670.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/Z4M4ZA1629362578013.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/3V254b1629362631587.jpg"><meta property="og:image" content="https://blog.buubiu.com/img/article/nfvWmd1629362691747.jpg"><meta property="article:published_time" content="2021-08-19T08:17:53.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.901Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="TypeScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/oFG88H1629361190019.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/TypeScript-%E5%BE%AA%E7%8E%AF/"},"headline":"TypeScript 循环","image":["https://blog.buubiu.com/img/article/oFG88H1629361190019.png","https://blog.buubiu.com/img/article/8p5KfV1629361360564.png","https://blog.buubiu.com/img/article/fL1nrq1629362464670.png","https://blog.buubiu.com/img/article/Z4M4ZA1629362578013.jpg","https://blog.buubiu.com/img/article/3V254b1629362631587.jpg","https://blog.buubiu.com/img/article/nfvWmd1629362691747.jpg"],"datePublished":"2021-08-19T08:17:53.000Z","dateModified":"2024-01-25T15:08:05.901Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。 编程语言提供了更为复杂执行路径的多种控制结构。 循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的\b流程图："}</script><link rel="canonical" href="https://blog.buubiu.com/TypeScript-%E5%BE%AA%E7%8E%AF/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-19T08:17:53.000Z" title="8/19/2021, 4:17:53 PM">2021-08-19</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.901Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span> / </span><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/TypeScript/">TypeScript</a></span><span class="level-item">14 分钟读完 (大约2075个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">TypeScript 循环</h1><div class="content"><p>有的时候，我们可能需要多次执行同一块代码。一般情况下，语句是按顺序执行的：函数中的第一个语句先执行，接着是第二个语句，依此类推。</p>
+<p>编程语言提供了更为复杂执行路径的多种控制结构。</p>
+<p>循环语句允许我们多次执行一个语句或语句组，下面是大多数编程语言中循环语句的流程图：</p>
+<p><img src="/../img/article/oFG88H1629361190019.png"></p>
+<span id="more"></span>
+
+<hr>
+<h2 id="for-循环"><a href="#for-循环" class="headerlink" title="for 循环"></a>for 循环</h2><p>TypeScript for 循环用于多次执行一个语句序列，简化管理循环变量的代码。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ( init; condition; increment )&#123;</span><br><span class="line">    <span class="title function_">statement</span>(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是 for 循环的控制流程解析：</p>
+<ol>
+<li><strong>init</strong> 会首先被执行，且只会执行一次。这一步允许您声明并初始化任何循环控制变量。您也可以不在这里写任何语句，只要有一个分号出现即可。</li>
+<li>接下来，会判断 <strong>condition</strong>。如果为 true，则执行循环主体。如果为 false，则不执行循环主体，且控制流会跳转到紧接着 for 循环的下一条语句。</li>
+<li>在执行完 for 循环主体后，控制流会跳回上面的 <strong>increment</strong> 语句。该语句允许您更新循环控制变量。该语句可以留空，只要在条件后有一个分号出现即可。</li>
+<li>条件再次被判断。如果为 true，则执行循环，这个过程会不断重复（循环主体，然后增加步值，再然后重新判断条件）。在条件变为 false 时，for 循环终止。</li>
+</ol>
+<p>在这里，statement(s) 可以是一个单独的语句，也可以是几个语句组成的代码块。</p>
+<p>condition 可以是任意的表达式，当条件为 true 时执行循环，当条件为 false 时，退出循环。</p>
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../img/article/8p5KfV1629361360564.png"></p>
+<p><strong>实例</strong></p>
+<p>以下实例计算 5 的阶乘， for 循环生成从 5 到 1 的数字，并计算每次循环数字的乘积。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num</span>:<span class="built_in">number</span> = <span class="number">5</span>; </span><br><span class="line"><span class="keyword">var</span> <span class="attr">i</span>:<span class="built_in">number</span>; </span><br><span class="line"><span class="keyword">var</span> factorial = <span class="number">1</span>; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span>(i = num;i&gt;=<span class="number">1</span>;i--) &#123;</span><br><span class="line">   factorial *= i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(factorial)</span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> i;</span><br><span class="line"><span class="keyword">var</span> factorial = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (i = num; i &gt;= <span class="number">1</span>; i--) &#123;</span><br><span class="line">    factorial *= i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(factorial);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">120</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="for…in-循环"><a href="#for…in-循环" class="headerlink" title="for…in 循环"></a>for…in 循环</h2><p>for…in 语句用于一组值的集合或列表进行迭代输出。</p>
+<h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> val <span class="keyword">in</span> list) &#123; </span><br><span class="line">    <span class="comment">//语句 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>val 需要为 string 或 any 类型。</p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">j</span>:<span class="built_in">any</span>; </span><br><span class="line"><span class="keyword">var</span> <span class="attr">n</span>:<span class="built_in">any</span> = <span class="string">&quot;a b c&quot;</span> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span>(j <span class="keyword">in</span> n) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(n[j])  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> j;</span><br><span class="line"><span class="keyword">var</span> n = <span class="string">&quot;a b c&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> (j <span class="keyword">in</span> n) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(n[j]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a</span><br><span class="line"></span><br><span class="line">b</span><br><span class="line"></span><br><span class="line">c</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="for…of-、forEach、every-和-some-循环"><a href="#for…of-、forEach、every-和-some-循环" class="headerlink" title="for…of 、forEach、every 和 some 循环"></a>for…of 、forEach、every 和 some 循环</h2><p>此外，TypeScript 还支持 for…of 、forEach、every 和 some 循环。</p>
+<p>for…of 语句创建一个循环来迭代可迭代的对象。在 ES6 中引入的 for…of 循环，以替代 for…in 和 forEach() ，并支持新的迭代协议。for…of 允许你遍历 Arrays（数组）, Strings（字符串）, Maps（映射）, Sets（集合）等可迭代的数据结构等。</p>
+<p><strong>for…of 循环实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> someArray = [<span class="number">1</span>, <span class="string">&quot;string&quot;</span>, <span class="literal">false</span>];</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> entry <span class="keyword">of</span> someArray) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(entry); <span class="comment">// 1, &quot;string&quot;, false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>forEach、every 和 some 是 JavaScript 的循环语法，TypeScript 作为 JavaScript 的语法超集，当然默认也是支持的。</p>
+<p>因为 forEach 在 iteration 中是无法返回的，所以可以使用 every 和 some 来取代 forEach。</p>
+<p><strong>forEach 循环实例</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> list = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line">list.<span class="title function_">forEach</span>(<span class="function">(<span class="params">val, idx, array</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// val: 当前值</span></span><br><span class="line">    <span class="comment">// idx：当前index</span></span><br><span class="line">    <span class="comment">// array: Array</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>every 循环实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> list = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line">list.<span class="title function_">every</span>(<span class="function">(<span class="params">val, idx, array</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// val: 当前值</span></span><br><span class="line">    <span class="comment">// idx：当前index</span></span><br><span class="line">    <span class="comment">// array: Array</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// Continues</span></span><br><span class="line">    <span class="comment">// Return false will quit the iteration</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h2><p>while 语句在给定条件为 true 时，重复执行语句或语句组。循环主体执行之前会先测试条件。</p>
+<h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(condition)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="title function_">statement</span>(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，statement(s) 可以是一个单独的语句，也可以是几个语句组成的代码块。</p>
+<p>condition 可以是任意的表达式，当条件为 true 时执行循环。 当条件为 false 时，程序流将退出循环。</p>
+<h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../img/article/fL1nrq1629362464670.png"></p>
+<p>图表中，<em>while</em> 循环的关键点是循环可能一次都不会执行。当条件为 false 时，会跳过循环主体，直接执行紧接着 while 循环的下一条语句。</p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num</span>:<span class="built_in">number</span> = <span class="number">5</span>; </span><br><span class="line"><span class="keyword">var</span> <span class="attr">factorial</span>:<span class="built_in">number</span> = <span class="number">1</span>; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">while</span>(num &gt;=<span class="number">1</span>) &#123; </span><br><span class="line">    factorial = factorial * num; </span><br><span class="line">    num--; </span><br><span class="line">&#125; </span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;5 的阶乘为：&quot;</span>+factorial);</span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> factorial = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (num &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">    factorial = factorial * num;</span><br><span class="line">    num--;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;5 的阶乘为：&quot;</span> + factorial);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5 的阶乘为：120</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="do…while-循环"><a href="#do…while-循环" class="headerlink" title="do…while 循环"></a>do…while 循环</h2><p>不像 <strong>for</strong> 和 <strong>while</strong> 循环，它们是在循环头部测试循环条件。<strong>do…while</strong> 循环是在循环的尾部检查它的条件。</p>
+<h3 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line">   <span class="title function_">statement</span>(s);</span><br><span class="line">&#125;<span class="keyword">while</span>( condition );</span><br></pre></td></tr></table></figure>
+
+<p>请注意，条件表达式出现在循环的尾部，所以循环中的 statement(s) 会在条件被测试之前至少执行一次。</p>
+<p>如果条件为 true，控制流会跳转回上面的 do，然后重新执行循环中的 statement(s)。这个过程会不断重复，直到给定条件变为 false 为止。</p>
+<h3 id="流程图-2"><a href="#流程图-2" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../img/article/Z4M4ZA1629362578013.jpg"></p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">n</span>:<span class="built_in">number</span> = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">do</span> &#123; </span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(n); </span><br><span class="line">    n--; </span><br><span class="line">&#125; <span class="keyword">while</span>(n&gt;=<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">var</span> n = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(n);</span><br><span class="line">    n--;</span><br><span class="line">&#125; <span class="keyword">while</span> (n &gt;= <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">9</span><br><span class="line">8</span><br><span class="line">7</span><br><span class="line">6</span><br><span class="line">5</span><br><span class="line">4</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">1</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="break-语句"><a href="#break-语句" class="headerlink" title="break 语句"></a>break 语句</h2><p><strong>break</strong> 语句有以下两种用法：</p>
+<ol>
+<li>当 <strong>break</strong> 语句出现在一个循环内时，循环会立即终止，且程序流将继续执行紧接着循环的下一条语句。</li>
+<li>它可用于终止 <strong>switch</strong> 语句中的一个 case。</li>
+</ol>
+<p>如果您使用的是嵌套循环（即一个循环内嵌套另一个循环），break 语句会停止执行最内层的循环，然后开始执行该块之后的下一行代码。</p>
+<h3 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="流程图-3"><a href="#流程图-3" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../img/article/3V254b1629362631587.jpg"></p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">i</span>:<span class="built_in">number</span> = <span class="number">1</span> </span><br><span class="line"><span class="keyword">while</span>(i&lt;=<span class="number">10</span>) &#123; </span><br><span class="line">    <span class="keyword">if</span> (i % <span class="number">5</span> == <span class="number">0</span>) &#123;   </span><br><span class="line">        <span class="variable language_">console</span>.<span class="property">log</span> (<span class="string">&quot;在 1~10 之间第一个被 5 整除的数为 : &quot;</span>+i) </span><br><span class="line">        <span class="keyword">break</span>     <span class="comment">// 找到一个后退出循环</span></span><br><span class="line">    &#125; </span><br><span class="line">    i++ </span><br><span class="line">&#125;  <span class="comment">// 输出 5 然后程序执行结束</span></span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt;= <span class="number">10</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i % <span class="number">5</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;在 1~10 之间第一个被 5 整除的数为 : &quot;</span> + i);</span><br><span class="line">        <span class="keyword">break</span>; <span class="comment">// 找到一个后退出循环</span></span><br><span class="line">    &#125;</span><br><span class="line">    i++;</span><br><span class="line">&#125; <span class="comment">// 输出 5 然后程序执行结束</span></span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在 1~10 之间第一个被 5 整除的数为 : 5</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="continue-语句"><a href="#continue-语句" class="headerlink" title="continue 语句"></a>continue 语句</h2><p><strong>continue</strong> 语句有点像 <strong>break</strong> 语句。但它不是强制终止，continue 会跳过当前循环中的代码，强迫开始下一次循环。</p>
+<p>对于 <strong>for</strong> 循环，<strong>continue</strong> 语句执行后自增语句仍然会执行。对于 <strong>while</strong> 和 <strong>do…while</strong> 循环，<strong>continue</strong> 语句重新执行条件判断语句。</p>
+<h3 id="语法-5"><a href="#语法-5" class="headerlink" title="语法"></a>语法</h3><p>语法格式如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">continue</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="流程图-4"><a href="#流程图-4" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../img/article/nfvWmd1629362691747.jpg"></p>
+<p><strong>实例</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">num</span>:<span class="built_in">number</span> = <span class="number">0</span></span><br><span class="line"><span class="keyword">var</span> <span class="attr">count</span>:<span class="built_in">number</span> = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span>(num=<span class="number">0</span>;num&lt;=<span class="number">20</span>;num++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (num % <span class="number">2</span>==<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    &#125;</span><br><span class="line">    count++</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="property">log</span> (<span class="string">&quot;0 ~20 之间的奇数个数为: &quot;</span>+count)    <span class="comment">//输出10个偶数</span></span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码得到如下 JavaScript 代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (num = <span class="number">0</span>; num &lt;= <span class="number">20</span>; num++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (num % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    count++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;0 ~20 之间的奇数个数为: &quot;</span> + count); <span class="comment">//输出 10</span></span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 ~20 之间的奇数个数为: 10</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="无限循环"><a href="#无限循环" class="headerlink" title="无限循环"></a>无限循环</h2><p>无限循环就是一直在运行不会停止的循环。 for 和 while 循环都可以创建无限循环。</p>
+<p><strong>for 创建无限循环语法格式：</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(;;) &#123; </span><br><span class="line">   <span class="comment">// 语句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实例</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(;;) &#123; </span><br><span class="line">   <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;这段代码会不停的执行&quot;</span>) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>while 创建无限循环语法格式：</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123; </span><br><span class="line">   <span class="comment">// 语句</span></span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<p>实例</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="literal">true</span>) &#123; </span><br><span class="line">   <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;这段代码会不停的执行&quot;</span>) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><div class="article-licensing box"><div class="licensing-title"><p>TypeScript 循环</p><p><a href="https://blog.buubiu.com/TypeScript-循环/">https://blog.buubiu.com/TypeScript-循环/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-08-19</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/TypeScript/">TypeScript</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/TypeScript-%E5%87%BD%E6%95%B0/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">TypeScript 函数</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/TypeScript-%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5/"><span class="level-item">TypeScript 条件语句</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#for-循环"><span class="level-left"><span class="level-item">1</span><span class="level-item">for 循环</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#流程图"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">流程图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#for…in-循环"><span class="level-left"><span class="level-item">2</span><span class="level-item">for…in 循环</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">语法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#for…of-、forEach、every-和-some-循环"><span class="level-left"><span class="level-item">3</span><span class="level-item">for…of 、forEach、every 和 some 循环</span></span></a></li><li><a class="level is-mobile" href="#while-循环"><span class="level-left"><span class="level-item">4</span><span class="level-item">while 循环</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-2"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#流程图-1"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">流程图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#do…while-循环"><span class="level-left"><span class="level-item">5</span><span class="level-item">do…while 循环</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-3"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#流程图-2"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">流程图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#break-语句"><span class="level-left"><span class="level-item">6</span><span class="level-item">break 语句</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-4"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#流程图-3"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">流程图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#continue-语句"><span class="level-left"><span class="level-item">7</span><span class="level-item">continue 语句</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-5"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#流程图-4"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">流程图</span></span></a></li></ul></li><li><a class="level is-mobile" href="#无限循环"><span class="level-left"><span class="level-item">8</span><span class="level-item">无限循环</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

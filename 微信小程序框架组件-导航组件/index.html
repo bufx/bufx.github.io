@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序框架组件-导航组件 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="页面导航 navigator页面导航(navigator)组件,它类似于HTML中的a标签;"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序框架组件-导航组件"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%AF%BC%E8%88%AA%E7%BB%84%E4%BB%B6/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="页面导航 navigator页面导航(navigator)组件,它类似于HTML中的a标签;"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/219Kfe1636696671766.png"><meta property="article:published_time" content="2021-11-12T05:46:41.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.933Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/219Kfe1636696671766.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%AF%BC%E8%88%AA%E7%BB%84%E4%BB%B6/"},"headline":"微信小程序框架组件-导航组件","image":["https://blog.buubiu.com/img/article/219Kfe1636696671766.png"],"datePublished":"2021-11-12T05:46:41.000Z","dateModified":"2024-01-25T15:08:05.933Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"页面导航 navigator页面导航(navigator)组件,它类似于HTML中的a标签;"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%AF%BC%E8%88%AA%E7%BB%84%E4%BB%B6/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-12T05:46:41.000Z" title="11/12/2021, 1:46:41 PM">2021-11-12</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.933Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">15 分钟读完 (大约2230个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序框架组件-导航组件</h1><div class="content"><h2 id="页面导航-navigator"><a href="#页面导航-navigator" class="headerlink" title="页面导航 navigator"></a>页面导航 navigator</h2><p>页面导航(navigator)组件,它类似于HTML中的a标签;</p>
+<span id="more"></span>
+
+<blockquote>
+<p>基础库 1.0.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>页面链接。</p>
+<blockquote>
+<p>在小程序插件中使用需要基础库版本 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a> 起。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">target</td>
+<td align="left">string</td>
+<td align="left">self</td>
+<td align="left">否</td>
+<td align="left">在哪个目标上发生跳转，默认当前小程序</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">url</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当前小程序内的跳转链接</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">open-type</td>
+<td align="left">string</td>
+<td align="left">navigate</td>
+<td align="left">否</td>
+<td align="left">跳转方式</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">delta</td>
+<td align="left">number</td>
+<td align="left">1</td>
+<td align="left">否</td>
+<td align="left">当 open-type 为 ‘navigateBack’ 时有效，表示回退的层数</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">app-id</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，要打开的小程序 appId</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">path</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，打开的页面路径，如果为空则打开首页</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">extra-data</td>
+<td align="left">object</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，需要传递给目标小程序的数据，目标小程序可在 <code>App.onLaunch()</code>，<code>App.onShow()</code> 中获取到这份数据。<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/app.html">详情</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">version</td>
+<td align="left">string</td>
+<td align="left">release</td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，要打开的小程序版本</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">short-link</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，当传递该参数后，可以不传 app-id 和 path。链接可以通过【小程序菜单】-&gt;【复制链接】获取。</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.18.1</a></td>
+</tr>
+<tr>
+<td align="left">hover-class</td>
+<td align="left">string</td>
+<td align="left">navigator-hover</td>
+<td align="left">否</td>
+<td align="left">指定点击时的样式类，当<code>hover-class=&quot;none&quot;</code>时，没有点击态效果</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-stop-propagation</td>
+<td align="left">boolean</td>
+<td align="left">false</td>
+<td align="left">否</td>
+<td align="left">指定是否阻止本节点的祖先节点出现点击态</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.5.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-start-time</td>
+<td align="left">number</td>
+<td align="left">50</td>
+<td align="left">否</td>
+<td align="left">按住后多久出现点击态，单位毫秒</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">hover-stay-time</td>
+<td align="left">number</td>
+<td align="left">600</td>
+<td align="left">否</td>
+<td align="left">手指松开后点击态保留时间，单位毫秒</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.0.0</a></td>
+</tr>
+<tr>
+<td align="left">bindsuccess</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，跳转小程序成功</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">bindfail</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，跳转小程序失败</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+<tr>
+<td align="left">bindcomplete</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">当<code>target=&quot;miniProgram&quot;</code>时有效，跳转小程序完成</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.0.7</a></td>
+</tr>
+</tbody></table>
+<p><strong>target 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">self</td>
+<td align="left">当前小程序</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">miniProgram</td>
+<td align="left">其它小程序</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>open-type 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">navigate</td>
+<td align="left">对应 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateTo.html">wx.navigateTo</a> 或 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/navigate/wx.navigateToMiniProgram.html">wx.navigateToMiniProgram</a> 的功能</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">redirect</td>
+<td align="left">对应 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.redirectTo.html">wx.redirectTo</a> 的功能</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">switchTab</td>
+<td align="left">对应 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.switchTab.html">wx.switchTab</a> 的功能</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">reLaunch</td>
+<td align="left">对应 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.reLaunch.html">wx.reLaunch</a> 的功能</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">navigateBack</td>
+<td align="left">对应 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateBack.html">wx.navigateBack</a> 的功能</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">1.1.0</a></td>
+</tr>
+<tr>
+<td align="left">exit</td>
+<td align="left">退出小程序，<code>target=&quot;miniProgram&quot;</code>时生效</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+</tbody></table>
+<p><strong>version 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">develop</td>
+<td align="left">开发版</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">trial</td>
+<td align="left">体验版</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">release</td>
+<td align="left">正式版，仅在当前小程序为开发版或体验版时此参数有效；如果当前小程序是正式版，则打开的小程序必定是正式版。</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="使用限制"><a href="#使用限制" class="headerlink" title="使用限制"></a>使用限制</h3><ol>
+<li>需要用户确认跳转 从 <code>2.3.0</code> 版本开始，在跳转至其他小程序前，将统一增加弹窗，询问是否跳转，用户确认后才可以跳转其他小程序。如果用户点击取消，则回调 <code>fail cancel</code>。</li>
+<li>每个小程序可跳转的其他小程序数量限制为不超过 10 个 从 2.4.0 版本以及指定日期（具体待定）开始，开发者提交新版小程序代码时，如使用了跳转其他小程序功能，则需要在代码配置中声明将要跳转的小程序名单，限定不超过 10 个，否则将无法通过审核。该名单可在发布新版时更新，不支持动态修改。配置方法详见 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/config.html">配置</a>。调用此接口时，所跳转的 appId 必须在配置列表中，否则回调 <code>fail appId &quot;$&#123;appId&#125;&quot; is not in navigateToMiniProgramAppIdList</code>。</li>
+</ol>
+<h3 id="无需声明跳转名单，不限跳转数量（众测中）"><a href="#无需声明跳转名单，不限跳转数量（众测中）" class="headerlink" title="无需声明跳转名单，不限跳转数量（众测中）"></a>无需声明跳转名单，不限跳转数量（众测中）</h3><ol>
+<li>从2020年4月24日起，使用跳转其他小程序功能将无需在全局配置中声明跳转名单，调用此接口时将不再校验所跳转的 AppID 是否在 navigateToMiniProgramAppIdList 中。</li>
+<li>从2020年4月24日起，跳转其他小程序将不再受数量限制，使用此功能时请注意遵守运营规范。</li>
+</ol>
+<h3 id="关于调试"><a href="#关于调试" class="headerlink" title="关于调试"></a>关于调试</h3><ul>
+<li>在开发者工具上调用此 API 并不会真实的跳转到另外的小程序，但是开发者工具会校验本次调用跳转是否成功。<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/different.html#%E8%B7%B3%E8%BD%AC%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%B0%83%E8%AF%95%E6%94%AF%E6%8C%81">详情</a></li>
+<li>开发者工具上支持被跳转的小程序处理接收参数的调试。<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/different.html#%E8%B7%B3%E8%BD%AC%E5%B0%8F%E7%A8%8B%E5%BA%8F%E8%B0%83%E8%AF%95%E6%94%AF%E6%8C%81">详情</a></li>
+</ul>
+<h3 id="Bug-amp-Tip"><a href="#Bug-amp-Tip" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>：<code>navigator-hover</code> 默认为 <code>&#123;background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;&#125;</code>, <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/navigator.html">navigator</a> 的子节点背景色应为透明色</li>
+</ol>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/s/2Ec11cmI6BY1">在开发者工具中预览效果</a></p>
+<figure class="highlight html"><figcaption><span>index.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- sample.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;btn-area&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">navigator</span> <span class="attr">url</span>=<span class="string">&quot;/navigate/navigate?title=navigate&quot;</span> <span class="attr">hover-class</span>=<span class="string">&quot;navigator-hover&quot;</span>&gt;</span>跳转到新页面<span class="tag">&lt;/<span class="name">navigator</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">navigator</span> <span class="attr">url</span>=<span class="string">&quot;../redirect/redirect?title=redirect&quot;</span> <span class="attr">open-type</span>=<span class="string">&quot;redirect&quot;</span> <span class="attr">hover-class</span>=<span class="string">&quot;other-navigator-hover&quot;</span>&gt;</span>在当前页打开<span class="tag">&lt;/<span class="name">navigator</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;navigator url=&quot;/index/index&quot; open-type=&quot;switchTab&quot; hover-class=&quot;other-navigator-hover&quot;&gt;切换 Tab&lt;/navigator&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>index.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redirect.js navigator.js</span></span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">onLoad</span>: <span class="keyword">function</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">      <span class="attr">title</span>: options.<span class="property">title</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><figcaption><span>index.wxss</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&#x27;../lib/weui.wxss&#x27;</span></span><br><span class="line">/** wxss **/</span><br><span class="line">/** 修改默认的navigator点击态 **/</span><br><span class="line">.navigator-hover &#123;</span><br><span class="line">    <span class="attribute">color</span>:blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/** 自定义其他点击态样式类 **/</span></span><br><span class="line"><span class="selector-class">.other-navigator-hover</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>:red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><figcaption><span>navigate.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- navigator.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">style</span>=<span class="string">&quot;text-align:center&quot;</span>&gt;</span> &#123;&#123;title&#125;&#125; <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span> 点击左上角返回回到之前页面 <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>navigate.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redirect.js navigator.js</span></span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">onLoad</span>: <span class="keyword">function</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">      <span class="attr">title</span>: options.<span class="property">title</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><figcaption><span>redirect.wxml</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- redirect.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">style</span>=<span class="string">&quot;text-align:center&quot;</span>&gt;</span> &#123;&#123;title&#125;&#125; <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span> 点击左上角返回回到上级页面 <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><figcaption><span>redirect.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redirect.js navigator.js</span></span><br><span class="line"><span class="title class_">Page</span>(&#123;</span><br><span class="line">  <span class="attr">onLoad</span>: <span class="keyword">function</span> (<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123;</span><br><span class="line">      <span class="attr">title</span>: options.<span class="property">title</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/article/219Kfe1636696671766.png"></p>
+<h2 id="功能页导航-functional-page-navigator"><a href="#功能页导航-functional-page-navigator" class="headerlink" title="功能页导航 functional-page-navigator"></a>功能页导航 functional-page-navigator</h2><blockquote>
+<p>基础库 2.1.0 开始支持，低版本需做<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">兼容处理</a>。</p>
+</blockquote>
+<p>仅在插件中有效，用于跳转到插件功能页。</p>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">必填</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">version</td>
+<td align="left">string</td>
+<td align="left">release</td>
+<td align="left">否</td>
+<td align="left">跳转到的小程序版本，<strong>线上版本必须设置为 release</strong></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">name</td>
+<td align="left">string</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">要跳转到的功能页</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">args</td>
+<td align="left">object</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">功能页参数，参数格式与具体功能页相关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">bindsuccess</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">功能页返回，且操作成功时触发， detail 格式与具体功能页相关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">bindfail</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">功能页返回，且操作失败时触发， detail 格式与具体功能页相关</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">bindcancel</td>
+<td align="left">eventhandler</td>
+<td align="left"></td>
+<td align="left">否</td>
+<td align="left">因用户操作从功能页返回时触发</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.1</a></td>
+</tr>
+</tbody></table>
+<p><strong>version 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">develop</td>
+<td align="left">开发版</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">trial</td>
+<td align="left">体验版</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">release</td>
+<td align="left">正式版</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p><strong>name 的合法值</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">值</th>
+<th align="left">说明</th>
+<th align="left">最低版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">loginAndGetUserInfo</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/plugin/functional-pages/user-info.html">用户信息功能页</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">requestPayment</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/plugin/functional-pages/request-payment.html">支付功能页</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.1.0</a></td>
+</tr>
+<tr>
+<td align="left">chooseAddress</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/plugin/functional-pages/choose-address.html">收货地址功能页</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.4.0</a></td>
+</tr>
+<tr>
+<td align="left">chooseInvoice</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/plugin/functional-pages/choose-invoice.html">获取发票功能页</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.14.1</a></td>
+</tr>
+<tr>
+<td align="left">chooseInvoiceTitle</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/plugin/functional-pages/choose-invoice-title.html">获取发票抬头功能页</a></td>
+<td align="left"><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html">2.14.1</a></td>
+</tr>
+</tbody></table>
+<h3 id="Bug-amp-Tip-1"><a href="#Bug-amp-Tip-1" class="headerlink" title="Bug &amp; Tip"></a>Bug &amp; Tip</h3><ol>
+<li><code>tip</code>: 功能页是插件所有者小程序中的一个特殊页面，开发者不能自定义这个页面的外观。</li>
+<li><code>tip</code>: 在功能页展示时，一些与界面展示相关的接口将被禁用（接口调用返回 fail ）。</li>
+<li><code>tip</code>: 这个组件本身可以在开发者工具中使用，但功能页的跳转目前不支持在开发者工具中调试，请在真机上测试。</li>
+</ol>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- sample.wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">functional-page-navigator</span> <span class="attr">name</span>=<span class="string">&quot;loginAndGetUserInfo&quot;</span> <span class="attr">bind:success</span>=<span class="string">&quot;loginSuccess&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span>&gt;</span>登录到插件<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">functional-page-navigator</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redirect.js navigator.js</span></span><br><span class="line"><span class="title class_">Component</span>(&#123;</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="attr">loginSuccess</span>: <span class="keyword">function</span>(<span class="params">e</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">detail</span>.<span class="property">code</span>) <span class="comment">// wx.login 的 code</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">detail</span>.<span class="property">userInfo</span>) <span class="comment">// wx.getUserInfo 的 userInfo</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序框架组件-导航组件</p><p><a href="https://blog.buubiu.com/微信小程序框架组件-导航组件/">https://blog.buubiu.com/微信小程序框架组件-导航组件/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E5%AA%92%E4%BD%93%E7%BB%84%E4%BB%B6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序框架组件-媒体组件</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6-%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6/"><span class="level-item">微信小程序框架组件-表单组件</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#页面导航-navigator"><span class="level-left"><span class="level-item">1</span><span class="level-item">页面导航 navigator</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#使用限制"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">使用限制</span></span></a></li><li><a class="level is-mobile" href="#无需声明跳转名单，不限跳转数量（众测中）"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">无需声明跳转名单，不限跳转数量（众测中）</span></span></a></li><li><a class="level is-mobile" href="#关于调试"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">关于调试</span></span></a></li><li><a class="level is-mobile" href="#Bug-amp-Tip"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">Bug &amp; Tip</span></span></a></li><li><a class="level is-mobile" href="#示例代码"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">示例代码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#功能页导航-functional-page-navigator"><span class="level-left"><span class="level-item">2</span><span class="level-item">功能页导航 functional-page-navigator</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Bug-amp-Tip-1"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">Bug &amp; Tip</span></span></a></li><li><a class="level is-mobile" href="#示例代码-1"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">示例代码</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

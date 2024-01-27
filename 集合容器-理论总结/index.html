@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>集合容器-理论总结 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="简介集合框架：用于存储数据的容器。 集合框架是为表示和操作集合而规定的一种统一的标准的体系结构。任何集合框架都包含三大块内容：对外的接口、接口的实现和对集合运算的算法。"><meta property="og:type" content="blog"><meta property="og:title" content="集合容器-理论总结"><meta property="og:url" content="https://blog.buubiu.com/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8-%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="简介集合框架：用于存储数据的容器。 集合框架是为表示和操作集合而规定的一种统一的标准的体系结构。任何集合框架都包含三大块内容：对外的接口、接口的实现和对集合运算的算法。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0pvdXJXb24vaW1hZ2UvbWFzdGVyL0phdmElRTklOUIlODYlRTUlOTAlODglRTYlQTElODYlRTYlOUUlQjYvY29sbGVjdGlvbi5wbmc.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/S8OKuB.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/NCi0nO1599811586242.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/dLGotc1599811683322.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/8y3gy21599811700486.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/3hIodh1599811909668.png"><meta property="article:published_time" content="2020-09-11T03:15:15.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.948Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="集合编程"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0pvdXJXb24vaW1hZ2UvbWFzdGVyL0phdmElRTklOUIlODYlRTUlOTAlODglRTYlQTElODYlRTYlOUUlQjYvY29sbGVjdGlvbi5wbmc.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8-%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93/"},"headline":"集合容器-理论总结","image":["https://blog.buubiu.com/img/article/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0pvdXJXb24vaW1hZ2UvbWFzdGVyL0phdmElRTklOUIlODYlRTUlOTAlODglRTYlQTElODYlRTYlOUUlQjYvY29sbGVjdGlvbi5wbmc.png","https://blog.buubiu.com/img/article/S8OKuB.png","https://blog.buubiu.com/img/article/NCi0nO1599811586242.png","https://blog.buubiu.com/img/article/dLGotc1599811683322.png","https://blog.buubiu.com/img/article/8y3gy21599811700486.png","https://blog.buubiu.com/img/article/3hIodh1599811909668.png"],"datePublished":"2020-09-11T03:15:15.000Z","dateModified":"2024-01-25T15:08:05.948Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"简介集合框架：用于存储数据的容器。 集合框架是为表示和操作集合而规定的一种统一的标准的体系结构。任何集合框架都包含三大块内容：对外的接口、接口的实现和对集合运算的算法。"}</script><link rel="canonical" href="https://blog.buubiu.com/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8-%E7%90%86%E8%AE%BA%E6%80%BB%E7%BB%93/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2020-09-11T03:15:15.000Z" title="9/11/2020, 11:15:15 AM">2020-09-11</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.948Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/">集合容器</a></span><span class="level-item">38 分钟读完 (大约5625个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">集合容器-理论总结</h1><div class="content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>集合框架</strong>：用于存储数据的容器。</p>
+<p>集合框架是为表示和操作集合而规定的一种统一的标准的体系结构。<br>任何集合框架都包含三大块内容：对外的接口、接口的实现和对集合运算的算法。</p>
+<span id="more"></span>
+
+<p><strong>接口</strong>：表示集合的抽象数据类型。接口允许我们操作集合时不必关注具体实现，从而达到“多态”。在面向对象编程语言中，接口通常用来形成规范。</p>
+<p><strong>实现</strong>：集合接口的具体实现，是重用性很高的数据结构。</p>
+<p><strong>算法</strong>：在一个实现了某个集合框架中的接口的对象身上完成某种有用的计算的方法，例如查找、排序等。这些算法通常是多态的，因为相同的方法可以在同一个接口被多个类实现时有不同的表现。事实上，算法是可复用的函数。<br>它减少了程序设计的辛劳。</p>
+<p>集合框架通过提供有用的数据结构和算法使你能集中注意力于你的程序的重要部分上，而不是为了让程序能正常运转而将注意力于低层设计上。<br>通过这些在无关API之间的简易的互用性，使你免除了为改编对象或转换代码以便联合这些API而去写大量的代码。 它提高了程序速度和质量。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>对象封装数据，对象多了也需要存储。集合用于存储对象。</li>
+<li>对象的个数确定可以使用数组，对象的个数不确定的可以用集合。因为集合是可变长度的。</li>
+</ul>
+<p><strong>集合和数组的区别</strong></p>
+<ul>
+<li>数组是固定长度的；集合可变长度的。</li>
+<li>数组可以存储基本数据类型，也可以存储引用数据类型；集合只能存储引用数据类型。</li>
+<li>数组存储的元素必须是同一个数据类型；集合存储的对象可以是不同数据类型。</li>
+</ul>
+<p><strong>数据结构</strong>：就是容器中存储数据的方式。</p>
+<p>对于集合容器，有很多种。因为每一个容器的自身特点不同，其实原理在于每个容器的内部数据结构不同。</p>
+<p>集合容器在不断向上抽取过程中，出现了集合体系。<strong>在使用一个体系的原则：参阅顶层内容。建立底层对象。</strong></p>
+<h3 id="使用集合框架的好处"><a href="#使用集合框架的好处" class="headerlink" title="使用集合框架的好处"></a>使用集合框架的好处</h3><ol>
+<li>容量自增长；</li>
+<li>提供了高性能的数据结构和算法，使编码更轻松，提高了程序速度和质量；</li>
+<li>允许不同 API 之间的互操作，API之间可以来回传递集合；</li>
+<li>可以方便地扩展或改写集合，提高代码复用性和可操作性。</li>
+<li>通过使用JDK自带的集合类，可以降低代码维护和学习新API成本。</li>
+</ol>
+<h2 id="Iterator接口"><a href="#Iterator接口" class="headerlink" title="Iterator接口"></a>Iterator接口</h2><p>Iterator接口，用于遍历集合元素的接口。</p>
+<p>在Iterator接口中定义了三个方法：</p>
+<table>
+<thead>
+<tr>
+<th>修饰与类型</th>
+<th>方法与描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>boolean</code></td>
+<td><code>hasNext()</code> 如果仍有元素可以迭代，则返回true。</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>next()</code> 返回迭代的下一个元素。</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>remove()</code> 从迭代器指向的 collection 中移除迭代器返回的最后一个元素（可选操作）。</td>
+</tr>
+</tbody></table>
+<p>每一个集合都有自己的数据结构(就是容器中存储数据的方式)，都有特定的取出自己内部元素的方式。为了便于操作所有的容器，取出元素。将容器内部的取出方式按照一个统一的规则向外提供，这个规则就是Iterator接口，使得对容器的遍历操作与其具体的底层实现相隔离，达到解耦的效果。</p>
+<p>也就说，只要通过该接口就可以取出Collection集合中的元素，至于每一个具体的容器依据自己的数据结构，如何实现的具体取出细节，这个不用关心，这样就降低了取出元素和具体集合的耦合性。</p>
+<p>使用迭代器遍历集合元素</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    List&lt;String&gt; list1 = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    list1.add(<span class="string">&quot;abc0&quot;</span>);</span><br><span class="line">    list1.add(<span class="string">&quot;abc1&quot;</span>);</span><br><span class="line">    list1.add(<span class="string">&quot;abc2&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// while循环方式遍历</span></span><br><span class="line">    <span class="type">Iterator</span> <span class="variable">it1</span> <span class="operator">=</span> list1.iterator();</span><br><span class="line">    <span class="keyword">while</span> (it1.hasNext()) &#123;</span><br><span class="line">        System.out.println(it1.next());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for循环方式遍历</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">Iterator</span> <span class="variable">it2</span> <span class="operator">=</span> list1.iterator(); it2.hasNext(); ) &#123;</span><br><span class="line">        System.out.println(it2.next());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用Iterator迭代器进行删除集合元素，则不会出现并发修改异常。</p>
+<p>因为：在执行remove操作时，同样先执行checkForComodification()，然后会执行ArrayList的remove()方法，该方法会将modCount值加1，这里我们将expectedModCount&#x3D;modCount，使之保持统一。</p>
+<h3 id="ListIterator接口"><a href="#ListIterator接口" class="headerlink" title="ListIterator接口"></a>ListIterator接口</h3><p>ListIterator是一个功能更加强大的迭代器， 它继承于Iterator接口，只能用于各种List类型的访问。可以通过调用listIterator()方法产生一个指向List开始处的ListIterator， 还可以调用listIterator(n)方法创建一个一开始就指向列表索引为n的元素处的ListIterator。</p>
+<p><strong>特点</strong></p>
+<ol>
+<li>允许我们向前、向后两个方向遍历 List；</li>
+<li>在遍历时修改 List 的元素；</li>
+<li>遍历时获取迭代器当前游标所在位置。</li>
+</ol>
+<p><strong>常用API</strong></p>
+<table>
+<thead>
+<tr>
+<th>修饰与类型</th>
+<th>方法与描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>void</code></td>
+<td><code>add(E e)</code> 将指定的元素插入到列表 （可选操作）。</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><code>hasNext()</code> 如果此列表迭代器在前进方向还有更多的元素时，返回 <code>true</code>。</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td><code>hasPrevious()</code> 如果此列表迭代器在相反方向还有更多的元素时，返回 <code>true</code>。</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>next()</code> 返回列表中的下一个元素和光标的位置向后推进。</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><code>nextIndex()</code> 返回调用 <code>next()</code>后返回的元素索引。</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td><code>previous()</code> 返回列表中的上一个元素和光标的位置向前移动。</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td><code>previousIndex()</code> 返回调用<code>previous()</code> 后返回的元素索引 。</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>remove()</code> 删除列表中调用<code>next()</code>或<code>previous()</code>的返回最后一个元素。</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><code>set(E e)</code> 用指定元素替换列表中调用<code>next()</code>或<code>previous()</code>的返回最后一个元素。</td>
+</tr>
+</tbody></table>
+<h3 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a>Collection接口</h3><p>所有集合类都位于<strong>java.util</strong>包下。Java的集合类主要由两个接口派生而出：<strong>Collection</strong>和<strong>Map</strong>，Collection和Map是Java集合框架的根接口，这两个接口又包含了一些子接口或实现类。</p>
+<ul>
+<li>Collection一次存一个元素，是单列集合；</li>
+<li>Map一次存一对元素，是双列集合。Map存储的一对元素：键–值，<strong>键（key）与值(value)间有对应(映射)关系。</strong></li>
+</ul>
+<p><strong>单列集合继承关系图</strong></p>
+<p><img src="/../img/article/aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0pvdXJXb24vaW1hZ2UvbWFzdGVyL0phdmElRTklOUIlODYlRTUlOTAlODglRTYlQTElODYlRTYlOUUlQjYvY29sbGVjdGlvbi5wbmc.png"></p>
+<p>Collection集合主要有List和Set两大接口</p>
+<ul>
+<li>List：有序(元素存入集合的顺序和取出的顺序一致)，元素都有索引。元素可以重复。</li>
+<li>Set：无序(存入和取出顺序有可能不一致)，不可以存储重复元素。必须保证元素唯一性。</li>
+</ul>
+<h4 id="List集合"><a href="#List集合" class="headerlink" title="List集合"></a>List集合</h4><p>List是元素有序并且可以重复的集合。</p>
+<p>List的主要实现：ArrayList， LinkedList， Vector。</p>
+<h5 id="List常用方法"><a href="#List常用方法" class="headerlink" title="List常用方法"></a>List常用方法</h5><p><img src="/../img/article/S8OKuB.png"></p>
+<h5 id="ArrayList、LinkedList、Vector-的区别"><a href="#ArrayList、LinkedList、Vector-的区别" class="headerlink" title="ArrayList、LinkedList、Vector 的区别"></a>ArrayList、LinkedList、Vector 的区别</h5><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>ArrayList</strong></th>
+<th>LinkedList</th>
+<th><strong>Vector</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>底层实现</td>
+<td>数组</td>
+<td>双向链表</td>
+<td>数组</td>
+</tr>
+<tr>
+<td>同步性及效率</td>
+<td>不同步，非线程安全，效率高，支持随机访问</td>
+<td>不同步，非线程安全，效率高</td>
+<td>同步，线程安全，效率低</td>
+</tr>
+<tr>
+<td>特点</td>
+<td>查询快，增删慢</td>
+<td>查询慢，增删快</td>
+<td>查询快，增删慢</td>
+</tr>
+<tr>
+<td>默认容量</td>
+<td>10</td>
+<td>&#x2F;</td>
+<td>10</td>
+</tr>
+<tr>
+<td>扩容机制</td>
+<td>int newCapacity &#x3D; oldCapacity + (oldCapacity &gt;&gt; 1)；&#x2F;&#x2F;1.5 倍</td>
+<td>&#x2F;</td>
+<td>2 倍</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>总结</strong>：</p>
+</blockquote>
+<ul>
+<li>ArrayList 和 Vector 基于数组实现，对于随机访问get和set，ArrayList优于LinkedList，因为LinkedList要移动指针。</li>
+<li>LinkedList 不会出现扩容的问题，所以比较适合随机位置增、删。但是其基于链表实现，所以在定位时需要线性扫描，效率比较低。</li>
+<li>当操作是在一列数据的后面添加数据而不是在前面或中间，并且需要随机地访问其中的元素时，使用ArrayList会提供比较好的性能；</li>
+<li>当你的操作是在一列数据的前面或中间添加或删除数据，并且按照顺序访问其中的元素时，就应该使用LinkedList了。</li>
+</ul>
+<h5 id="遍历时操作元素"><a href="#遍历时操作元素" class="headerlink" title="遍历时操作元素"></a>遍历时操作元素</h5><p>遍历集合时，同时操作集合中的元素（增删等）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Description: for循环遍历</span></span><br><span class="line"><span class="comment">  * 输出结果：</span></span><br><span class="line"><span class="comment">  * [a, b, c, d, e]</span></span><br><span class="line"><span class="comment">  * 由结果可知，第二个元素b并未删除，原因是当第一个元素b被删除后，它后面所有的元素都向前移动了一个单位，循环时导致第二个元素b漏掉了</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(List&lt;String&gt; list)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> list.get(i);</span><br><span class="line">        <span class="keyword">if</span> (s.equals(<span class="string">&quot;b&quot;</span>)) &#123;</span><br><span class="line">            list.remove(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Description: foreach循环遍历</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * 会报错：java.util.ConcurrentModificationException。这是因为在这里，foreach循环遍历容器本质上是使用迭代器进行遍历的，会对修改次数modCount进行检查，不允许集合进行更改操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">remove2</span><span class="params">(List&lt;String&gt; list)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (String s : list) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s.equals(<span class="string">&quot;b&quot;</span>)) &#123;</span><br><span class="line">            list.remove(s);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * Description: 使用迭代器遍历</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">remove3</span><span class="params">(List&lt;String&gt; list)</span> &#123;</span><br><span class="line">    Iterator&lt;String&gt; it = list.iterator();</span><br><span class="line">    <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> it.next();</span><br><span class="line">        <span class="keyword">if</span> (s.equals(<span class="string">&quot;b&quot;</span>)) &#123;</span><br><span class="line">            it.remove();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用迭代器遍历删除时，能够避免方法二中出现的问题。这是因为：在ArrayList中，modCount是指集合的修改次数，当进行add或者delete时，modCount会+1；expectedModCount是指集合的迭代器的版本号，初始值是modCount，但是当集合进行add或者delete操作时，modCount会+1，而expectedModCount不会改变，所以方法二中会抛出异常。但是it.remove操作时，会同步expectedModCount的值，把modCount的值赋予expectedModCount。所以不会抛出异常。</p>
+<p>测试方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    List&lt;String&gt; arrayList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;String&gt;();</span><br><span class="line">    arrayList.add(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    arrayList.add(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    arrayList.add(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">    arrayList.add(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">    arrayList.add(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">    arrayList.add(<span class="string">&quot;e&quot;</span>);</span><br><span class="line">    <span class="comment">// remove(arrayList);</span></span><br><span class="line">    <span class="comment">// remove2(arrayList);</span></span><br><span class="line">    remove3(arrayList);</span><br><span class="line">    System.out.println(arrayList);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结：如果想正确的循环遍历删除（增加）元素，需要使用方法三，也就是迭代器遍历删除（增加）的方法。</p>
+<h4 id="Set集合"><a href="#Set集合" class="headerlink" title="Set集合"></a>Set集合</h4><p>Set集合元素无序(存入和取出的顺序不一定一致)，并且没有重复对象。<br>Set的主要实现类：HashSet， TreeSet。</p>
+<h5 id="Set常用方法"><a href="#Set常用方法" class="headerlink" title="Set常用方法"></a>Set常用方法</h5><p><img src="/../img/article/NCi0nO1599811586242.png"></p>
+<h5 id="HashSet、TreeSet、LinkedHashSet的区别"><a href="#HashSet、TreeSet、LinkedHashSet的区别" class="headerlink" title="HashSet、TreeSet、LinkedHashSet的区别"></a>HashSet、TreeSet、LinkedHashSet的区别</h5><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>HashSet</strong></th>
+<th><strong>TreeSet</strong></th>
+<th><strong>LinkedHashSet</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>底层实现</td>
+<td>HashMap</td>
+<td>红黑树</td>
+<td>LinkedHashMap</td>
+</tr>
+<tr>
+<td>重复性</td>
+<td>不允许重复</td>
+<td>不允许重复</td>
+<td>不允许重复</td>
+</tr>
+<tr>
+<td>有无序</td>
+<td>无序</td>
+<td>有序，支持两种排序方式，自然排序和定制排序，其中自然排序为默认的排序方式。</td>
+<td>有序，以元素插入的顺序来维护集合的链接表</td>
+</tr>
+<tr>
+<td>时间复杂度</td>
+<td>add()，remove()，contains()方法的时间复杂度是O(1)</td>
+<td>add()，remove()，contains()方法的时间复杂度是O(logn)</td>
+<td>LinkedHashSet在迭代访问Set中的全部元素时，性能比HashSet好，但是插入时性能稍微逊色于HashSet，时间复杂度是 O(1)。</td>
+</tr>
+<tr>
+<td>同步性</td>
+<td>不同步，线程不安全</td>
+<td>不同步，线程不安全</td>
+<td>不同步，线程不安全</td>
+</tr>
+<tr>
+<td>null值</td>
+<td>允许null值</td>
+<td>不支持null值，会抛出 java.lang.NullPointerException 异常。因为TreeSet应用 compareTo() 方法于各个元素来比较他们，当比较null值时会抛出 NullPointerException异常。</td>
+<td>允许null值</td>
+</tr>
+<tr>
+<td>比较</td>
+<td>equals()</td>
+<td>compareTo()</td>
+<td>equals()</td>
+</tr>
+</tbody></table>
+<h5 id="HashSet如何检查重复"><a href="#HashSet如何检查重复" class="headerlink" title="HashSet如何检查重复"></a>HashSet如何检查重复</h5><p>当你把对象加入HashSet时，HashSet会先计算对象的hashcode值来判断对象加入的位置，同时也会与其他加入的对象的hashcode值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。但是如果发现有相同hashcode值的对象，这时会调用equals()方法来检查hashcode相等的对象是否真的相同。如果两者相同，HashSet就不会让加入操作成功。<br>hashCode()与equals()的相关规定：</p>
+<ul>
+<li>如果两个对象相等，则hashcode一定也是相同的</li>
+<li>两个对象相等，equals方法返回true</li>
+<li>两个对象有相同的hashcode值，它们也不一定是相等的</li>
+<li>综上，equals方法被覆盖过，则hashCode方法也必须被覆盖<br>hashCode()的默认行为是对堆上的对象产生独特值。如果没有重写hashCode()，则该class的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）。</li>
+</ul>
+<blockquote>
+<p>总结：</p>
+</blockquote>
+<p>HashSet是一个通用功能的Set，而LinkedHashSet 提供元素插入顺序保证，TreeSet是一个SortedSet实现，由Comparator 或者 Comparable指定的元素顺序存储元素。</p>
+<h2 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h2><p>Map 是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象。 Map没有继承于Collection接口，从Map集合中检索元素时，只要给出键对象，就会返回对应的值对象。<br>Map 的常用实现类：HashMap、TreeMap、HashTable、LinkedHashMap、ConcurrentHashMap</p>
+<h3 id="双列集合继承关系图"><a href="#双列集合继承关系图" class="headerlink" title="双列集合继承关系图"></a>双列集合继承关系图</h3><p><img src="/../img/article/dLGotc1599811683322.png"></p>
+<h3 id="Map常用方法"><a href="#Map常用方法" class="headerlink" title="Map常用方法"></a>Map常用方法</h3><p><img src="/../img/article/8y3gy21599811700486.png"></p>
+<h3 id="HashMap、HashTable、TreeMap的区别"><a href="#HashMap、HashTable、TreeMap的区别" class="headerlink" title="HashMap、HashTable、TreeMap的区别"></a>HashMap、HashTable、TreeMap的区别</h3><ul>
+<li>TreeMap：基于红黑树实现。</li>
+<li>HashMap：基于哈希表实现。</li>
+<li>HashTable：和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。它是遗留类，不应该去使用它。现在可以使用 ConcurrentHashMap 来支持线程安全，并且 ConcurrentHashMap 的效率会更高，因为 ConcurrentHashMap 引入了分段锁。</li>
+<li>LinkedHashMap：使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用（LRU）顺序。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>HashMap</strong></th>
+<th><strong>HashTable</strong></th>
+<th>TreeMap</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>底层实现</td>
+<td>哈希表（数组+链表）</td>
+<td>哈希表（数组+链表）</td>
+<td>红黑树</td>
+</tr>
+<tr>
+<td>同步性</td>
+<td>线程不同步</td>
+<td>同步</td>
+<td>线程不同步</td>
+</tr>
+<tr>
+<td>null值</td>
+<td>允许 key 和 Vale 是 null，但是只允许一个 key 为 null，且这个元素存放在哈希表 0 角标位置</td>
+<td>不允许key、value 是 null</td>
+<td>value允许为null。 当未实现 Comparator 接口时，key 不可以为null 当实现 Comparator 接口时，若未对 null 情况进行判断，则可能抛 NullPointerException 异常。如果针对null情况实现了，可以存入，但是却不能正常使用get()访问，只能通过遍历去访问。</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>使用hash(Object key)扰动函数对 key 的 hashCode 进行扰动后作为 hash 值</td>
+<td>直接使用 key 的 hashCode() 返回值作为 hash 值</td>
+<td></td>
+</tr>
+<tr>
+<td>容量</td>
+<td>容量为 2^4 且容量一定是 2^n</td>
+<td>默认容量是11，不一定是 2^n</td>
+<td></td>
+</tr>
+<tr>
+<td>扩容</td>
+<td>两倍，且哈希桶的下标使用 &amp;运算代替了取模</td>
+<td>2倍+1，取哈希桶下标是直接用模运算</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="HashMap在JDK1-7和JDK1-8中有哪些不同"><a href="#HashMap在JDK1-7和JDK1-8中有哪些不同" class="headerlink" title="HashMap在JDK1.7和JDK1.8中有哪些不同"></a>HashMap在JDK1.7和JDK1.8中有哪些不同</h3><table>
+<thead>
+<tr>
+<th>不同</th>
+<th>JDK 1.7</th>
+<th>JDK 1.8</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存储结构</td>
+<td>数组 + 链表</td>
+<td>数组 + 链表 + 红黑树</td>
+</tr>
+<tr>
+<td>初始化方式</td>
+<td>单独函数：<code>inflateTable()</code></td>
+<td>直接集成到了扩容函数<code>resize()</code>中</td>
+</tr>
+<tr>
+<td>hash值计算方式</td>
+<td>扰动处理 &#x3D; 9次扰动 &#x3D; 4次位运算 + 5次异或运算</td>
+<td>扰动处理 &#x3D; 2次扰动 &#x3D; 1次位运算 + 1次异或运算</td>
+</tr>
+<tr>
+<td>存放数据的规则</td>
+<td>无冲突时，存放数组；冲突时，存放链表</td>
+<td>无冲突时，存放数组；冲突 &amp; 链表长度 &lt; 8：存放单链表；冲突 &amp; 链表长度 &gt; 8：树化并存放红黑树</td>
+</tr>
+<tr>
+<td>插入数据方式</td>
+<td>头插法（先讲原位置的数据移到后1位，再插入数据到该位置）</td>
+<td>尾插法（直接插入到链表尾部&#x2F;红黑树）</td>
+</tr>
+<tr>
+<td>扩容后存储位置的计算方式</td>
+<td>全部按照原来方法进行计算（即hashCode -&gt;&gt; 扰动函数 -&gt;&gt; (h&amp;length-1)）</td>
+<td>按照扩容后的规律计算（即扩容后的位置&#x3D;原位置 or 原位置 + 旧容量）</td>
+</tr>
+</tbody></table>
+<h2 id="集合工具类Collections"><a href="#集合工具类Collections" class="headerlink" title="集合工具类Collections"></a>集合工具类Collections</h2><p>Collections：集合工具类，方便对集合的操作。这个类不需要创建对象，内部提供的都是静态方法。</p>
+<p>静态方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(list);<span class="comment">//list集合进行元素的自然顺序排序。</span></span><br><span class="line">Collections.sort(list,<span class="keyword">new</span> <span class="title class_">ComparatorByLen</span>());<span class="comment">//按指定的比较器方法排序。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ComparatorByLen</span> <span class="keyword">implements</span> <span class="title class_">Comparator</span>&lt;String&gt;&#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(String s1,String s2)</span>&#123;</span><br><span class="line">     <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> s1.length()-s2.length();</span><br><span class="line">     <span class="keyword">return</span> temp==<span class="number">0</span>?s1.compareTo(s2):temp;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Collections.max(list);<span class="comment">//返回list中字典顺序最大的元素。</span></span><br><span class="line"><span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> Collections.binarySearch(list,<span class="string">&quot;zz&quot;</span>);<span class="comment">//二分查找，返回角标。</span></span><br><span class="line">Collections.reverseOrder();<span class="comment">//逆向反转排序。</span></span><br><span class="line">Collections.shuffle(list);<span class="comment">//随机对list中的元素进行位置的置换。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//将非同步集合转成同步集合的方法：Collections中的  XXX synchronizedXXX(XXX);  </span></span><br><span class="line"><span class="comment">//原理：定义一个类，将集合所有的方法加同一把锁后返回。</span></span><br><span class="line">List <span class="title function_">synchronizedList</span><span class="params">(list)</span>;</span><br><span class="line">Map <span class="title function_">synchronizedMap</span><span class="params">(map)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Collection-和-Collections的区别"><a href="#Collection-和-Collections的区别" class="headerlink" title="Collection 和 Collections的区别"></a>Collection 和 Collections的区别</h3><ol>
+<li><p>Collections是个java.util下的类，是针对集合类的一个工具类,提供一系列静态方法,实现对集合的查找、排序、替换、线程安全化（将非同步的集合转换成同步的）等操作。</p>
+</li>
+<li><p>Collection是个java.util下的接口，它是各种集合结构的父接口，继承于它的接口主要有Set和List,提供了关于集合的一些操作,如插入、删除、判断一个元素是否其成员、遍历等。</p>
+</li>
+</ol>
+<h2 id="数组工具类-Arrays"><a href="#数组工具类-Arrays" class="headerlink" title="数组工具类 Arrays"></a>数组工具类 Arrays</h2><p>用于操作数组对象的工具类，里面都是静态方法。</p>
+<p>数组 -&gt; 集合：asList方法，将数组转换成list集合。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String[] arr =&#123;<span class="string">&quot;abc&quot;</span>,<span class="string">&quot;kk&quot;</span>,<span class="string">&quot;qq&quot;</span>&#125;;</span><br><span class="line">List&lt;String&gt; list =Arrays.asList(arr);<span class="comment">//将arr数组转成list集合。</span></span><br></pre></td></tr></table></figure>
+
+<p>将数组转换成集合，有什么好处呢？用aslist方法，将数组变成集合；</p>
+<ul>
+<li><p>可以通过list集合中的方法来操作数组中的元素：isEmpty()、contains、indexOf、set；<br>注意（局限性）：数组是固定长度，不可以使用集合对象增加或者删除等，会改变数组长度的功能方法。比如add、remove、clear。（会报不支持操作异常UnsupportedOperationException）；</p>
+</li>
+<li><p>如果数组中存储的引用数据类型，直接作为集合的元素可以直接用集合方法操作。</p>
+</li>
+<li><p>如果数组中存储的是基本数据类型，asList会将数组实体作为集合元素存在。</p>
+</li>
+</ul>
+<p>集合 -&gt; 数组：用的是Collection接口中的toArray()方法;</p>
+<ul>
+<li><p>如果给toArray传递的指定类型的数据长度小于了集合的size，那么toArray方法，会自定再创建一个该类型的数据，长度为集合的size。</p>
+</li>
+<li><p>如果传递的指定的类型的数组的长度大于了集合的size，那么toArray方法，就不会创建新数组，直接使用该数组即可，并将集合中的元素存储到数组中，其他为存储元素的位置默认值null。</p>
+</li>
+<li><p>所以，在传递指定类型数组时，最好的方式就是指定的长度和size相等的数组。</p>
+</li>
+</ul>
+<p>将集合变成数组后有什么好处？限定了对集合中的元素进行增删操作，只要获取这些元素即可。</p>
+<p><strong>用基本数据类型的数组转换ArrayList，ArrayList的size有问题</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    <span class="type">int</span>[] arr1 = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br><span class="line">    List&lt;<span class="type">int</span>[]&gt; intList = Arrays.asList(arr1);</span><br><span class="line">    <span class="comment">// intList size: 1</span></span><br><span class="line">    System.out.println(String.format(<span class="string">&quot;intList size: %s&quot;</span>, intList.size()));</span><br><span class="line"></span><br><span class="line">    Integer[] arr2 = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> &#125;;</span><br><span class="line">    List&lt;Integer&gt; integerList = Arrays.asList(arr2);</span><br><span class="line">    <span class="comment">// integerList size: 5</span></span><br><span class="line">    System.out.println(String.format(<span class="string">&quot;integerList size：%s&quot;</span>, integerList.size()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>asList方法接受的参数是一个泛型的变长参数，我们知道基本数据类型是无法泛型化的，也就是说基本类型是无法作为asList方法的参数的， 要想作为泛型参数就必须使用其所对应的包装类型。但是这个这个实例中为什么没有出错呢？因为该实例是将int 类型的数组当做其参数，而在Java中数组是一个对象，它是可以泛型化的。所以该例子是不会产生错误的。既然例子是将整个int 类型的数组当做泛型参数，那么经过asList转换就只有一个int 的列表了.</p>
+<blockquote>
+<p>结论：</p>
+</blockquote>
+<p><strong>在使用asList()时尽量不要将基本数据类型数组转List.</strong></p>
+<p>asList转换得到的ArrayList不是java.util.ArrayList</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    String[] arr = &#123;<span class="string">&quot;abc&quot;</span>, <span class="string">&quot;kk&quot;</span>, <span class="string">&quot;qq&quot;</span>&#125;;</span><br><span class="line">    List&lt;String&gt; list = Arrays.asList(arr);</span><br><span class="line">    <span class="comment">// 添加一个元素,抛出异常UnsupportedOperationException</span></span><br><span class="line">    list.add(<span class="string">&quot;bb&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>原因：</p>
+</blockquote>
+<p><strong>此处ArrayList是Arrays的内部类,并没有add方法,add方法是父类AbstractList的,但是没有具体实现,</strong><br><strong>而是直接抛出UnsupportedOperationException异常.</strong></p>
+<p><img src="/../img/article/3hIodh1599811909668.png"></p>
+<p>正确操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    String[] arr = &#123;<span class="string">&quot;abc&quot;</span>, <span class="string">&quot;kk&quot;</span>, <span class="string">&quot;qq&quot;</span>&#125;;</span><br><span class="line">	<span class="comment">// 使用new ArrayList包裹一层</span></span><br><span class="line">    List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(Arrays.asList(arr));</span><br><span class="line">    list.add(<span class="string">&quot;bb&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何选用集合"><a href="#如何选用集合" class="headerlink" title="如何选用集合?"></a>如何选用集合?</h2><p>主要根据集合的特点来选用，比如我们需要根据键值获取到元素值时就选用Map接口下的集合，需要排序时选择TreeMap,不需要排序时就选择HashMap,需要保证线程安全就选用ConcurrentHashMap.当我们只需要存放元素值时，就选择实现Collection接口的集合，需要保证元素唯一时选择实现Set接口的集合比如TreeSet或HashSet，不需要就选择实现List接口的比如ArrayList或LinkedList，然后再根据实现这些接口的集合的特点来选用。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>集合容器-理论总结</p><p><a href="https://blog.buubiu.com/集合容器-理论总结/">https://blog.buubiu.com/集合容器-理论总结/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2020-09-11</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E9%9B%86%E5%90%88%E7%BC%96%E7%A8%8B/">集合编程</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8-%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">集合容器-问题总结</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E5%88%9D%E8%AF%86Lock%E4%B8%8EAQS/"><span class="level-item">并发编程-初识Lock与AQS</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#简介"><span class="level-left"><span class="level-item">1</span><span class="level-item">简介</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#特点"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">特点</span></span></a></li><li><a class="level is-mobile" href="#使用集合框架的好处"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">使用集合框架的好处</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Iterator接口"><span class="level-left"><span class="level-item">2</span><span class="level-item">Iterator接口</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#ListIterator接口"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">ListIterator接口</span></span></a></li><li><a class="level is-mobile" href="#Collection接口"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">Collection接口</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#List集合"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">List集合</span></span></a></li><li><a class="level is-mobile" href="#Set集合"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">Set集合</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#Map接口"><span class="level-left"><span class="level-item">3</span><span class="level-item">Map接口</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#双列集合继承关系图"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">双列集合继承关系图</span></span></a></li><li><a class="level is-mobile" href="#Map常用方法"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">Map常用方法</span></span></a></li><li><a class="level is-mobile" href="#HashMap、HashTable、TreeMap的区别"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">HashMap、HashTable、TreeMap的区别</span></span></a></li><li><a class="level is-mobile" href="#HashMap在JDK1-7和JDK1-8中有哪些不同"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">HashMap在JDK1.7和JDK1.8中有哪些不同</span></span></a></li></ul></li><li><a class="level is-mobile" href="#集合工具类Collections"><span class="level-left"><span class="level-item">4</span><span class="level-item">集合工具类Collections</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Collection-和-Collections的区别"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">Collection 和 Collections的区别</span></span></a></li></ul></li><li><a class="level is-mobile" href="#数组工具类-Arrays"><span class="level-left"><span class="level-item">5</span><span class="level-item">数组工具类 Arrays</span></span></a></li><li><a class="level is-mobile" href="#如何选用集合"><span class="level-left"><span class="level-item">6</span><span class="level-item">如何选用集合?</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

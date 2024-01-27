@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Dockerfile的使用 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="什么是DockerfileDockerfile可以认为是Docker镜像的描述文件，是由一系列命令和参数构成的脚本。主要作用是用来帮助我们自己构建一个自定义镜像，日后用户可以将自己应用打包成镜像，这样就可以让我们应用进行容器运行。"><meta property="og:type" content="blog"><meta property="og:title" content="Dockerfile的使用"><meta property="og:url" content="https://blog.buubiu.com/Dockerfile%E7%9A%84%E4%BD%BF%E7%94%A8/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="什么是DockerfileDockerfile可以认为是Docker镜像的描述文件，是由一系列命令和参数构成的脚本。主要作用是用来帮助我们自己构建一个自定义镜像，日后用户可以将自己应用打包成镜像，这样就可以让我们应用进行容器运行。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/Gg6SDk1615467181848.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/555WcF1615468743046.png"><meta property="article:published_time" content="2021-03-11T12:51:45.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:04.800Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="Docker"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/Gg6SDk1615467181848.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/Dockerfile%E7%9A%84%E4%BD%BF%E7%94%A8/"},"headline":"Dockerfile的使用","image":["https://blog.buubiu.com/img/article/Gg6SDk1615467181848.png","https://blog.buubiu.com/img/article/555WcF1615468743046.png"],"datePublished":"2021-03-11T12:51:45.000Z","dateModified":"2024-01-25T15:08:04.800Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"什么是DockerfileDockerfile可以认为是Docker镜像的描述文件，是由一系列命令和参数构成的脚本。主要作用是用来帮助我们自己构建一个自定义镜像，日后用户可以将自己应用打包成镜像，这样就可以让我们应用进行容器运行。"}</script><link rel="canonical" href="https://blog.buubiu.com/Dockerfile%E7%9A%84%E4%BD%BF%E7%94%A8/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-03-11T12:51:45.000Z" title="3/11/2021, 8:51:45 PM">2021-03-11</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:04.800Z" title="1/25/2024, 11:08:04 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Docker/">Docker</a></span><span class="level-item">13 分钟读完 (大约1898个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Dockerfile的使用</h1><div class="content"><h3 id="什么是Dockerfile"><a href="#什么是Dockerfile" class="headerlink" title="什么是Dockerfile"></a>什么是Dockerfile</h3><p>Dockerfile可以认为是<strong>Docker镜像的描述文件，是由一系列命令和参数构成的脚本</strong>。主要作用是<strong>用来帮助我们自己构建一个自定义镜像，日后用户可以将自己应用打包成镜像，这样就可以让我们应用进行容器运行。</strong></p>
+<p><img src="/../img/article/Gg6SDk1615467181848.png"></p>
+<span id="more"></span>
+
+<h3 id="Dockerfile构建镜像原理"><a href="#Dockerfile构建镜像原理" class="headerlink" title="Dockerfile构建镜像原理"></a>Dockerfile构建镜像原理</h3><p><img src="/../img/article/555WcF1615468743046.png"></p>
+<h4 id="构建镜像命令"><a href="#构建镜像命令" class="headerlink" title="构建镜像命令"></a>构建镜像命令</h4><ol>
+<li><p>先在需要打包的目录下建<code>Dockerfile</code>文件</p>
+</li>
+<li><p>书写Dockerfile命令</p>
+</li>
+<li><p>运行Dockerfile</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t 镜像名:TAG -f Dockerfile .</span><br></pre></td></tr></table></figure>
+
+<p><code>-t</code>：指定生成镜像的名称和标签</p>
+<p><code>-f</code>：指定dockerfile文件</p>
+<p><code>.</code>：表示打包当前文件夹所有文件</p>
+</li>
+</ol>
+<h3 id="Dockerfile的基本命令"><a href="#Dockerfile的基本命令" class="headerlink" title="Dockerfile的基本命令"></a>Dockerfile的基本命令</h3><p>官方说明:<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a></p>
+<table>
+<thead>
+<tr>
+<th>保留字</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>FROM</strong></td>
+<td><strong>当前镜像是基于哪个镜像的</strong> <code>第一个指令必须是FROM</code></td>
+</tr>
+<tr>
+<td>MAINTAINER</td>
+<td>镜像维护者的姓名和邮箱地址(将要弃用)</td>
+</tr>
+<tr>
+<td><strong>RUN</strong></td>
+<td><strong>构建镜像时需要运行的指令</strong></td>
+</tr>
+<tr>
+<td><strong>EXPOSE</strong></td>
+<td><strong>当前容器对外暴露出的端口号</strong></td>
+</tr>
+<tr>
+<td><strong>WORKDIR</strong></td>
+<td><strong>指定在创建容器后，终端默认登录进来的工作目录，一个落脚点</strong></td>
+</tr>
+<tr>
+<td><strong>ENV</strong></td>
+<td><strong>用来在构建镜像过程中设置环境变量</strong></td>
+</tr>
+<tr>
+<td><strong>ADD</strong></td>
+<td><strong>将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和解压tar包</strong></td>
+</tr>
+<tr>
+<td><strong>COPY</strong></td>
+<td><strong>类似于ADD，拷贝文件和目录到镜像中<br/>将从构建上下文目录中&lt;原路径&gt;的文件&#x2F;目录复制到新的一层的镜像内的&lt;目标路径&gt;位置</strong></td>
+</tr>
+<tr>
+<td><strong>VOLUME</strong></td>
+<td><strong>容器数据卷，用于数据保存和持久化工作</strong></td>
+</tr>
+<tr>
+<td><strong>CMD</strong></td>
+<td><strong>指定一个容器启动时要运行的命令<br/>Dockerfile中可以有多个CMD指令，但只有最后一个生效，CMD会被docker run之后的参数替换</strong></td>
+</tr>
+<tr>
+<td><strong>ENTRYPOINT</strong></td>
+<td><strong>指定一个容器启动时要运行的命令<br/>ENTRYPOINT的目的和CMD一样，都是在指定容器启动程序及其参数</strong></td>
+</tr>
+</tbody></table>
+<h4 id="FROM命令"><a href="#FROM命令" class="headerlink" title="FROM命令"></a>FROM命令</h4><ul>
+<li><p>基于那个镜像进行构建新的镜像,在构建时会自动从docker hub拉取base镜像 必须作为Dockerfile的第一个指令出现</p>
+</li>
+<li><p>语法:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span>  &lt;image&gt;</span><br><span class="line"><span class="keyword">FROM</span>  &lt;image&gt;[:&lt;tag&gt;]     <span class="comment">#使用版本不写为latest</span></span><br><span class="line"><span class="keyword">FROM</span>  &lt;image&gt;[@&lt;digest&gt;]  <span class="comment">#使用摘要</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FORM centos:<span class="number">7</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="MAINTAINER-命令"><a href="#MAINTAINER-命令" class="headerlink" title="MAINTAINER  命令"></a>MAINTAINER  命令</h4><ul>
+<li><p>镜像维护者的姓名和邮箱地址[废弃]</p>
+</li>
+<li><p>语法:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MAINTAINER</span> &lt;name&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MAINTAINER</span> buubiu.com</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="RUN命令"><a href="#RUN命令" class="headerlink" title="RUN命令"></a>RUN命令</h4><ul>
+<li><p>RUN指令将在当前映像之上的新层中执行任何命令并提交结果。生成的提交映像将用于Dockerfile中的下一步</p>
+</li>
+<li><p>语法:可以直接跟命令行，也可以json数据形式</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="language-bash"> &lt;<span class="built_in">command</span>&gt; (shell form, the <span class="built_in">command</span> is run <span class="keyword">in</span> a shell, <span class="built_in">which</span> by default is /bin/sh -c on Linux or cmd /S /C on Windows)</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">echo</span> hello</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> [<span class="string">&quot;executable&quot;</span>, <span class="string">&quot;param1&quot;</span>, <span class="string">&quot;param2&quot;</span>] (<span class="built_in">exec</span> form)</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> [<span class="string">&quot;/bin/bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;echo hello&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="language-bash"> yum install -y vim</span></span><br><span class="line"><span class="comment">#或者 json数组形式</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> [<span class="string">&quot;yum&quot;</span>,<span class="string">&quot;install&quot;</span>,<span class="string">&quot;-y&quot;</span>,<span class="string">&quot;vim&quot;</span>]</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="EXPOSE命令"><a href="#EXPOSE命令" class="headerlink" title="EXPOSE命令"></a>EXPOSE命令</h4><ul>
+<li><p>用来指定构建的镜像在运行为容器时对外暴露的端口</p>
+</li>
+<li><p>语法：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span>/tcp  如果没有显示指定则默认暴露都是tcp</span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span>/udp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8081</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>WORKDIR命令</p>
+<ul>
+<li><p>用来为Dockerfile中的任何RUN、CMD、ENTRYPOINT、COPY和ADD指令设置工作目录。如果WORKDIR不存在，即使它没有在任何后续Dockerfile指令中使用，它也将被创建。</p>
+</li>
+<li><p>注意:<strong>WORKDIR指令可以在Dockerfile中多次使用。如果提供了相对路径，则该路径将与先前WORKDIR指令的路径相对</strong></p>
+</li>
+<li><p>语法：可以绝对路径，也可以相对路径</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /path/to/workdir</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /a</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> b</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> c</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /data</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> aa</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="ENV-命令"><a href="#ENV-命令" class="headerlink" title="ENV 命令"></a>ENV 命令</h4><ul>
+<li><p>用来为构建镜像设置环境变量。这个值将出现在构建阶段中所有后续指令的环境中。</p>
+</li>
+<li><p>语法：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> &lt;key&gt; &lt;value&gt;</span><br><span class="line"><span class="keyword">ENV</span> &lt;key&gt;=&lt;value&gt; ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> BASE_DIR /mydir</span><br><span class="line"><span class="keyword">ENV</span> BASE_DIR=/mydir</span><br><span class="line"><span class="comment">#其他引用是用$符号</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> <span class="variable">$BASE_DIR</span>/aa</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="ADD命令"><a href="#ADD命令" class="headerlink" title="ADD命令"></a>ADD命令</h4><ul>
+<li><p>用来从context上下文复制文件、目录或远程文件URL，并将它们添加到位于指定路径的镜像文件系统中，跟COPY命令类似，区别在于<strong>ADD命令会自动处理URL和解压tar包</strong></p>
+</li>
+<li><p>语法：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="language-bash"> 原文件 目标路径 </span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> [<span class="string">&quot;原文件&quot;</span>,<span class="string">&quot;目标路径&quot;</span>] <span class="comment">#也支持json数据形式</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> url <span class="comment">#添加远程文件(直接跟URL 不会自动解压压缩包)</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> 文件名.tar.gz 目标路径 <span class="comment">#直接跟压缩包会自动解压</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="language-bash"> hom* /mydir/ <span class="comment">#通配符添加多个文件</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> hom?.txt /mydir/ <span class="comment">#通配符添加</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> test.txt relativeDir/ <span class="comment">#可以指定相对路径</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> test.txt /absoluteDir/ <span class="comment">#可以指定绝对路径</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> [<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;/mydir/&quot;</span>] <span class="comment">#也支持json数据形式</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> https://mirrors.bfsu.edu.cn/apache/tomcat/tomcat-8/v8.5.64/bin/apache-tomcat-8.5.64.tar.gz /mydir/ <span class="comment">#添加远程文件</span></span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> apache-tomcat-8.5.64.tar.gz /mydir/ <span class="comment">#会自动解压到mydir目录</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">#可以与以下命令连用</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">mv</span> apache-tomcat-8.5.64 tomcat <span class="comment">#改名为tomcat</span></span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> tomcat <span class="comment">#指定容器运行后的目录为tomcat</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="COPY命令"><a href="#COPY命令" class="headerlink" title="COPY命令"></a>COPY命令</h4><ul>
+<li><p>用来将context上下文目录中的指定文件复制到镜像的指定目录中，跟ADD命令类似</p>
+</li>
+<li><p>语法：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="language-bash"> 原文件 目标路径 </span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> [<span class="string">&quot;原文件&quot;</span>,<span class="string">&quot;目标路径&quot;</span>] <span class="comment">#也支持json数据形式</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="language-bash"> test.txt /mydir/</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> [<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;/mydir/&quot;</span>] <span class="comment">#也支持json数据形式</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="VOLUME命令"><a href="#VOLUME命令" class="headerlink" title="VOLUME命令"></a>VOLUME命令</h4><ul>
+<li><p>用来定义容器运行时可以挂载到宿主机的目录</p>
+</li>
+<li><p>语法：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">VOLUME</span><span class="language-bash"> 容器内部待挂载的绝对路径</span></span><br><span class="line"><span class="keyword">VOLUME</span><span class="language-bash"> [<span class="string">&quot;容器内部待挂载的绝对路径&quot;</span>] <span class="comment">#也支持json格式</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">VOLUME</span><span class="language-bash"> /mydir/tomcat/webapps</span></span><br><span class="line"><span class="keyword">VOLUME</span><span class="language-bash"> [<span class="string">&quot;/mydir/tomcat/webapps&quot;</span>]</span></span><br><span class="line"><span class="comment">#后续运行容器才能指定挂载目录</span></span><br><span class="line">docker <span class="keyword">run</span><span class="language-bash"> -v tomcatwebapps:/mydir/tomcat/webapps centos7</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="CMD-命令"><a href="#CMD-命令" class="headerlink" title="CMD 命令"></a>CMD 命令</h4><ul>
+<li><p>用来为启动的容器指定执行的命令,在Dockerfile中只能有一条CMD指令。如果列出多个命令，则只有最后一个命令才会生效。</p>
+</li>
+<li><p>注意: </p>
+<ol>
+<li><p><strong>Dockerfile中只能有一条CMD指令。如果列出多个命令，则只有最后一个命令才会生效。</strong></p>
+</li>
+<li><p><strong>我们可以在run容器时覆盖掉cmd命令</strong></p>
+</li>
+</ol>
+</li>
+<li><p>语法:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="language-bash"> <span class="built_in">command</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;command&quot;</span>, <span class="string">&quot;command&quot;</span>, <span class="string">&quot;command&quot;</span>] <span class="comment">#也支持json格式</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="language-bash"> <span class="built_in">ls</span> /mydir/tomcat <span class="comment">#查看目录下文件</span></span></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;ls&quot;</span>,<span class="string">&quot;/mydir/tomcat&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#docker run 覆盖CMD命令</span></span><br><span class="line">docker <span class="keyword">run</span><span class="language-bash"> centos7 <span class="built_in">ls</span> /mydir/tomcat/webapps</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="ENTRYPOINT命令"><a href="#ENTRYPOINT命令" class="headerlink" title="ENTRYPOINT命令"></a>ENTRYPOINT命令</h4><ul>
+<li><p>用来指定容器启动时执行命令和CMD类似</p>
+</li>
+<li><p>注意：</p>
+<p><strong>我们不可以在run容器时像CMD那样覆盖命令，但是如果想覆盖ENTRYPOINT的命令，可以加上 <code>--entrypoint=command</code></strong></p>
+</li>
+<li><p>语法:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> <span class="built_in">command</span></span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;command&quot;</span>, <span class="string">&quot;command&quot;</span>, <span class="string">&quot;command&quot;</span>] <span class="comment">#也支持json格式</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例如：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> <span class="built_in">ls</span> /mydir/tomcat <span class="comment">#查看目录下文件</span></span></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;ls&quot;</span>,<span class="string">&quot;/mydir/tomcat&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#docker run 覆盖ENTRYPOINT命令</span></span><br><span class="line">docker <span class="keyword">run</span><span class="language-bash"> centos7 --entrypoint=<span class="built_in">ls</span> /mydir/tomcat/webapps</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="CMD与ENTRYPOINT的区别"><a href="#CMD与ENTRYPOINT的区别" class="headerlink" title="CMD与ENTRYPOINT的区别"></a>CMD与ENTRYPOINT的区别</h4><ul>
+<li><p>ENTRYPOINT指令，往往用于设置容器启动后的<strong>第一个命令</strong>，这对一个容器来说往往是固定的。</p>
+</li>
+<li><p>CMD指令，往往用于设置容器启动的第一个命令的<strong>默认参数</strong>，这对一个容器来说可以是变化的。</p>
+</li>
+<li><p>联合使用</p>
+<ul>
+<li><strong>注意：联合使用时，必须是json数组格式的命令，否则无法联合使用</strong></li>
+</ul>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#第一种应用：展示目录</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;ls&quot;</span>]</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;/mydir/tomcat&quot;</span>]</span></span><br><span class="line"><span class="comment">#第二种应用：运行不同的jar包</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;java&quot;</span>,<span class="string">&quot;-jar&quot;</span>]</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;buubiu.jar&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#启动容器</span></span><br><span class="line">docker <span class="keyword">run</span><span class="language-bash"> centos7 <span class="comment">#结果展示tomcat目录</span></span></span><br><span class="line">docker <span class="keyword">run</span><span class="language-bash"> centos7 /mydir/tomcat/webapps <span class="comment">#结果展示webapps目录，因为覆盖了CMD命令</span></span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Dockerfile的使用</p><p><a href="https://blog.buubiu.com/Dockerfile的使用/">https://blog.buubiu.com/Dockerfile的使用/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-03-11</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Docker/">Docker</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/Dockerfile%E6%9E%84%E5%BB%BAspringboot%E9%A1%B9%E7%9B%AE/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Dockerfile构建springboot项目</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/Docker%E5%AE%89%E8%A3%85%E5%B8%B8%E7%94%A8%E6%9C%8D%E5%8A%A1/"><span class="level-item">Docker安装常用服务</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#什么是Dockerfile"><span class="level-left"><span class="level-item">1</span><span class="level-item">什么是Dockerfile</span></span></a></li><li><a class="level is-mobile" href="#Dockerfile构建镜像原理"><span class="level-left"><span class="level-item">2</span><span class="level-item">Dockerfile构建镜像原理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#构建镜像命令"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">构建镜像命令</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Dockerfile的基本命令"><span class="level-left"><span class="level-item">3</span><span class="level-item">Dockerfile的基本命令</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#FROM命令"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">FROM命令</span></span></a></li><li><a class="level is-mobile" href="#MAINTAINER-命令"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">MAINTAINER  命令</span></span></a></li><li><a class="level is-mobile" href="#RUN命令"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">RUN命令</span></span></a></li><li><a class="level is-mobile" href="#EXPOSE命令"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">EXPOSE命令</span></span></a></li><li><a class="level is-mobile" href="#ENV-命令"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">ENV 命令</span></span></a></li><li><a class="level is-mobile" href="#ADD命令"><span class="level-left"><span class="level-item">3.6</span><span class="level-item">ADD命令</span></span></a></li><li><a class="level is-mobile" href="#COPY命令"><span class="level-left"><span class="level-item">3.7</span><span class="level-item">COPY命令</span></span></a></li><li><a class="level is-mobile" href="#VOLUME命令"><span class="level-left"><span class="level-item">3.8</span><span class="level-item">VOLUME命令</span></span></a></li><li><a class="level is-mobile" href="#CMD-命令"><span class="level-left"><span class="level-item">3.9</span><span class="level-item">CMD 命令</span></span></a></li><li><a class="level is-mobile" href="#ENTRYPOINT命令"><span class="level-left"><span class="level-item">3.10</span><span class="level-item">ENTRYPOINT命令</span></span></a></li><li><a class="level is-mobile" href="#CMD与ENTRYPOINT的区别"><span class="level-left"><span class="level-item">3.11</span><span class="level-item">CMD与ENTRYPOINT的区别</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

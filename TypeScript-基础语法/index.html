@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>TypeScript 基础语法 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="TypeScript 程序由以下几个部分组成：  模块 函数 变量 语句和表达式 注释"><meta property="og:type" content="blog"><meta property="og:title" content="TypeScript 基础语法"><meta property="og:url" content="https://blog.buubiu.com/TypeScript-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="TypeScript 程序由以下几个部分组成：  模块 函数 变量 语句和表达式 注释"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/cPa2iV1629341281028.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/xVpMjg1629353209889.jpg"><meta property="article:published_time" content="2021-08-19T02:38:17.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.900Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="TypeScript"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/cPa2iV1629341281028.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/TypeScript-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"},"headline":"TypeScript 基础语法","image":["https://blog.buubiu.com/img/article/cPa2iV1629341281028.png","https://blog.buubiu.com/img/article/xVpMjg1629353209889.jpg"],"datePublished":"2021-08-19T02:38:17.000Z","dateModified":"2024-01-25T15:08:05.900Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"TypeScript 程序由以下几个部分组成：  模块 函数 变量 语句和表达式 注释"}</script><link rel="canonical" href="https://blog.buubiu.com/TypeScript-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-08-19T02:38:17.000Z" title="8/19/2021, 10:38:17 AM">2021-08-19</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.900Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><span> / </span><a class="link-muted" href="/categories/%E5%89%8D%E7%AB%AF/TypeScript/">TypeScript</a></span><span class="level-item">7 分钟读完 (大约1054个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">TypeScript 基础语法</h1><div class="content"><p>TypeScript 程序由以下几个部分组成：</p>
+<ul>
+<li>模块</li>
+<li>函数</li>
+<li>变量</li>
+<li>语句和表达式</li>
+<li>注释</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="第一个-TypeScript-程序"><a href="#第一个-TypeScript-程序" class="headerlink" title="第一个 TypeScript 程序"></a>第一个 TypeScript 程序</h2><p>可以使用以下 TypeScript 程序来输出 “Hello World” ：</p>
+<figure class="highlight typescript"><figcaption><span>buubiu.ts</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hello : <span class="built_in">string</span> = <span class="string">&quot;Hello World!&quot;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(hello)</span><br></pre></td></tr></table></figure>
+
+<p>以上代码首先通过 <strong>tsc</strong> 命令编译：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tsc buubiu.ts</span><br></pre></td></tr></table></figure>
+
+<p>得到如下 js 代码：</p>
+<figure class="highlight typescript"><figcaption><span>buubiu.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hello = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(hello);</span><br></pre></td></tr></table></figure>
+
+<p>最后我们使用 node 命令来执行该 js 代码。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node buubiu.js</span><br><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+
+<p>整个流程如下图所示：</p>
+<p><img src="/../img/article/cPa2iV1629341281028.png"></p>
+<p>可以同时编译多个 ts 文件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tsc file1.ts file2.ts file3.ts</span><br></pre></td></tr></table></figure>
+
+<p>tsc 常用编译参数如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">编译参数说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1.</td>
+<td align="left"><strong>–help</strong><br />显示帮助信息</td>
+</tr>
+<tr>
+<td align="center">2.</td>
+<td align="left"><strong>–module</strong><br />载入扩展模块</td>
+</tr>
+<tr>
+<td align="center">3.</td>
+<td align="left"><strong>–target</strong><br />设置 ECMA 版本</td>
+</tr>
+<tr>
+<td align="center">4.</td>
+<td align="left"><strong>–declaration</strong><br />额外生成一个 .d.ts 扩展名的文件。<br /><code>tsc ts-hw.ts --declaration</code><br />以上命令会生成 ts-hw.d.ts、ts-hw.js 两个文件。</td>
+</tr>
+<tr>
+<td align="center">5.</td>
+<td align="left"><strong>–removeComments</strong><br />删除文件的注释</td>
+</tr>
+<tr>
+<td align="center">6.</td>
+<td align="left"><strong>–out</strong><br />编译多个文件并合并到一个输出的文件</td>
+</tr>
+<tr>
+<td align="center">7.</td>
+<td align="left"><strong>–sourcemap</strong><br />生成一个 sourcemap (.map) 文件。<br />sourcemap 是一个存储源代码与编译代码对应位置映射的信息文件。</td>
+</tr>
+<tr>
+<td align="center">8.</td>
+<td align="left"><strong>–module noImplicitAny</strong><br />在表达式和声明上有隐含的 any 类型时报错</td>
+</tr>
+<tr>
+<td align="center">9.</td>
+<td align="left"><strong>–watch</strong><br />在监视模式下运行编译器。会监视输出文件，在它们改变时重新编译。</td>
+</tr>
+</tbody></table>
+<h2 id="TypeScript-保留关键字"><a href="#TypeScript-保留关键字" class="headerlink" title="TypeScript 保留关键字"></a>TypeScript 保留关键字</h2><h3 id="保留关键字"><a href="#保留关键字" class="headerlink" title="保留关键字"></a>保留关键字</h3><table>
+<thead>
+<tr>
+<th>break</th>
+<th>as</th>
+<th>catch</th>
+<th>switch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>case</td>
+<td>if</td>
+<td>throw</td>
+<td>else</td>
+</tr>
+<tr>
+<td>var</td>
+<td>number</td>
+<td>string</td>
+<td>get</td>
+</tr>
+<tr>
+<td>module</td>
+<td>type</td>
+<td>instanceof</td>
+<td>typeof</td>
+</tr>
+<tr>
+<td>public</td>
+<td>private</td>
+<td>enum</td>
+<td>export</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>for</td>
+<td>while</td>
+<td>void</td>
+</tr>
+<tr>
+<td>null</td>
+<td>super</td>
+<td>this</td>
+<td>new</td>
+</tr>
+<tr>
+<td>in</td>
+<td>return</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>any</td>
+<td>extends</td>
+<td>static</td>
+<td>let</td>
+</tr>
+<tr>
+<td>package</td>
+<td>implements</td>
+<td>interface</td>
+<td>function</td>
+</tr>
+<tr>
+<td>new</td>
+<td>try</td>
+<td>yield</td>
+<td>const</td>
+</tr>
+<tr>
+<td>continue</td>
+<td>do</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="空白和换行"><a href="#空白和换行" class="headerlink" title="空白和换行"></a>空白和换行</h3><p>TypeScript 会忽略程序中出现的空格、制表符和换行符。</p>
+<p>空格、制表符通常用来缩进代码，使代码易于阅读和理解。</p>
+<h3 id="TypeScript-区分大小写"><a href="#TypeScript-区分大小写" class="headerlink" title="TypeScript 区分大小写"></a>TypeScript 区分大小写</h3><p>TypeScript 区分大写和小写字符。</p>
+<h3 id="分号是可选的"><a href="#分号是可选的" class="headerlink" title="分号是可选的"></a>分号是可选的</h3><p>每行指令都是一段语句，你可以使用分号或不使用， 分号在 TypeScript 中是可选的，建议使用。</p>
+<p>以下代码都是合法的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;buubiu&quot;</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Google&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如果语句写在同一行则一定需要使用分号来分隔，否则会报错，如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;buubiu&quot;</span>);<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Google&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="TypeScript-注释"><a href="#TypeScript-注释" class="headerlink" title="TypeScript 注释"></a>TypeScript 注释</h3><p>注释是一个良好的习惯，虽然很多程序员讨厌注释，但还是建议你在每段代码写上文字说明。</p>
+<p>注释可以提高程序的可读性。</p>
+<p>注释可以包含有关程序一些信息，如代码的作者，有关函数的说明等。</p>
+<p>编译器会忽略注释。</p>
+<h3 id="TypeScript-支持两种类型的注释"><a href="#TypeScript-支持两种类型的注释" class="headerlink" title="TypeScript 支持两种类型的注释"></a>TypeScript 支持两种类型的注释</h3><ul>
+<li><strong>单行注释 ( &#x2F;&#x2F; )</strong> − 在 &#x2F;&#x2F; 后面的文字都是注释内容。</li>
+<li><strong>多行注释 (&#x2F;* *&#x2F;)</strong> − 这种注释可以跨越多行。</li>
+</ul>
+<p>注释实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是一个单行注释</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> 这是一个多行注释 </span></span><br><span class="line"><span class="comment"> 这是一个多行注释 </span></span><br><span class="line"><span class="comment"> 这是一个多行注释 </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="TypeScript-与面向对象"><a href="#TypeScript-与面向对象" class="headerlink" title="TypeScript 与面向对象"></a>TypeScript 与面向对象</h2><p>面向对象是一种对现实世界理解和抽象的方法。</p>
+<p>TypeScript 是一种面向对象的编程语言。</p>
+<p>面向对象主要有两个概念：对象和类。</p>
+<ul>
+<li><strong>对象</strong>：对象是类的一个实例（<strong>对象不是找个女朋友</strong>），有状态和行为。例如，一条狗是一个对象，它的状态有：颜色、名字、品种；行为有：摇尾巴、叫、吃等。</li>
+<li><strong>类</strong>：类是一个模板，它描述一类对象的行为和状态。</li>
+<li><strong>方法</strong>：方法是类的操作的实现步骤。</li>
+</ul>
+<p><img src="/../img/article/xVpMjg1629353209889.jpg"></p>
+<p>TypeScript 面向对象编程实例：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Site</span> &#123;</span><br><span class="line">    <span class="title function_">name</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;buubiu&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="title class_">Site</span>();</span><br><span class="line">obj.<span class="title function_">name</span>();</span><br></pre></td></tr></table></figure>
+
+<p>以上实例定义了一个类 Site，该类有一个方法 name()，该方法在终端上输出字符串 Runoob。</p>
+<p>new 关键字创建类的对象，该对象调用方法 name()。</p>
+<p>编译后生成的 JavaScript 代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Site</span> = <span class="comment">/** <span class="doctag">@class</span> */</span> (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">Site</span>(<span class="params"></span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title class_">Site</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">name</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;buubiu&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Site</span>;</span><br><span class="line">&#125;());</span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="title class_">Site</span>();</span><br><span class="line">obj.<span class="title function_">name</span>();</span><br></pre></td></tr></table></figure>
+
+<p>执行以上 JavaScript 代码，输出结果如下:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buubiu</span><br></pre></td></tr></table></figure>
+</div><div class="article-licensing box"><div class="licensing-title"><p>TypeScript 基础语法</p><p><a href="https://blog.buubiu.com/TypeScript-基础语法/">https://blog.buubiu.com/TypeScript-基础语法/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-08-19</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/TypeScript/">TypeScript</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/TypeScript-%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">TypeScript 基础类型</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/TypeScript-%E5%AE%89%E8%A3%85/"><span class="level-item">TypeScript安装</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#第一个-TypeScript-程序"><span class="level-left"><span class="level-item">1</span><span class="level-item">第一个 TypeScript 程序</span></span></a></li><li><a class="level is-mobile" href="#TypeScript-保留关键字"><span class="level-left"><span class="level-item">2</span><span class="level-item">TypeScript 保留关键字</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#保留关键字"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">保留关键字</span></span></a></li><li><a class="level is-mobile" href="#空白和换行"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">空白和换行</span></span></a></li><li><a class="level is-mobile" href="#TypeScript-区分大小写"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">TypeScript 区分大小写</span></span></a></li><li><a class="level is-mobile" href="#分号是可选的"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">分号是可选的</span></span></a></li><li><a class="level is-mobile" href="#TypeScript-注释"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">TypeScript 注释</span></span></a></li><li><a class="level is-mobile" href="#TypeScript-支持两种类型的注释"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">TypeScript 支持两种类型的注释</span></span></a></li></ul></li><li><a class="level is-mobile" href="#TypeScript-与面向对象"><span class="level-left"><span class="level-item">3</span><span class="level-item">TypeScript 与面向对象</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

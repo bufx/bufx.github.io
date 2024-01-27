@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>微信小程序WXS教程 - buubiu&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="buubiu&#039;s blog"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="buubiu&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="介绍WXS（WeiXin Script）是小程序的一套脚本语言，结合 WXML，可以构建出页面的结构。 WXS 与 JavaScript 是不同的语言，有自己的语法，并不和 JavaScript 一致。 WXS 代码可以编写在 wxml 文件中的 &amp;lt;wxs&amp;gt; 标签内，或以 .wxs 为后缀名的文件内。"><meta property="og:type" content="blog"><meta property="og:title" content="微信小程序WXS教程"><meta property="og:url" content="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FWXS%E6%95%99%E7%A8%8B/"><meta property="og:site_name" content="buubiu&#039;s blog"><meta property="og:description" content="介绍WXS（WeiXin Script）是小程序的一套脚本语言，结合 WXML，可以构建出页面的结构。 WXS 与 JavaScript 是不同的语言，有自己的语法，并不和 JavaScript 一致。 WXS 代码可以编写在 wxml 文件中的 &amp;lt;wxs&amp;gt; 标签内，或以 .wxs 为后缀名的文件内。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/img/article/UdYmMR1636430488064.png"><meta property="og:image" content="https://blog.buubiu.com/img/article/AAA3uv1636432028574.png"><meta property="article:published_time" content="2021-11-09T03:07:13.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:05.929Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="微信小程序"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/img/article/UdYmMR1636430488064.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FWXS%E6%95%99%E7%A8%8B/"},"headline":"微信小程序WXS教程","image":["https://blog.buubiu.com/img/article/UdYmMR1636430488064.png","https://blog.buubiu.com/img/article/AAA3uv1636432028574.png"],"datePublished":"2021-11-09T03:07:13.000Z","dateModified":"2024-01-25T15:08:05.929Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"buubiu's blog","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"介绍WXS（WeiXin Script）是小程序的一套脚本语言，结合 WXML，可以构建出页面的结构。 WXS 与 JavaScript 是不同的语言，有自己的语法，并不和 JavaScript 一致。 WXS 代码可以编写在 wxml 文件中的 &lt;wxs&gt; 标签内，或以 .wxs 为后缀名的文件内。"}</script><link rel="canonical" href="https://blog.buubiu.com/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FWXS%E6%95%99%E7%A8%8B/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-11-09T03:07:13.000Z" title="11/9/2021, 11:07:13 AM">2021-11-09</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:05.929Z" title="1/25/2024, 11:08:05 PM">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><span> / </span><a class="link-muted" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></span><span class="level-item">28 分钟读完 (大约4221个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">微信小程序WXS教程</h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>WXS（WeiXin Script）是小程序的一套脚本语言，结合 <code>WXML</code>，可以构建出页面的结构。</p>
+<p>WXS 与 JavaScript 是不同的语言，有自己的语法，并不和 JavaScript 一致。</p>
+<p>WXS 代码可以编写在 wxml 文件中的 <code>&lt;wxs&gt;</code> 标签内，或以 <code>.wxs</code> 为后缀名的文件内。</p>
+<span id="more"></span>
+
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>每一个 <code>.wxs</code> 文件和 <code>&lt;wxs&gt;</code> 标签都是一个单独的模块。</p>
+<p>每个模块都有自己独立的作用域。即在一个模块里面定义的变量与函数，默认为私有的，对其他模块不可见。</p>
+<p>一个模块要想对外暴露其内部的私有变量与函数，只能通过 <code>module.exports</code> 实现。</p>
+<h3 id="lt-wxs-gt-标签"><a href="#lt-wxs-gt-标签" class="headerlink" title="&lt;wxs&gt; 标签"></a><code>&lt;wxs&gt;</code> 标签</h3><table>
+<thead>
+<tr>
+<th align="left">属性名</th>
+<th align="left">类型</th>
+<th align="left">默认值</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">module</td>
+<td align="left">String</td>
+<td align="left"></td>
+<td align="left">当前 <code>&lt;wxs&gt;</code> 标签的模块名。必填字段。</td>
+</tr>
+<tr>
+<td align="left">src</td>
+<td align="left">String</td>
+<td align="left"></td>
+<td align="left">引用 .wxs 文件的相对路径。仅当本标签为<strong>单闭合标签</strong>或<strong>标签的内容为空</strong>时有效。</td>
+</tr>
+</tbody></table>
+<h3 id="module-属性"><a href="#module-属性" class="headerlink" title="module 属性"></a>module 属性</h3><p>module 属性是当前 <code>&lt;wxs&gt;</code> 标签的模块名。在单个 wxml 文件内，建议其值唯一。有重复模块名则按照先后顺序覆盖（后者覆盖前者）。不同文件之间的 wxs 模块名不会相互覆盖。</p>
+<p>module 属性值的命名必须符合下面两个规则：</p>
+<ul>
+<li>首字符必须是：字母（a-zA-Z），下划线（_）</li>
+<li>剩余字符可以是：字母（a-zA-Z），下划线（_）， 数字（0-9）</li>
+</ul>
+<p>每个 <code>wxs</code> 模块均有一个内置的 <code>module</code> 对象。</p>
+<p><strong>属性</strong></p>
+<ul>
+<li><code>exports</code>: 通过该属性，可以对外共享本模块的私有变量与函数。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--pages/moduleTest/moduleTest.wxml--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wxs</span> <span class="attr">module</span>=<span class="string">&quot;foo&quot;</span>&gt;</span></span><br><span class="line">var some_msg = &quot;hello world&quot;;</span><br><span class="line">  module.exports = &#123;</span><br><span class="line">    msg : some_msg,</span><br><span class="line">  &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">wxs</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span> &#123;&#123;foo.msg&#125;&#125; <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>页面输出：</p>
+<p><img src="/../img/article/UdYmMR1636430488064.png"></p>
+<p>上面例子声明了一个名字为 <code>foo</code> 的模块，将 <code>some_msg</code> 变量暴露出来，供当前页面使用。</p>
+<h3 id="src-属性"><a href="#src-属性" class="headerlink" title="src 属性"></a>src 属性</h3><p>src 属性可以用来引用其他的 <code>wxs</code> 文件模块。</p>
+<p>引用的时候，要注意如下几点：</p>
+<ul>
+<li>只能引用 <code>.wxs</code> 文件模块，且必须使用相对路径。</li>
+<li><code>wxs</code> 模块均为单例，<code>wxs</code> 模块在第一次被引用时，会自动初始化为单例对象。多个页面，多个地方，多次引用，使用的都是同一个 <code>wxs</code> 模块对象。</li>
+<li>如果一个 <code>wxs</code> 模块在定义之后，一直没有被引用，则该模块不会被解析与运行。</li>
+</ul>
+<p><strong>示例代码:</strong></p>
+<p>在<strong>微信开发者工具</strong>里面，右键可以直接创建 <code>.wxs</code> 文件，在其中直接编写 WXS 脚本。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /pages/comm.wxs</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = <span class="string">&quot;&#x27;hello world&#x27; from comm.wxs&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="keyword">function</span>(<span class="params">d</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">foo</span>: foo,</span><br><span class="line">  <span class="attr">bar</span>: bar</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上述例子在 <code>/pages/comm.wxs</code> 的文件里面编写了 WXS 代码。该 <code>.wxs</code> 文件可以被其他的 <code>.wxs</code> 文件 或 WXML 中的 <code>&lt;wxs&gt;</code> 标签引用。</p>
+<p>wxs标签通过src引入:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--pages/moduleTest/moduleTest.wxml--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">wxs</span> <span class="attr">src</span>=<span class="string">&quot;../../pages/comm.wxs&quot;</span> <span class="attr">module</span>=<span class="string">&quot;comm&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span>&#123;&#123;comm.msg&#125;&#125;<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">view</span>&gt;</span>&#123;&#123;comm.bar(comm.foo)&#125;&#125;<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p><img src="/../img/article/AAA3uv1636432028574.png"></p>
+<h3 id="require函数"><a href="#require函数" class="headerlink" title="require函数"></a>require函数</h3><p>在<code>.wxs</code>模块中引用其他 <code>wxs</code> 文件模块，可以使用 <code>require</code> 函数。</p>
+<p>引用的时候，要注意如下几点：</p>
+<ul>
+<li>只能引用 <code>.wxs</code> 文件模块，且必须使用相对路径。</li>
+<li><code>wxs</code> 模块均为单例，<code>wxs</code> 模块在第一次被引用时，会自动初始化为单例对象。多个页面，多个地方，多次引用，使用的都是同一个 <code>wxs</code> 模块对象。</li>
+<li>如果一个 <code>wxs</code> 模块在定义之后，一直没有被引用，则该模块不会被解析与运行。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /pages/tools.wxs</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> foo = <span class="string">&quot;&#x27;hello world&#x27; from tools.wxs&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="keyword">function</span> (<span class="params">d</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> d;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">FOO</span>: foo,</span><br><span class="line">  <span class="attr">bar</span>: bar,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span>.<span class="property">msg</span> = <span class="string">&quot;some msg&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /pages/logic.wxs</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> tools = <span class="built_in">require</span>(<span class="string">&quot;./tools.wxs&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(tools.<span class="property">FOO</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(tools.<span class="title function_">bar</span>(<span class="string">&quot;logic.wxs&quot;</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(tools.<span class="property">msg</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--pages/moduleTest/moduleTest.wxml--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">wxs</span> <span class="attr">src</span>=<span class="string">&quot;./../logic.wxs&quot;</span> <span class="attr">module</span>=<span class="string">&quot;logic&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>控制台输出：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello world&#x27;</span> <span class="keyword">from</span> tools.<span class="property">wxs</span></span><br><span class="line">logic.<span class="property">wxs</span></span><br><span class="line">some msg</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li><code>&lt;wxs&gt;</code> 模块只能在定义模块的 WXML 文件中被访问到。使用 <code>&lt;include&gt;</code> 或 <code>&lt;import&gt;</code> 时，<code>&lt;wxs&gt;</code> 模块不会被引入到对应的 WXML 文件中。</li>
+<li><code>&lt;template&gt;</code> 标签中，只能使用定义该 <code>&lt;template&gt;</code> 的 WXML 文件中定义的 <code>&lt;wxs&gt;</code> 模块。</li>
+</ul>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>WXS 中的变量均为值的引用。</li>
+<li>没有声明的变量直接赋值使用，会被定义为全局变量。</li>
+<li>如果只声明变量而不赋值，则默认值为 <code>undefined</code>。</li>
+<li>var表现与javascript一致，会有变量提升。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="string">&quot;hello world&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> i; <span class="comment">// i === undefined</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码，分别声明了 <code>foo</code>、 <code>bar</code>、 <code>i</code> 三个变量。然后，<code>foo</code> 赋值为数值 <code>1</code> ，<code>bar</code> 赋值为字符串 <code>&quot;hello world&quot;</code>。</p>
+<h3 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h3><p>变量命名必须符合下面两个规则：</p>
+<ul>
+<li>首字符必须是：字母（a-zA-Z），下划线（_）</li>
+<li>剩余字符可以是：字母（a-zA-Z），下划线（_）， 数字（0-9）</li>
+</ul>
+<h3 id="保留标识符"><a href="#保留标识符" class="headerlink" title="保留标识符"></a>保留标识符</h3><p>以下标识符不能作为变量名：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">delete</span><br><span class="line">void</span><br><span class="line">typeof</span><br><span class="line"></span><br><span class="line">null</span><br><span class="line">undefined</span><br><span class="line">NaN</span><br><span class="line">Infinity</span><br><span class="line">var</span><br><span class="line"></span><br><span class="line">if</span><br><span class="line">else</span><br><span class="line"></span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line"></span><br><span class="line">require</span><br><span class="line"></span><br><span class="line">this</span><br><span class="line">function</span><br><span class="line">arguments</span><br><span class="line">return</span><br><span class="line"></span><br><span class="line">for</span><br><span class="line">while</span><br><span class="line">do</span><br><span class="line">break</span><br><span class="line">continue</span><br><span class="line">switch</span><br><span class="line">case</span><br><span class="line">default</span><br></pre></td></tr></table></figure>
+
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>WXS 主要有 3 种注释的方法。</p>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- wxml --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wxs</span> <span class="attr">module</span>=<span class="string">&quot;sample&quot;</span>&gt;</span></span><br><span class="line">// 方法一：单行注释</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">方法二：多行注释</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">方法三：结尾注释。即从 /* 开始往后的所有 WXS 代码均被注释</span><br><span class="line"></span><br><span class="line">var a = 1;</span><br><span class="line">var b = 2;</span><br><span class="line">var c = &quot;fake&quot;;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">wxs</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上述例子中，所有 WXS 代码均被注释掉了。</p>
+<blockquote>
+<p>方法三 和 方法二 的唯一区别是，没有 <code>*/</code> 结束符。</p>
+</blockquote>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><h3 id="基本运算符"><a href="#基本运算符" class="headerlink" title="基本运算符"></a>基本运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加法运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">30</span> === a + b);</span><br><span class="line"><span class="comment">// 减法运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(-<span class="number">10</span> === a - b);</span><br><span class="line"><span class="comment">// 乘法运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">200</span> === a * b);</span><br><span class="line"><span class="comment">// 除法运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">0.5</span> === a / b);</span><br><span class="line"><span class="comment">// 取余运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10</span> === a % b);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>加法运算（<code>+</code>）也可以用作字符串的拼接。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&#x27;.w&#x27;</span> , b = <span class="string">&#x27;xs&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 字符串拼接</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;.wxs&#x27;</span> === a + b);</span><br></pre></td></tr></table></figure>
+
+<h3 id="一元运算符"><a href="#一元运算符" class="headerlink" title="一元运算符"></a>一元运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自增运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10</span> === a++);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">12</span> === ++a);</span><br><span class="line"><span class="comment">// 自减运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">12</span> === a--);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10</span> === --a);</span><br><span class="line"><span class="comment">// 正值运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10</span> === +a);</span><br><span class="line"><span class="comment">// 负值运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">0</span>-<span class="number">10</span> === -a);</span><br><span class="line"><span class="comment">// 否运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(-<span class="number">11</span> === ~a);</span><br><span class="line"><span class="comment">// 取反运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">false</span> === !a);</span><br><span class="line"><span class="comment">// delete 运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === <span class="keyword">delete</span> a.<span class="property">fake</span>);</span><br><span class="line"><span class="comment">// void 运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">undefined</span> === <span class="keyword">void</span> a);</span><br><span class="line"><span class="comment">// typeof 运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;number&quot;</span> === <span class="keyword">typeof</span> a);</span><br></pre></td></tr></table></figure>
+
+<h3 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 左移运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">80</span> === (a &lt;&lt; <span class="number">3</span>));</span><br><span class="line"><span class="comment">// 带符号右移运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === (a &gt;&gt; <span class="number">2</span>));</span><br><span class="line"><span class="comment">// 无符号右移运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === (a &gt;&gt;&gt; <span class="number">2</span>));</span><br><span class="line"><span class="comment">// 与运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === (a &amp; <span class="number">3</span>));</span><br><span class="line"><span class="comment">// 异或运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">9</span> === (a ^ <span class="number">3</span>));</span><br><span class="line"><span class="comment">// 或运算</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">11</span> === (a | <span class="number">3</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 小于</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === (a &lt; b));</span><br><span class="line"><span class="comment">// 大于</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">false</span> === (a &gt; b));</span><br><span class="line"><span class="comment">// 小于等于</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === (a &lt;= b));</span><br><span class="line"><span class="comment">// 大于等于</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">false</span> === (a &gt;= b));</span><br></pre></td></tr></table></figure>
+
+<h3 id="等值运算符"><a href="#等值运算符" class="headerlink" title="等值运算符"></a>等值运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等号</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">false</span> === (a == b));</span><br><span class="line"><span class="comment">// 非等号</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === (a != b));</span><br><span class="line"><span class="comment">// 全等号</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">false</span> === (a === b));</span><br><span class="line"><span class="comment">// 非全等号</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === (a !== b));</span><br></pre></td></tr></table></figure>
+
+<h3 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">a = <span class="number">10</span>; a *= <span class="number">10</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">100</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a /= <span class="number">5</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a %= <span class="number">7</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a += <span class="number">5</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">15</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a -= <span class="number">11</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(-<span class="number">1</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a &lt;&lt;= <span class="number">10</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10240</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a &gt;&gt;= <span class="number">2</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a &gt;&gt;&gt;= <span class="number">2</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a &amp;= <span class="number">3</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a ^= <span class="number">3</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">9</span> === a);</span><br><span class="line">a = <span class="number">10</span>; a |= <span class="number">3</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">11</span> === a);</span><br></pre></td></tr></table></figure>
+
+<h3 id="二元逻辑运算符"><a href="#二元逻辑运算符" class="headerlink" title="二元逻辑运算符"></a>二元逻辑运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 逻辑与</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">20</span> === (a &amp;&amp; b));</span><br><span class="line"><span class="comment">// 逻辑或</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">10</span> === (a || b));</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他运算符"><a href="#其他运算符" class="headerlink" title="其他运算符"></a>其他运算符</h3><p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>, b = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//条件运算符</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">20</span> === (a &gt;= <span class="number">10</span> ? a + <span class="number">10</span> : b + <span class="number">10</span>));</span><br><span class="line"><span class="comment">//逗号运算符</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">20</span> === (a, b));</span><br></pre></td></tr></table></figure>
+
+<h3 id="运算符优先级"><a href="#运算符优先级" class="headerlink" title="运算符优先级"></a>运算符优先级</h3><table>
+<thead>
+<tr>
+<th align="left">优先级</th>
+<th align="left">运算符</th>
+<th align="left">说明</th>
+<th align="left">结合性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">20</td>
+<td align="left"><code>(</code> … <code>)</code></td>
+<td align="left">括号</td>
+<td align="left">n&#x2F;a</td>
+</tr>
+<tr>
+<td align="left">19</td>
+<td align="left">… <code>.</code> …</td>
+<td align="left">成员访问</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>[</code> … <code>]</code></td>
+<td align="left">成员访问</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>(</code> … <code>)</code></td>
+<td align="left">函数调用</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left">… <code>++</code></td>
+<td align="left">后置递增</td>
+<td align="left">n&#x2F;a</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>--</code></td>
+<td align="left">后置递减</td>
+<td align="left">n&#x2F;a</td>
+</tr>
+<tr>
+<td align="left">16</td>
+<td align="left"><code>!</code> …</td>
+<td align="left">逻辑非</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>~</code> …</td>
+<td align="left">按位非</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>+</code> …</td>
+<td align="left">一元加法</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>-</code> …</td>
+<td align="left">一元减法</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>++</code> …</td>
+<td align="left">前置递增</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>--</code> …</td>
+<td align="left">前置递减</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>typeof</code> …</td>
+<td align="left">typeof</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>void</code> …</td>
+<td align="left">void</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>delete</code> …</td>
+<td align="left">delete</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left">14</td>
+<td align="left">… <code>*</code> …</td>
+<td align="left">乘法</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>/</code> …</td>
+<td align="left">除法</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>%</code> …</td>
+<td align="left">取模</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left">… <code>+</code> …</td>
+<td align="left">加法</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>-</code> …</td>
+<td align="left">减法</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">… <code>&lt;&lt;</code> …</td>
+<td align="left">按位左移</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;&gt;</code> …</td>
+<td align="left">按位右移</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;&gt;&gt;</code> …</td>
+<td align="left">无符号右移</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">… <code>&lt;</code> …</td>
+<td align="left">小于</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&lt;=</code> …</td>
+<td align="left">小于等于</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;</code> …</td>
+<td align="left">大于</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;=</code> …</td>
+<td align="left">大于等于</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">… <code>==</code> …</td>
+<td align="left">等号</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>!=</code> …</td>
+<td align="left">非等号</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>===</code> …</td>
+<td align="left">全等号</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>!==</code> …</td>
+<td align="left">非全等号</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">… <code>&amp;</code> …</td>
+<td align="left">按位与</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">… <code>^</code> …</td>
+<td align="left">按位异或</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">… <code>｜</code> …</td>
+<td align="left">按位或</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">… <code>&amp;&amp;</code> …</td>
+<td align="left">逻辑与</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">… <code>｜｜</code> …</td>
+<td align="left">逻辑或</td>
+<td align="left">从左到右</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">… <code>?</code> … <code>:</code> …</td>
+<td align="left">条件运算符</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">… <code>=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>+=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>-=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>*=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>/=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>%=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&lt;&lt;=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;&gt;=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&gt;&gt;&gt;=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>&amp;=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>^=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">… <code>｜=</code> …</td>
+<td align="left">赋值</td>
+<td align="left">从右到左</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">… <code>,</code> …</td>
+<td align="left">逗号</td>
+<td align="left">从左到右</td>
+</tr>
+</tbody></table>
+<h2 id="语句"><a href="#语句" class="headerlink" title="语句"></a>语句</h2><h3 id="if-语句"><a href="#if-语句" class="headerlink" title="if 语句"></a>if 语句</h3><p>在 WXS 中，可以使用以下格式的 <code>if</code> 语句 ：</p>
+<ul>
+<li><code>if (expression) statement</code> ： 当 <code>expression</code> 为 truthy 时，执行 <code>statement</code>。</li>
+<li><code>if (expression) statement1 else statement2</code> : 当 <code>expression</code> 为 truthy 时，执行 <code>statement1</code>。 否则，执行 <code>statement2</code></li>
+<li><code>if ... else if ... else statementN</code> 通过该句型，可以在 <code>statement1</code> ~ <code>statementN</code> 之间选其中一个执行。</li>
+</ul>
+<p><strong>示例语法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式) 语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式)</span><br><span class="line">  语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// if ... else</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式) 语句;</span><br><span class="line"><span class="keyword">else</span> 语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式)</span><br><span class="line">  语句;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// if ... else if ... else ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (表达式) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (表达式) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (表达式) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="switch-语句"><a href="#switch-语句" class="headerlink" title="switch 语句"></a>switch 语句</h3><p><strong>示例语法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (表达式) &#123;</span><br><span class="line">  <span class="keyword">case</span> 变量:</span><br><span class="line">    语句;</span><br><span class="line">  <span class="keyword">case</span> 数字:</span><br><span class="line">    语句;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">case</span> 字符串:</span><br><span class="line">    语句;</span><br><span class="line">  <span class="attr">default</span>:</span><br><span class="line">    语句;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>default</code> 分支可以省略不写。</li>
+<li><code>case</code> 关键词后面只能使用：<code>变量</code>，<code>数字</code>，<code>字符串</code>。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> exp = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> ( exp ) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;10&quot;</span>:</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;string 10&quot;</span>);</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">10</span>:</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;number 10&quot;</span>);</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="attr">exp</span>:</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;var exp&quot;</span>);</span><br><span class="line">  <span class="keyword">break</span>;</span><br><span class="line"><span class="attr">default</span>:</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;default&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number 10</span><br></pre></td></tr></table></figure>
+
+<h3 id="for-语句"><a href="#for-语句" class="headerlink" title="for 语句"></a>for 语句</h3><p><strong>示例语法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (语句; 语句; 语句)</span><br><span class="line">  语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (语句; 语句; 语句) &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>支持使用 <code>break</code>，<code>continue</code> 关键词。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; ++i) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  <span class="keyword">if</span>( i &gt;= <span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="while-语句"><a href="#while-语句" class="headerlink" title="while 语句"></a>while 语句</h3><p><strong>示例语法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (表达式)</span><br><span class="line">  语句;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (表达式)&#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">  代码块;</span><br><span class="line">&#125; <span class="keyword">while</span> (表达式)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当<code>表达式</code>为 true 时，循环执行<code>语句</code>或<code>代码块</code>。</li>
+<li>支持使用 <code>break</code>，<code>continue</code> 关键词。</li>
+</ul>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>WXS 语言目前共有以下几种数据类型：</p>
+<ul>
+<li><code>number</code> ： 数值</li>
+<li><code>string</code> ：字符串</li>
+<li><code>boolean</code>：布尔值</li>
+<li><code>object</code>：对象</li>
+<li><code>function</code>：函数</li>
+<li><code>array</code> : 数组</li>
+<li><code>date</code>：日期</li>
+<li><code>regexp</code>：正则</li>
+</ul>
+<h3 id="number"><a href="#number" class="headerlink" title="number"></a>number</h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p>number 包括两种数值：整数，小数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">PI</span> = <span class="number">3.141592653589793</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;Number&quot;</code>。</li>
+</ul>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code></li>
+<li><code>toLocaleString</code></li>
+<li><code>valueOf</code></li>
+<li><code>toFixed</code></li>
+<li><code>toExponential</code></li>
+<li><code>toPrecision</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><h4 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h4><p>string 有两种写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello world&#x27;</span>;</span><br><span class="line"><span class="string">&quot;hello world&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-1"><a href="#属性-1" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;String&quot;</code>。</li>
+<li><code>length</code></li>
+</ul>
+<blockquote>
+<p>除constructor外属性的具体含义请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h4 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code></li>
+<li><code>valueOf</code></li>
+<li><code>charAt</code></li>
+<li><code>charCodeAt</code></li>
+<li><code>concat</code></li>
+<li><code>indexOf</code></li>
+<li><code>lastIndexOf</code></li>
+<li><code>localeCompare</code></li>
+<li><code>match</code></li>
+<li><code>replace</code></li>
+<li><code>search</code></li>
+<li><code>slice</code></li>
+<li><code>split</code></li>
+<li><code>substring</code></li>
+<li><code>toLowerCase</code></li>
+<li><code>toLocaleLowerCase</code></li>
+<li><code>toUpperCase</code></li>
+<li><code>toLocaleUpperCase</code></li>
+<li><code>trim</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="boolean"><a href="#boolean" class="headerlink" title="boolean"></a>boolean</h3><h4 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h4><p>布尔值只有两个特定的值：<code>true</code> 和 <code>false</code>。</p>
+<h4 id="属性-2"><a href="#属性-2" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;Boolean&quot;</code>。</li>
+</ul>
+<h4 id="方法-2"><a href="#方法-2" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code></li>
+<li><code>valueOf</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="object"><a href="#object" class="headerlink" title="object"></a>object</h3><h4 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h4><p>object 是一种无序的键值对。使用方法如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125; <span class="comment">//生成一个新的空对象</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//生成一个新的非空对象</span></span><br><span class="line">o = &#123;</span><br><span class="line">  <span class="string">&#x27;string&#x27;</span>  : <span class="number">1</span>,  <span class="comment">//object 的 key 可以是字符串</span></span><br><span class="line">  const_var : <span class="number">2</span>,  <span class="comment">//object 的 key 也可以是符合变量定义规则的标识符</span></span><br><span class="line">  func      : &#123;&#125;, <span class="comment">//object 的 value 可以是任何类型</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//对象属性的读操作</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span> === o[<span class="string">&#x27;string&#x27;</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">2</span> === o.<span class="property">const_var</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//对象属性的写操作</span></span><br><span class="line">o[<span class="string">&#x27;string&#x27;</span>]++;</span><br><span class="line">o[<span class="string">&#x27;string&#x27;</span>] += <span class="number">10</span>;</span><br><span class="line">o.<span class="property">const_var</span>++;</span><br><span class="line">o.<span class="property">const_var</span> += <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//对象属性的读操作</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">12</span> === o[<span class="string">&#x27;string&#x27;</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">13</span> === o.<span class="property">const_var</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-3"><a href="#属性-3" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;Object&quot;</code>。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Object&quot;</span> === &#123;<span class="attr">k</span>:<span class="string">&quot;1&quot;</span>,<span class="attr">v</span>:<span class="string">&quot;2&quot;</span>&#125;.<span class="property">constructor</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法-3"><a href="#方法-3" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code>：返回字符串 <code>&quot;[object Object]&quot;</code>。</li>
+</ul>
+<h3 id="function"><a href="#function" class="headerlink" title="function"></a>function</h3><h4 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h4><p>function 支持以下的定义方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法 1</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">a</span> (x) &#123;</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法 2</span></span><br><span class="line"><span class="keyword">var</span> b = <span class="keyword">function</span> (<span class="params">x</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>function 同时也支持以下的语法（匿名函数，闭包等）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="keyword">function</span> (<span class="params">x</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123; <span class="keyword">return</span> x;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b = <span class="title function_">a</span>(<span class="number">100</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="number">100</span> === <span class="title function_">b</span>() );</span><br></pre></td></tr></table></figure>
+
+<h5 id="arguments"><a href="#arguments" class="headerlink" title="arguments"></a>arguments</h5><p>function 里面可以使用 <code>arguments</code> 关键词。该关键词目前只支持以下的属性：</p>
+<ul>
+<li><code>length</code>: 传递给函数的参数个数。</li>
+<li><code>[index]</code>: 通过 <code>index</code> 下标可以遍历传递给函数的每个参数。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span> === <span class="variable language_">arguments</span>.<span class="property">length</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">100</span> === <span class="variable language_">arguments</span>[<span class="number">0</span>]);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">200</span> === <span class="variable language_">arguments</span>[<span class="number">1</span>]);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">300</span> === <span class="variable language_">arguments</span>[<span class="number">2</span>]);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="title function_">a</span>(<span class="number">100</span>,<span class="number">200</span>,<span class="number">300</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-4"><a href="#属性-4" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;Function&quot;</code>。</li>
+<li><code>length</code>：返回函数的形参个数。</li>
+</ul>
+<h4 id="方法-4"><a href="#方法-4" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code>：返回字符串 <code>&quot;[function Function]&quot;</code>。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> func = <span class="keyword">function</span> (<span class="params">a,b,c</span>) &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Function&quot;</span> === func.<span class="property">constructor</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span> === func.<span class="property">length</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;[function Function]&quot;</span> === func.<span class="title function_">toString</span>());</span><br></pre></td></tr></table></figure>
+
+<h3 id="array"><a href="#array" class="headerlink" title="array"></a>array</h3><h4 id="语法-5"><a href="#语法-5" class="headerlink" title="语法"></a>语法</h4><p>array 支持以下的定义方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [];      <span class="comment">//生成一个新的空数组</span></span><br><span class="line"></span><br><span class="line">a = [<span class="number">1</span>,<span class="string">&quot;2&quot;</span>,&#123;&#125;,<span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;];  <span class="comment">//生成一个新的非空数组，数组元素可以是任何类型</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-5"><a href="#属性-5" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;Array&quot;</code>。</li>
+<li><code>length</code></li>
+</ul>
+<blockquote>
+<p>除constructor外属性的具体含义请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h4 id="方法-5"><a href="#方法-5" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code></li>
+<li><code>concat</code></li>
+<li><code>join</code></li>
+<li><code>pop</code></li>
+<li><code>push</code></li>
+<li><code>reverse</code></li>
+<li><code>shift</code></li>
+<li><code>slice</code></li>
+<li><code>sort</code></li>
+<li><code>splice</code></li>
+<li><code>unshift</code></li>
+<li><code>indexOf</code></li>
+<li><code>lastIndexOf</code></li>
+<li><code>every</code></li>
+<li><code>some</code></li>
+<li><code>forEach</code></li>
+<li><code>map</code></li>
+<li><code>filter</code></li>
+<li><code>reduce</code></li>
+<li><code>reduceRight</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="date"><a href="#date" class="headerlink" title="date"></a>date</h3><h4 id="语法-6"><a href="#语法-6" class="headerlink" title="语法"></a>语法</h4><p>生成 date 对象需要使用 <code>getDate</code>函数, 返回一个当前时间的对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getDate</span>()</span><br><span class="line"><span class="title function_">getDate</span>(milliseconds)</span><br><span class="line"><span class="title function_">getDate</span>(datestring)</span><br><span class="line"><span class="title function_">getDate</span>(year, month[, date[, hours[, minutes[, seconds[, milliseconds]]]]])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>milliseconds</code>: 从1970年1月1日00:00:00 UTC开始计算的毫秒数</li>
+<li><code>datestring</code>: 日期字符串，其格式为：”month day, year hours:minutes:seconds”</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> date = <span class="title function_">getDate</span>(); <span class="comment">//返回当前时间对象</span></span><br><span class="line"></span><br><span class="line">date = <span class="title function_">getDate</span>(<span class="number">1500000000000</span>);</span><br><span class="line"><span class="comment">// Fri Jul 14 2017 10:40:00 GMT+0800 (中国标准时间)</span></span><br><span class="line">date = <span class="title function_">getDate</span>(<span class="string">&#x27;2017-7-14&#x27;</span>);</span><br><span class="line"><span class="comment">// Fri Jul 14 2017 00:00:00 GMT+0800 (中国标准时间)</span></span><br><span class="line">date = <span class="title function_">getDate</span>(<span class="number">2017</span>, <span class="number">6</span>, <span class="number">14</span>, <span class="number">10</span>, <span class="number">40</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// Fri Jul 14 2017 10:40:00 GMT+0800 (中国标准时间)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-6"><a href="#属性-6" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 “Date”。</li>
+</ul>
+<h4 id="方法-6"><a href="#方法-6" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>toString</code></li>
+<li><code>toDateString</code></li>
+<li><code>toTimeString</code></li>
+<li><code>toLocaleString</code></li>
+<li><code>toLocaleDateString</code></li>
+<li><code>toLocaleTimeString</code></li>
+<li><code>valueOf</code></li>
+<li><code>getTime</code></li>
+<li><code>getFullYear</code></li>
+<li><code>getUTCFullYear</code></li>
+<li><code>getMonth</code></li>
+<li><code>getUTCMonth</code></li>
+<li><code>getDate</code></li>
+<li><code>getUTCDate</code></li>
+<li><code>getDay</code></li>
+<li><code>getUTCDay</code></li>
+<li><code>getHours</code></li>
+<li><code>getUTCHours</code></li>
+<li><code>getMinutes</code></li>
+<li><code>getUTCMinutes</code></li>
+<li><code>getSeconds</code></li>
+<li><code>getUTCSeconds</code></li>
+<li><code>getMilliseconds</code></li>
+<li><code>getUTCMilliseconds</code></li>
+<li><code>getTimezoneOffset</code></li>
+<li><code>setTime</code></li>
+<li><code>setMilliseconds</code></li>
+<li><code>setUTCMilliseconds</code></li>
+<li><code>setSeconds</code></li>
+<li><code>setUTCSeconds</code></li>
+<li><code>setMinutes</code></li>
+<li><code>setUTCMinutes</code></li>
+<li><code>setHours</code></li>
+<li><code>setUTCHours</code></li>
+<li><code>setDate</code></li>
+<li><code>setUTCDate</code></li>
+<li><code>setMonth</code></li>
+<li><code>setUTCMonth</code></li>
+<li><code>setFullYear</code></li>
+<li><code>setUTCFullYear</code></li>
+<li><code>toUTCString</code></li>
+<li><code>toISOString</code></li>
+<li><code>toJSON</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="regexp"><a href="#regexp" class="headerlink" title="regexp"></a>regexp</h3><h4 id="语法-7"><a href="#语法-7" class="headerlink" title="语法"></a>语法</h4><p>生成 regexp 对象需要使用 <code>getRegExp</code>函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getRegExp</span>(pattern[, flags])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数：<ul>
+<li><code>pattern</code>: 正则表达式的内容。</li>
+<li><code>flags</code>:修饰符。该字段只能包含以下字符:<ul>
+<li><code>g</code>: global</li>
+<li><code>i</code>: ignoreCase</li>
+<li><code>m</code>: multiline。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="title function_">getRegExp</span>(<span class="string">&quot;x&quot;</span>, <span class="string">&quot;img&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;x&quot;</span> === a.<span class="property">source</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === a.<span class="property">global</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === a.<span class="property">ignoreCase</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="literal">true</span> === a.<span class="property">multiline</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="属性-7"><a href="#属性-7" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>constructor</code>：返回字符串 <code>&quot;RegExp&quot;</code>。</li>
+<li><code>source</code></li>
+<li><code>global</code></li>
+<li><code>ignoreCase</code></li>
+<li><code>multiline</code></li>
+<li><code>lastIndex</code></li>
+</ul>
+<blockquote>
+<p>除constructor外属性的具体含义请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h4 id="方法-7"><a href="#方法-7" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>exec</code></li>
+<li><code>test</code></li>
+<li><code>toString</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="数据类型判断"><a href="#数据类型判断" class="headerlink" title="数据类型判断"></a>数据类型判断</h3><h4 id="constructor-属性"><a href="#constructor-属性" class="headerlink" title="constructor 属性"></a><code>constructor</code> 属性</h4><p>数据类型的判断可以使用 <code>constructor</code> 属性。</p>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> number = <span class="number">10</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Number&quot;</span> === number.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> string = <span class="string">&quot;str&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;String&quot;</span> === string.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> boolean = <span class="literal">true</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Boolean&quot;</span> === boolean.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> object = &#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Object&quot;</span> === object.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> func = <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Function&quot;</span> === func.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array = [];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Array&quot;</span> === array.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> date = <span class="title function_">getDate</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;Date&quot;</span> === date.<span class="property">constructor</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> regexp = <span class="title function_">getRegExp</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&quot;RegExp&quot;</span> === regexp.<span class="property">constructor</span> );</span><br></pre></td></tr></table></figure>
+
+<h4 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a><code>typeof</code></h4><p>使用 <code>typeof</code> 也可以区分部分数据类型。</p>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> number = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> boolean = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">var</span> object = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> func = <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> array = [];</span><br><span class="line"><span class="keyword">var</span> date = <span class="title function_">getDate</span>();</span><br><span class="line"><span class="keyword">var</span> regexp = <span class="title function_">getRegExp</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;number&#x27;</span> === <span class="keyword">typeof</span> number );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;boolean&#x27;</span> === <span class="keyword">typeof</span> boolean );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;object&#x27;</span> === <span class="keyword">typeof</span> object );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;function&#x27;</span> === <span class="keyword">typeof</span> func );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;object&#x27;</span> === <span class="keyword">typeof</span> array );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;object&#x27;</span> === <span class="keyword">typeof</span> date );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;object&#x27;</span> === <span class="keyword">typeof</span> regexp );</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;undefined&#x27;</span> === <span class="keyword">typeof</span> <span class="literal">undefined</span> );</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>( <span class="string">&#x27;object&#x27;</span> === <span class="keyword">typeof</span> <span class="literal">null</span> );</span><br></pre></td></tr></table></figure>
+
+<h2 id="基础类库"><a href="#基础类库" class="headerlink" title="基础类库"></a>基础类库</h2><h3 id="console"><a href="#console" class="headerlink" title="console"></a>console</h3><p><code>console.log</code> 方法用于在 console 窗口输出信息。它可以接受多个参数，将它们的结果连接起来输出。</p>
+<h3 id="Math"><a href="#Math" class="headerlink" title="Math"></a>Math</h3><h4 id="属性-8"><a href="#属性-8" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>E</code></li>
+<li><code>LN10</code></li>
+<li><code>LN2</code></li>
+<li><code>LOG2E</code></li>
+<li><code>LOG10E</code></li>
+<li><code>PI</code></li>
+<li><code>SQRT1_2</code></li>
+<li><code>SQRT2</code></li>
+</ul>
+<blockquote>
+<p>以上属性的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h4 id="方法-8"><a href="#方法-8" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>abs</code></li>
+<li><code>acos</code></li>
+<li><code>asin</code></li>
+<li><code>atan</code></li>
+<li><code>atan2</code></li>
+<li><code>ceil</code></li>
+<li><code>cos</code></li>
+<li><code>exp</code></li>
+<li><code>floor</code></li>
+<li><code>log</code></li>
+<li><code>max</code></li>
+<li><code>min</code></li>
+<li><code>pow</code></li>
+<li><code>random</code></li>
+<li><code>round</code></li>
+<li><code>sin</code></li>
+<li><code>sqrt</code></li>
+<li><code>tan</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h3><h4 id="方法-9"><a href="#方法-9" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>stringify(object)</code>: 将 <code>object</code> 对象转换为 <code>JSON</code> 字符串，并返回该字符串。</li>
+<li><code>parse(string)</code>: 将 <code>JSON</code> 字符串转化成对象，并返回该对象。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">console.log(undefined === JSON.stringify());</span><br><span class="line">console.log(undefined === JSON.stringify(undefined));</span><br><span class="line">console.log(&quot;null&quot;===JSON.stringify(null));</span><br><span class="line"></span><br><span class="line">console.log(&quot;111&quot;===JSON.stringify(111));</span><br><span class="line">console.log(&#x27;&quot;111&quot;&#x27;===JSON.stringify(&quot;111&quot;));</span><br><span class="line">console.log(&quot;true&quot;===JSON.stringify(true));</span><br><span class="line">console.log(undefined===JSON.stringify(function()&#123;&#125;));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">console.log(undefined===JSON.parse(JSON.stringify()));</span><br><span class="line">console.log(undefined===JSON.parse(JSON.stringify(undefined)));</span><br><span class="line">console.log(null===JSON.parse(JSON.stringify(null)));</span><br><span class="line"></span><br><span class="line">console.log(111===JSON.parse(JSON.stringify(111)));</span><br><span class="line">console.log(&quot;111&quot;===JSON.parse(JSON.stringify(&quot;111&quot;)));</span><br><span class="line">console.log(true===JSON.parse(JSON.stringify(true)));</span><br><span class="line"></span><br><span class="line">console.log(undefined===JSON.parse(JSON.stringify(function()&#123;&#125;)));</span><br></pre></td></tr></table></figure>
+
+<h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><h4 id="属性-9"><a href="#属性-9" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>MAX_VALUE</code></li>
+<li><code>MIN_VALUE</code></li>
+<li><code>NEGATIVE_INFINITY</code></li>
+<li><code>POSITIVE_INFINITY</code></li>
+</ul>
+<blockquote>
+<p>以上属性的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h3><h4 id="属性-10"><a href="#属性-10" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>parse</code></li>
+<li><code>UTC</code></li>
+<li><code>now</code></li>
+</ul>
+<blockquote>
+<p>以上属性的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h3 id="Global"><a href="#Global" class="headerlink" title="Global"></a>Global</h3><h4 id="属性-11"><a href="#属性-11" class="headerlink" title="属性"></a>属性</h4><ul>
+<li><code>NaN</code></li>
+<li><code>Infinity</code></li>
+<li><code>undefined</code></li>
+</ul>
+<blockquote>
+<p>以上属性的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+<h4 id="方法-10"><a href="#方法-10" class="headerlink" title="方法"></a>方法</h4><ul>
+<li><code>parseInt</code></li>
+<li><code>parseFloat</code></li>
+<li><code>isNaN</code></li>
+<li><code>isFinite</code></li>
+<li><code>decodeURI</code></li>
+<li><code>decodeURIComponent</code></li>
+<li><code>encodeURI</code></li>
+<li><code>encodeURIComponent</code></li>
+</ul>
+<blockquote>
+<p>以上方法的具体使用请参考 <code>ES5</code> 标准。</p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>微信小程序WXS教程</p><p><a href="https://blog.buubiu.com/微信小程序WXS教程/">https://blog.buubiu.com/微信小程序WXS教程/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-11-09</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%A1%86%E6%9E%B6%E7%BB%84%E4%BB%B6%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">微信小程序框架组件简单介绍</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8FWXSS%E6%95%99%E7%A8%8B/"><span class="level-item">微信小程序WXSS教程</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#介绍"><span class="level-left"><span class="level-item">1</span><span class="level-item">介绍</span></span></a></li><li><a class="level is-mobile" href="#模块"><span class="level-left"><span class="level-item">2</span><span class="level-item">模块</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#lt-wxs-gt-标签"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">&lt;wxs&gt; 标签</span></span></a></li><li><a class="level is-mobile" href="#module-属性"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">module 属性</span></span></a></li><li><a class="level is-mobile" href="#src-属性"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">src 属性</span></span></a></li><li><a class="level is-mobile" href="#require函数"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">require函数</span></span></a></li><li><a class="level is-mobile" href="#注意事项"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">注意事项</span></span></a></li></ul></li><li><a class="level is-mobile" href="#变量"><span class="level-left"><span class="level-item">3</span><span class="level-item">变量</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#变量名"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">变量名</span></span></a></li><li><a class="level is-mobile" href="#保留标识符"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">保留标识符</span></span></a></li></ul></li><li><a class="level is-mobile" href="#注释"><span class="level-left"><span class="level-item">4</span><span class="level-item">注释</span></span></a></li><li><a class="level is-mobile" href="#运算符"><span class="level-left"><span class="level-item">5</span><span class="level-item">运算符</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#基本运算符"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">基本运算符</span></span></a></li><li><a class="level is-mobile" href="#一元运算符"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">一元运算符</span></span></a></li><li><a class="level is-mobile" href="#位运算符"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">位运算符</span></span></a></li><li><a class="level is-mobile" href="#比较运算符"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">比较运算符</span></span></a></li><li><a class="level is-mobile" href="#等值运算符"><span class="level-left"><span class="level-item">5.5</span><span class="level-item">等值运算符</span></span></a></li><li><a class="level is-mobile" href="#赋值运算符"><span class="level-left"><span class="level-item">5.6</span><span class="level-item">赋值运算符</span></span></a></li><li><a class="level is-mobile" href="#二元逻辑运算符"><span class="level-left"><span class="level-item">5.7</span><span class="level-item">二元逻辑运算符</span></span></a></li><li><a class="level is-mobile" href="#其他运算符"><span class="level-left"><span class="level-item">5.8</span><span class="level-item">其他运算符</span></span></a></li><li><a class="level is-mobile" href="#运算符优先级"><span class="level-left"><span class="level-item">5.9</span><span class="level-item">运算符优先级</span></span></a></li></ul></li><li><a class="level is-mobile" href="#语句"><span class="level-left"><span class="level-item">6</span><span class="level-item">语句</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#if-语句"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">if 语句</span></span></a></li><li><a class="level is-mobile" href="#switch-语句"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">switch 语句</span></span></a></li><li><a class="level is-mobile" href="#for-语句"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">for 语句</span></span></a></li><li><a class="level is-mobile" href="#while-语句"><span class="level-left"><span class="level-item">6.4</span><span class="level-item">while 语句</span></span></a></li></ul></li><li><a class="level is-mobile" href="#数据类型"><span class="level-left"><span class="level-item">7</span><span class="level-item">数据类型</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#number"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">number</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法"><span class="level-left"><span class="level-item">7.1.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性"><span class="level-left"><span class="level-item">7.1.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法"><span class="level-left"><span class="level-item">7.1.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#string"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">string</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-1"><span class="level-left"><span class="level-item">7.2.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-1"><span class="level-left"><span class="level-item">7.2.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-1"><span class="level-left"><span class="level-item">7.2.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#boolean"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">boolean</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-2"><span class="level-left"><span class="level-item">7.3.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-2"><span class="level-left"><span class="level-item">7.3.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-2"><span class="level-left"><span class="level-item">7.3.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#object"><span class="level-left"><span class="level-item">7.4</span><span class="level-item">object</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-3"><span class="level-left"><span class="level-item">7.4.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-3"><span class="level-left"><span class="level-item">7.4.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-3"><span class="level-left"><span class="level-item">7.4.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#function"><span class="level-left"><span class="level-item">7.5</span><span class="level-item">function</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-4"><span class="level-left"><span class="level-item">7.5.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-4"><span class="level-left"><span class="level-item">7.5.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-4"><span class="level-left"><span class="level-item">7.5.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#array"><span class="level-left"><span class="level-item">7.6</span><span class="level-item">array</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-5"><span class="level-left"><span class="level-item">7.6.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-5"><span class="level-left"><span class="level-item">7.6.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-5"><span class="level-left"><span class="level-item">7.6.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#date"><span class="level-left"><span class="level-item">7.7</span><span class="level-item">date</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-6"><span class="level-left"><span class="level-item">7.7.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-6"><span class="level-left"><span class="level-item">7.7.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-6"><span class="level-left"><span class="level-item">7.7.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#regexp"><span class="level-left"><span class="level-item">7.8</span><span class="level-item">regexp</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#语法-7"><span class="level-left"><span class="level-item">7.8.1</span><span class="level-item">语法</span></span></a></li><li><a class="level is-mobile" href="#属性-7"><span class="level-left"><span class="level-item">7.8.2</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-7"><span class="level-left"><span class="level-item">7.8.3</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#数据类型判断"><span class="level-left"><span class="level-item">7.9</span><span class="level-item">数据类型判断</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#constructor-属性"><span class="level-left"><span class="level-item">7.9.1</span><span class="level-item">constructor 属性</span></span></a></li><li><a class="level is-mobile" href="#typeof"><span class="level-left"><span class="level-item">7.9.2</span><span class="level-item">typeof</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#基础类库"><span class="level-left"><span class="level-item">8</span><span class="level-item">基础类库</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#console"><span class="level-left"><span class="level-item">8.1</span><span class="level-item">console</span></span></a></li><li><a class="level is-mobile" href="#Math"><span class="level-left"><span class="level-item">8.2</span><span class="level-item">Math</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#属性-8"><span class="level-left"><span class="level-item">8.2.1</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-8"><span class="level-left"><span class="level-item">8.2.2</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#JSON"><span class="level-left"><span class="level-item">8.3</span><span class="level-item">JSON</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#方法-9"><span class="level-left"><span class="level-item">8.3.1</span><span class="level-item">方法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Number"><span class="level-left"><span class="level-item">8.4</span><span class="level-item">Number</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#属性-9"><span class="level-left"><span class="level-item">8.4.1</span><span class="level-item">属性</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Date"><span class="level-left"><span class="level-item">8.5</span><span class="level-item">Date</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#属性-10"><span class="level-left"><span class="level-item">8.5.1</span><span class="level-item">属性</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Global"><span class="level-left"><span class="level-item">8.6</span><span class="level-item">Global</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#属性-11"><span class="level-left"><span class="level-item">8.6.1</span><span class="level-item">属性</span></span></a></li><li><a class="level is-mobile" href="#方法-10"><span class="level-left"><span class="level-item">8.6.2</span><span class="level-item">方法</span></span></a></li></ul></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="buubiu&#039;s blog" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32032102000187号" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32032102000187号</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
