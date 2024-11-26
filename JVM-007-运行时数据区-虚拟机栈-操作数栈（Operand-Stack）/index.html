@@ -1,126 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack） | 技术分享主页</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="定义 栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等） 而操作数栈的含义：只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据 每一个独立的栈帧中除了包含局部变量表以外，还包含一个后进先出(Last-In-First-Out)的操作数栈，也可以称为 表达式栈(Expression S">
-<meta property="og:type" content="article">
-<meta property="og:title" content="JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）">
-<meta property="og:url" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/index.html">
-<meta property="og:site_name" content="技术分享主页">
-<meta property="og:description" content="定义 栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等） 而操作数栈的含义：只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据 每一个独立的栈帧中除了包含局部变量表以外，还包含一个后进先出(Last-In-First-Out)的操作数栈，也可以称为 表达式栈(Expression S">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213236414.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213310739.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530214307731.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222258464.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222409344.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222552821.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222642778.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222825266.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222850808.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223014199.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223250542.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223645676.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223813083.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224151508.png">
-<meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224415847.png">
-<meta property="article:published_time" content="2022-05-30T13:14:16.000Z">
-<meta property="article:modified_time" content="2024-01-25T15:08:04.885Z">
-<meta property="article:author" content="buubiu">
-<meta property="article:tag" content="JVM">
-<meta property="article:tag" content="运行时数据区">
-<meta property="article:tag" content="虚拟机栈">
-<meta property="article:tag" content="操作数栈">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png">
-  
-    <link rel="alternate" href="/atom.xml" title="技术分享主页" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack） - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="定义 栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等） 而操作数栈的含义：只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据 每一个独立的栈帧中除了包含局部变量表以外，还包含一个后进先出(Last-In-First-Out)的操作数栈，也可以称为 表达式栈(Expression S"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）"><meta property="og:url" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="定义 栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等） 而操作数栈的含义：只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据 每一个独立的栈帧中除了包含局部变量表以外，还包含一个后进先出(Last-In-First-Out)的操作数栈，也可以称为 表达式栈(Expression S"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213236414.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213310739.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530214307731.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222258464.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222409344.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222552821.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222642778.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222825266.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222850808.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223014199.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223250542.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223645676.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223813083.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224151508.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224415847.png"><meta property="article:published_time" content="2022-05-30T13:14:16.000Z"><meta property="article:modified_time" content="2024-01-25T15:08:04.885Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="虚拟机栈"><meta property="article:tag" content="操作数栈"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/"},"headline":"JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）","image":["https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213236414.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530213310739.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530214307731.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222258464.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222409344.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222552821.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222642778.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222825266.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530222850808.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223014199.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223250542.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223645676.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530223813083.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224151508.png","https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220530224415847.png"],"datePublished":"2022-05-30T13:14:16.000Z","dateModified":"2024-01-25T15:08:04.885Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"定义 栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等） 而操作数栈的含义：只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据 每一个独立的栈帧中除了包含局部变量表以外，还包含一个后进先出(Last-In-First-Out)的操作数栈，也可以称为 表达式栈(Expression S"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
 
-  
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">技术分享主页</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.buubiu.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main"><article id="post-JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand-Stack）" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/" class="article-date">
-  <time class="dt-published" datetime="2022-05-30T13:14:16.000Z" itemprop="datePublished">2022-05-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JVM/">JVM</a>►<a class="article-category-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a>►<a class="article-category-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/">虚拟机栈</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><img src="/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png"></p>
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-05-30T13:14:16.000Z" title="2022/5/30 21:14:16">2022-05-30</time>发表</span><span class="level-item"><time dateTime="2024-01-25T15:08:04.885Z" title="2024/1/25 23:08:04">2024-01-25</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/">虚拟机栈</a></span><span class="level-item">13 分钟读完 (大约1924个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）</h1><div class="content"><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><img src="/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/image-20220531163456442.png"></p>
 <p>栈的含义：先进后出，可以使用数组或链表来实现，但不具有数组或链表的特性（任意位置增删改等）</p>
 <p>而操作数栈的含义：<strong>只是使用了数组来存储实现的栈，即按照顺序存放，有索引，但是并非采用访问索引的方式来进行数据访问的，只能通过入栈和出栈来操作数据</strong></p>
 <p>每一个独立的栈帧中除了包含局部变量表以外，还包含一个<code>后进先出(Last-In-First-Out)</code>的<code>操作数栈</code>，也可以称为 <code>表达式栈(Expression Stack)</code></p>
@@ -205,158 +120,58 @@
 <h2 id="栈顶缓存技术（Top-Of-Stack-Cashing）"><a href="#栈顶缓存技术（Top-Of-Stack-Cashing）" class="headerlink" title="栈顶缓存技术（Top Of Stack Cashing）"></a>栈顶缓存技术（Top Of Stack Cashing）</h2><h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>基于栈式架构的虚拟机所使用的零地址指令更加紧凑，但完成一项操作的时候必然需要使用更多的入栈和出栈指令，这同时也就意味着将需要更多的指令分派（instruction dispatch）次数（也就是你会发现指令很多）和导致内存读&#x2F;写次数多，效率不高。</p>
 <h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>由于操作数是存储在内存中的，因此频繁地执行内存读&#x2F;写操作必然会影响执行速度。为了解决这个问题，HotSpot JVM的设计者们提出了栈顶缓存（Tos，Top-of-Stack Cashing）技术，<strong>将栈顶元素全部缓存在物理CPU的寄存器中，以此降低对内存的读&#x2F;写次数，提升执行引擎的执行效率。</strong></p>
 <h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>寄存器的主要优点：指令更少，执行速度快，但是指令集（也就是指令种类）很多</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://blog.buubiu.com/JVM-007-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88%EF%BC%88Operand-Stack%EF%BC%89/" data-id="cm3xsrxup004uucl8b6n00yss" data-title="JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/" rel="tag">操作数栈</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/" rel="tag">虚拟机栈</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" rel="tag">运行时数据区</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/JVM-008-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88Dynamic-Linking%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">前一篇</strong>
-      <div class="article-nav-title">
-        
-          JVM-008-运行时数据区-虚拟机栈-动态链接（Dynamic Linking）
-        
-      </div>
-    </a>
-  
-  
-    <a href="/JVM-006-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8%EF%BC%88Local-Variables%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">后一篇</strong>
-      <div class="article-nav-title">JVM-006-运行时数据区-虚拟机栈-局部变量表（Local Variables）</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/APM/">APM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Docker/">Docker</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ElasticSearch/">ElasticSearch</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/ElasticSearch/ElasticSearch6/">ElasticSearch6</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ElasticSearch/ElasticSearch7/">ElasticSearch7</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Gradle/">Gradle</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Gradle/6-2/">6.2</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/">JVM</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/">Class文件结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">垃圾回收</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0/">字符串常量池</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/">执行引擎</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%8C%BA/">本地方法区</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/">类加载子系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%A0%86/">堆</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E6%96%B9%E6%B3%95%E5%8C%BA/">方法区</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/">本地方法栈</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/">程序计数器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/">虚拟机栈</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Jenkins/">Jenkins</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kubernetes/">Kubernetes</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Kubernetes/Kubernetes%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B/">Kubernetes快速上手</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kubernetes/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Kubernetes/">深入理解Kubernetes</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/LDAP/">LDAP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Seata/">Seata</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Spring/">Spring</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringCloud/">SpringCloud</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringCloud-Alibaba/">SpringCloud Alibaba</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringMVC/">SpringMVC</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swagger/">Swagger</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zookeeper/">Zookeeper</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/ES6/">ES6</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF/TypeScript/">TypeScript</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Executor%E4%BD%93%E7%B3%BB/">Executor体系</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Lock%E4%BD%93%E7%B3%BB/">Lock体系</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%B1%BB/">原子操作类</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E5%85%B3%E9%94%AE%E5%AD%97/">并发关键字</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/">并发实践</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/">并发容器</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7/">并发工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E5%B9%B6%E5%8F%91%E7%90%86%E8%AE%BA/">并发理论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/">知识体系</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%A6%82%E8%BF%B0/">概述</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/">辅助工具</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9B%86%E5%90%88%E5%AE%B9%E5%99%A8/">集合容器</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BBR/" rel="tag">BBR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Centos7/" rel="tag">Centos7</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" rel="tag">Class文件结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Consul/" rel="tag">Consul</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataGrip/" rel="tag">DataGrip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/" rel="tag">ElasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eureka/" rel="tag">Eureka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Executor%E4%BD%93%E7%B3%BB/" rel="tag">Executor体系</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Google/" rel="tag">Google</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">Java虚拟机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jenkins/" rel="tag">Jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kibana/" rel="tag">Kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kubernetes/" rel="tag">Kubernetes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LDAP/" rel="tag">LDAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Launchpad/" rel="tag">Launchpad</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lock%E4%BD%93%E7%B3%BB/" rel="tag">Lock体系</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac/" rel="tag">Mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nexus3/" rel="tag">Nexus3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Oracle/" rel="tag">Oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/" rel="tag">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Seata/" rel="tag">Seata</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/" rel="tag">Shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/StringTable/" rel="tag">StringTable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swagger/" rel="tag">Swagger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebLogic/" rel="tag">WebLogic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper/" rel="tag">Zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debian/" rel="tag">debian</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/skywalking/" rel="tag">skywalking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thymeleaf/" rel="tag">thymeleaf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%80%E4%BA%9B%E9%99%84%E5%8A%A0%E4%BF%A1%E6%81%AF/" rel="tag">一些附加信息</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%9A%E9%A9%AC%E9%80%8A/" rel="tag">亚马逊</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" rel="tag">动态链接</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%B1%BB/" rel="tag">原子操作类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" rel="tag">垃圾回收器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A0%86/" rel="tag">堆</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag">存储过程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/" rel="tag">对象分配的过程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8/" rel="tag">局部变量表</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B4%E8%BD%BB%E4%BB%A3%E5%92%8C%E8%80%81%E5%B9%B4%E4%BB%A3/" rel="tag">年轻代和老年代</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E5%85%B3%E9%94%AE%E5%AD%97/" rel="tag">并发关键字</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="tag">并发基础知识</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/" rel="tag">并发实践</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/" rel="tag">并发容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7/" rel="tag">并发工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%90%86%E8%AE%BA/" rel="tag">并发理论</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag">并发编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%BC%98%E7%BC%BA%E7%82%B9/" rel="tag">并发编程优缺点</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/" rel="tag">开发框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag">微服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" rel="tag">执行引擎</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/" rel="tag">操作数栈</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3/" rel="tag">文档</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99/" rel="tag">文档编写</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%B9%E6%B3%95%E5%8C%BA/" rel="tag">方法区</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%B9%E6%B3%95%E8%BF%94%E5%9B%9E%E5%9C%B0%E5%9D%80/" rel="tag">方法返回地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%8C%BA/" rel="tag">本地方法区</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" rel="tag">本地方法库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%8E%A5%E5%8F%A3/" rel="tag">本地方法接口</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/" rel="tag">本地方法栈</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%9B%B8%E5%85%B3%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">相关面试题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">程序计数器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" rel="tag">类加载子系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E6%98%93%E4%BA%91/" rel="tag">网易云</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/" rel="tag">虚拟机栈</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" rel="tag">触发器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A4%E8%AF%81/" rel="tag">认证</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" rel="tag">运行时数据区</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/" rel="tag">逃逸分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" rel="tag">防火墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88%E7%BC%96%E7%A8%8B/" rel="tag">集合编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag">面试题</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/BBR/" style="font-size: 10px;">BBR</a> <a href="/tags/Centos7/" style="font-size: 10.53px;">Centos7</a> <a href="/tags/Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84/" style="font-size: 10px;">Class文件结构</a> <a href="/tags/Consul/" style="font-size: 10.53px;">Consul</a> <a href="/tags/DataGrip/" style="font-size: 10px;">DataGrip</a> <a href="/tags/Docker/" style="font-size: 17.37px;">Docker</a> <a href="/tags/ES6/" style="font-size: 13.16px;">ES6</a> <a href="/tags/ElasticSearch/" style="font-size: 16.32px;">ElasticSearch</a> <a href="/tags/Eureka/" style="font-size: 10px;">Eureka</a> <a href="/tags/Executor%E4%BD%93%E7%B3%BB/" style="font-size: 11.58px;">Executor体系</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/Gradle/" style="font-size: 11.58px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 20px;">JVM</a> <a href="/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/tags/Java/" style="font-size: 13.68px;">Java</a> <a href="/tags/Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" style="font-size: 10px;">Java虚拟机</a> <a href="/tags/Jenkins/" style="font-size: 11.58px;">Jenkins</a> <a href="/tags/Kibana/" style="font-size: 10px;">Kibana</a> <a href="/tags/Kubernetes/" style="font-size: 18.42px;">Kubernetes</a> <a href="/tags/LDAP/" style="font-size: 12.11px;">LDAP</a> <a href="/tags/Launchpad/" style="font-size: 10px;">Launchpad</a> <a href="/tags/Linux/" style="font-size: 14.74px;">Linux</a> <a href="/tags/Lock%E4%BD%93%E7%B3%BB/" style="font-size: 12.63px;">Lock体系</a> <a href="/tags/Mac/" style="font-size: 10px;">Mac</a> <a href="/tags/Nexus3/" style="font-size: 10px;">Nexus3</a> <a href="/tags/Oracle/" style="font-size: 14.21px;">Oracle</a> <a href="/tags/SQL/" style="font-size: 10.53px;">SQL</a> <a href="/tags/SSR/" style="font-size: 10.53px;">SSR</a> <a href="/tags/Seata/" style="font-size: 13.68px;">Seata</a> <a href="/tags/Shell/" style="font-size: 11.58px;">Shell</a> <a href="/tags/Spring/" style="font-size: 13.68px;">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 15.26px;">SpringBoot</a> <a href="/tags/SpringMVC/" style="font-size: 14.74px;">SpringMVC</a> <a href="/tags/StringTable/" style="font-size: 11.05px;">StringTable</a> <a href="/tags/Swagger/" style="font-size: 10px;">Swagger</a> <a href="/tags/TypeScript/" style="font-size: 17.89px;">TypeScript</a> <a href="/tags/WebLogic/" style="font-size: 10px;">WebLogic</a> <a href="/tags/Zookeeper/" style="font-size: 13.16px;">Zookeeper</a> <a href="/tags/debian/" style="font-size: 10.53px;">debian</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/skywalking/" style="font-size: 10.53px;">skywalking</a> <a href="/tags/thymeleaf/" style="font-size: 10px;">thymeleaf</a> <a href="/tags/%E4%B8%80%E4%BA%9B%E9%99%84%E5%8A%A0%E4%BF%A1%E6%81%AF/" style="font-size: 10px;">一些附加信息</a> <a href="/tags/%E4%BA%9A%E9%A9%AC%E9%80%8A/" style="font-size: 10px;">亚马逊</a> <a href="/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" style="font-size: 10px;">动态链接</a> <a href="/tags/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%B1%BB/" style="font-size: 10px;">原子操作类</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 15.79px;">垃圾回收</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/" style="font-size: 16.84px;">垃圾回收器</a> <a href="/tags/%E5%A0%86/" style="font-size: 12.63px;">堆</a> <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" style="font-size: 11.05px;">存储过程</a> <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E8%BF%87%E7%A8%8B/" style="font-size: 10px;">对象分配的过程</a> <a href="/tags/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8/" style="font-size: 10px;">局部变量表</a> <a href="/tags/%E5%B9%B4%E8%BD%BB%E4%BB%A3%E5%92%8C%E8%80%81%E5%B9%B4%E4%BB%A3/" style="font-size: 10px;">年轻代和老年代</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 11.58px;">并发关键字</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" style="font-size: 10px;">并发基础知识</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E5%AE%9E%E8%B7%B5/" style="font-size: 10px;">并发实践</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8/" style="font-size: 13.16px;">并发容器</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7/" style="font-size: 10.53px;">并发工具</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%90%86%E8%AE%BA/" style="font-size: 10px;">并发理论</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 11.05px;">并发编程</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%BC%98%E7%BC%BA%E7%82%B9/" style="font-size: 10px;">并发编程优缺点</a> <a href="/tags/%E5%BC%80%E5%8F%91%E6%A1%86%E6%9E%B6/" style="font-size: 10px;">开发框架</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 19.47px;">微信小程序</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 17.37px;">微服务</a> <a href="/tags/%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" style="font-size: 12.11px;">执行引擎</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 14.74px;">排序</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/" style="font-size: 10px;">操作数栈</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 12.63px;">数据结构</a> <a href="/tags/%E6%96%87%E6%A1%A3/" style="font-size: 10px;">文档</a> <a href="/tags/%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99/" style="font-size: 10px;">文档编写</a> <a href="/tags/%E6%96%B9%E6%B3%95%E5%8C%BA/" style="font-size: 12.11px;">方法区</a> <a href="/tags/%E6%96%B9%E6%B3%95%E8%BF%94%E5%9B%9E%E5%9C%B0%E5%9D%80/" style="font-size: 10px;">方法返回地址</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10.53px;">服务器</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%8C%BA/" style="font-size: 10px;">本地方法区</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%BA%93/" style="font-size: 10px;">本地方法库</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%8E%A5%E5%8F%A3/" style="font-size: 10px;">本地方法接口</a> <a href="/tags/%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/" style="font-size: 10px;">本地方法栈</a> <a href="/tags/%E7%9B%B8%E5%85%B3%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 10px;">相关面试题</a> <a href="/tags/%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 10px;">程序计数器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15.26px;">算法</a> <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">类加载子系统</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 10px;">线程</a> <a href="/tags/%E7%BD%91%E6%98%93%E4%BA%91/" style="font-size: 10px;">网易云</a> <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/" style="font-size: 13.68px;">虚拟机栈</a> <a href="/tags/%E8%A7%A6%E5%8F%91%E5%99%A8/" style="font-size: 10px;">触发器</a> <a href="/tags/%E8%AE%A4%E8%AF%81/" style="font-size: 10px;">认证</a> <a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" style="font-size: 18.95px;">运行时数据区</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10px;">进程</a> <a href="/tags/%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/" style="font-size: 10.53px;">逃逸分析</a> <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" style="font-size: 10px;">防火墙</a> <a href="/tags/%E9%9B%86%E5%90%88%E7%BC%96%E7%A8%8B/" style="font-size: 10.53px;">集合编程</a> <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" style="font-size: 14.21px;">面试题</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">一月 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">十二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/JVM-065-Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84-%E6%A6%82%E8%BF%B0/">JVM-065-Class文件结构-概述</a>
-          </li>
-        
-          <li>
-            <a href="/JVM-064-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E6%96%B0%E5%8F%91%E5%B1%95/">JVM-064-垃圾回收器-垃圾回收器的新发展</a>
-          </li>
-        
-          <li>
-            <a href="/JVM-063-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">JVM-063-垃圾回收器-GC日志分析</a>
-          </li>
-        
-          <li>
-            <a href="/JVM-062-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%80%BB%E7%BB%93/">JVM-062-垃圾回收器-垃圾回收器总结</a>
-          </li>
-        
-          <li>
-            <a href="/JVM-061-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/">JVM-061-垃圾回收器-G1回收器-垃圾回收过程详情</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2024 buubiu<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.4.1.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand Stack）</p><p><a href="https://blog.buubiu.com/JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand-Stack）/">https://blog.buubiu.com/JVM-007-运行时数据区-虚拟机栈-操作数栈（Operand-Stack）/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-05-30</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-01-25</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88/">虚拟机栈</a><a class="link-muted mr-2" rel="tag" href="/tags/%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88/">操作数栈</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-008-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%EF%BC%88Dynamic-Linking%EF%BC%89/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-008-运行时数据区-虚拟机栈-动态链接（Dynamic Linking）</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-006-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88-%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8%EF%BC%88Local-Variables%EF%BC%89/"><span class="level-item">JVM-006-运行时数据区-虚拟机栈-局部变量表（Local Variables）</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#定义"><span class="level-left"><span class="level-item">1</span><span class="level-item">定义</span></span></a></li><li><a class="level is-mobile" href="#原理"><span class="level-left"><span class="level-item">2</span><span class="level-item">原理</span></span></a></li><li><a class="level is-mobile" href="#特点"><span class="level-left"><span class="level-item">3</span><span class="level-item">特点</span></span></a></li><li><a class="level is-mobile" href="#执行流程"><span class="level-left"><span class="level-item">4</span><span class="level-item">执行流程</span></span></a></li><li><a class="level is-mobile" href="#类型转换问题"><span class="level-left"><span class="level-item">5</span><span class="level-item">类型转换问题</span></span></a></li><li><a class="level is-mobile" href="#带有返回值的方法"><span class="level-left"><span class="level-item">6</span><span class="level-item">带有返回值的方法</span></span></a></li><li><a class="level is-mobile" href="#栈顶缓存技术（Top-Of-Stack-Cashing）"><span class="level-left"><span class="level-item">7</span><span class="level-item">栈顶缓存技术（Top Of Stack Cashing）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#背景"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">背景</span></span></a></li><li><a class="level is-mobile" href="#方案"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">方案</span></span></a></li><li><a class="level is-mobile" href="#优点"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">优点</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
