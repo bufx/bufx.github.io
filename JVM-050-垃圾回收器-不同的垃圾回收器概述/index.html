@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-050-垃圾回收器-不同的垃圾回收器概述 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="引入垃圾收集机制是Java的招牌能力，极大地提高了开发效率。那么，Java常见的垃圾收集器有哪些？"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-050-垃圾回收器-不同的垃圾回收器概述"><meta property="og:url" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="引入垃圾收集机制是Java的招牌能力，极大地提高了开发效率。那么，Java常见的垃圾收集器有哪些？"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/Types-of-Java-Garbage-Collectors3_th_thumb.jpg"><meta property="og:image" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115143134199.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/%E7%AC%AC17%E7%AB%A0_%E7%BB%8F%E5%85%B8%E7%9A%847%E7%A7%8DGC.jpg"><meta property="og:image" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115162742423.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115165910435.png"><meta property="article:published_time" content="2024-01-15T05:55:00.000Z"><meta property="article:modified_time" content="2024-11-28T07:49:22.639Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="垃圾回收器"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/Types-of-Java-Garbage-Collectors3_th_thumb.jpg"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/"},"headline":"JVM-050-垃圾回收器-不同的垃圾回收器概述","image":["https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/Types-of-Java-Garbage-Collectors3_th_thumb.jpg","https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115143134199.png","https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/%E7%AC%AC17%E7%AB%A0_%E7%BB%8F%E5%85%B8%E7%9A%847%E7%A7%8DGC.jpg","https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115162742423.png","https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115165910435.png"],"datePublished":"2024-01-15T05:55:00.000Z","dateModified":"2024-11-28T07:49:22.639Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"引入垃圾收集机制是Java的招牌能力，极大地提高了开发效率。那么，Java常见的垃圾收集器有哪些？"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-01-15T05:55:00.000Z" title="2024/1/15 13:55:00">2024-01-15</time>发表</span><span class="level-item"><time dateTime="2024-11-28T07:49:22.639Z" title="2024/11/28 15:49:22">2024-11-28</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></span><span class="level-item">9 分钟读完 (大约1361个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-050-垃圾回收器-不同的垃圾回收器概述</h1><div class="content"><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>垃圾收集机制是Java的招牌能力，极大地提高了开发效率。<br>那么，Java常见的垃圾收集器有哪些？</p>
+<span id="more"></span>
+
+<h2 id="垃圾收集器发展史"><a href="#垃圾收集器发展史" class="headerlink" title="垃圾收集器发展史"></a>垃圾收集器发展史</h2><p>有了虚拟机，就一定需要收集垃圾的机制，这就是<code>Garbage Collection</code>，对应的产品我们称为<code>Garbage Collector</code>。</p>
+<ol>
+<li>1999年随JDK1.3.1一起来的是串行方式的Serial GC，它是第一款GC。ParNew垃圾收集器是Serial收集器的多线程（并行）版本</li>
+<li>2002年2月26日，Parallel GC和Concurrent Mark Sweep GC跟随JDK1.4.2一起发布·</li>
+<li>Parallel GC在JDK6之后成为HotSpot默认GC。</li>
+<li>2012年，在JDK1.7u4版本中，G1可用。</li>
+<li>2017年，JDK9中G1变成默认的垃圾收集器，以替代CMS。</li>
+<li>2018年3月，JDK10中G1垃圾回收器的并行完整垃圾回收，实现并行性来改善最坏情况下的延迟。</li>
+<li>2018年9月，JDK11发布。引入Epsilon 垃圾回收器，又被称为 “No-Op(无操作)“ 回收器。同时，引入ZGC：可伸缩的低延迟垃圾回收器（Experimental）</li>
+<li>2019年3月，JDK12发布。增强G1，自动返回未用堆内存给操作系统。同时，引入Shenandoah GC（OpenJDK）：低停顿时间的GC（Experimental）。</li>
+<li>2019年9月，JDK13发布。增强ZGC，自动返回未用堆内存给操作系统。</li>
+<li>2020年3月，JDK14发布。删除CMS垃圾回收器。扩展ZGC在macOS和Windows上的应用</li>
+</ol>
+<h2 id="7款经典的垃圾收集器"><a href="#7款经典的垃圾收集器" class="headerlink" title="7款经典的垃圾收集器"></a>7款经典的垃圾收集器</h2><ol>
+<li>串行回收器：Serial、Serial old</li>
+<li>并行回收器：ParNew、Parallel Scavenge、Parallel old</li>
+<li>并发回收器：CMS、G1</li>
+</ol>
+<p><img src="/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/Types-of-Java-Garbage-Collectors3_th_thumb.jpg"></p>
+<p>官方文档：</p>
+<p><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/memorymanagement-whitepaper-150215.pdf">https://www.oracle.com/technetwork/java/javase/memorymanagement-whitepaper-150215.pdf</a></p>
+<p><img src="/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115143134199.png"></p>
+<h2 id="7款经典回收器与垃圾分代之间的关系"><a href="#7款经典回收器与垃圾分代之间的关系" class="headerlink" title="7款经典回收器与垃圾分代之间的关系"></a>7款经典回收器与垃圾分代之间的关系</h2><p><img src="/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/%E7%AC%AC17%E7%AB%A0_%E7%BB%8F%E5%85%B8%E7%9A%847%E7%A7%8DGC.jpg"></p>
+<ul>
+<li><p>新生代收集器：Serial、ParNew、Parallel Scavenge；</p>
+</li>
+<li><p>老年代收集器：Serial old、Parallel old、CMS；</p>
+</li>
+<li><p>整堆收集器：G1；</p>
+</li>
+</ul>
+<h2 id="垃圾收集器的组合关系"><a href="#垃圾收集器的组合关系" class="headerlink" title="垃圾收集器的组合关系"></a>垃圾收集器的组合关系</h2><p>不同厂商、不同版本的虚拟机实现差别很大。HotSpot虚拟机在JDK7&#x2F;8后所有收集器及组合（连线），如下图：</p>
+<p><img src="/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115162742423.png"></p>
+<ol>
+<li><p>两个收集器间有连线，表明它们可以搭配使用：</p>
+<ul>
+<li>Serial&#x2F;Serial old</li>
+<li>Serial&#x2F;CMS （JDK8标为废弃，JDK9移除）</li>
+<li>ParNew&#x2F;Serial Old （JDK8标为废弃，JDK9移除）</li>
+<li>ParNew&#x2F;CMS （JDK14移除）</li>
+<li>Parallel Scavenge&#x2F;Serial Old （JDK14标为废弃）</li>
+<li>Parallel Scavenge&#x2F;Parallel Old</li>
+<li>G1</li>
+</ul>
+</li>
+<li><p>其中Serial Old作为CMS出现”Concurrent Mode Failure”失败的后备预案。</p>
+</li>
+<li><p>（红色虚线）由于维护和兼容性测试的成本，在JDK 8时将Serial+CMS、ParNew+Serial Old这两个组合声明为废弃（JEP173），并在JDK9中完全取消了这些组合的支持（JEP214），即：移除。</p>
+</li>
+<li><p>（绿色虚线）JDK14中：弃用Parallel Scavenge和Serial Old GC组合（JEP366）</p>
+</li>
+<li><p>（青色虚线）JDK14中：删除CMS垃圾回收器（JEP363）</p>
+</li>
+</ol>
+<p><strong>综上所述：</strong></p>
+<ul>
+<li>JDK8以前可选：Serial&#x2F;Serial old、Serial&#x2F;CMS、ParNew&#x2F;Serial Old、ParNew&#x2F;CMS、Parallel Scavenge&#x2F;Serial Old、Parallel Scavenge&#x2F;Parallel Old、G1</li>
+<li>JDK8可选：        Serial&#x2F;Serial old、ParNew&#x2F;CMS、Parallel Scavenge&#x2F;Serial Old、Parallel Scavenge&#x2F;Parallel Old（默认）、G1</li>
+<li>JDK9可选：Serial&#x2F;Serial old、ParNew&#x2F;CMS、Parallel Scavenge&#x2F;Serial Old、Parallel Scavenge&#x2F;Parallel Old、G1（默认）</li>
+<li>JDK14可选：Serial&#x2F;Serial old、Parallel Scavenge&#x2F;Parallel Old、G1（默认）</li>
+</ul>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ol>
+<li><p>为什么要有很多收集器，一个不够吗？因为Java的使用场景很多，移动端，服务器等。所以就需要针对不同的场景，提供不同的垃圾收集器，提高垃圾收集的性能。</p>
+</li>
+<li><p>虽然我们会对各个收集器进行比较，但并非为了挑选一个最好的收集器出来。没有一种放之四海皆准、任何场景下都适用的完美收集器存在，更加没有万能的收集器。<strong>所以我们选择的只是对具体应用最合适的收集器。</strong></p>
+</li>
+</ol>
+<h2 id="如何查看默认的垃圾收集器"><a href="#如何查看默认的垃圾收集器" class="headerlink" title="如何查看默认的垃圾收集器"></a>如何查看默认的垃圾收集器</h2><ul>
+<li><code>-XX:+PrintCommandLineFlags</code>：查看命令行相关参数（包含使用的垃圾收集器）</li>
+<li>使用命令行指令：<code>jinfo -flag 相关垃圾回收器参数 进程ID</code></li>
+</ul>
+<p>代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.buubiu;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  -XX:+PrintCommandLineFlags</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GCUseTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArrayList&lt;<span class="type">byte</span>[]&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="type">byte</span>[] arr = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">100</span>];</span><br><span class="line">            list.add(arr);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">10</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JDK8"><a href="#JDK8" class="headerlink" title="JDK8"></a>JDK8</h3><p><strong>在 JDK 8 下，设置 JVM 参数</strong></p>
+<p>-XX:+PrintCommandLineFlags</p>
+<p>程序打印输出：-XX:+UseParallelGC 表示使用使用 ParallelGC ，ParallelGC 默认和 Parallel Old 绑定使用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:InitialHeapSize=268435456 -XX:MaxHeapSize=4294967296 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseParallelGC </span><br></pre></td></tr></table></figure>
+
+<p><strong>通过命令行指令查看</strong></p>
+<p>命令行命令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jps</span><br><span class="line">jinfo -flag UseParallelGC 进程<span class="built_in">id</span></span><br><span class="line">jinfo -flag UseParallelOldGC 进程<span class="built_in">id</span></span><br><span class="line">jinfo -flag UseG1GC 进程<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<p>JDK 8 中默认使用 ParallelGC 和 ParallelOldGC 的组合</p>
+<p><img src="/JVM-050-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%A6%82%E8%BF%B0/image-20240115165910435.png"></p>
+<h3 id="JDK9-21"><a href="#JDK9-21" class="headerlink" title="JDK9~21"></a>JDK9~21</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:ConcGCThreads=2 -XX:G1ConcRefinementThreads=8 -XX:GCDrainStackTargetSize=64 -XX:InitialHeapSize=268435456 -XX:MarkStackSize=4194304 -XX:MaxHeapSize=4294967296 -XX:MinHeapSize=6815736 -XX:+PrintCommandLineFlags -XX:ReservedCodeCacheSize=251658240 -XX:+SegmentedCodeCache -XX:+UseCompressedOops -XX:+UseG1GC </span><br></pre></td></tr></table></figure>
+
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-050-垃圾回收器-不同的垃圾回收器概述</p><p><a href="https://blog.buubiu.com/JVM-050-垃圾回收器-不同的垃圾回收器概述/">https://blog.buubiu.com/JVM-050-垃圾回收器-不同的垃圾回收器概述/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-01-15</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-28</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-051-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-Serial%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%B2%E8%A1%8C%E5%9B%9E%E6%94%B6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-051-垃圾回收器-Serial回收器(串行回收)</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-049-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E8%AF%84%E4%BC%B0GC%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87/"><span class="level-item">JVM-049-垃圾回收器-评估GC的性能指标</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#引入"><span class="level-left"><span class="level-item">1</span><span class="level-item">引入</span></span></a></li><li><a class="level is-mobile" href="#垃圾收集器发展史"><span class="level-left"><span class="level-item">2</span><span class="level-item">垃圾收集器发展史</span></span></a></li><li><a class="level is-mobile" href="#7款经典的垃圾收集器"><span class="level-left"><span class="level-item">3</span><span class="level-item">7款经典的垃圾收集器</span></span></a></li><li><a class="level is-mobile" href="#7款经典回收器与垃圾分代之间的关系"><span class="level-left"><span class="level-item">4</span><span class="level-item">7款经典回收器与垃圾分代之间的关系</span></span></a></li><li><a class="level is-mobile" href="#垃圾收集器的组合关系"><span class="level-left"><span class="level-item">5</span><span class="level-item">垃圾收集器的组合关系</span></span></a></li><li><a class="level is-mobile" href="#说明"><span class="level-left"><span class="level-item">6</span><span class="level-item">说明</span></span></a></li><li><a class="level is-mobile" href="#如何查看默认的垃圾收集器"><span class="level-left"><span class="level-item">7</span><span class="level-item">如何查看默认的垃圾收集器</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#JDK8"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">JDK8</span></span></a></li><li><a class="level is-mobile" href="#JDK9-21"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">JDK9~21</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

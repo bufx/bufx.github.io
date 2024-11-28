@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="过程一：年轻代GC解释说明 JVM启动时，G1先准备好Eden区，程序在运行过程中不断创建对象到Eden区，当Eden空间耗尽时，G1会启动一次年轻代垃圾回收过程。  年轻代回收只回收Eden区和Survivor区。  YGC时，首先G1停止应用程序的执行（Stop-The-World），G1创建回收集（Collection Set），回收集是指需要被回收的内存分段的集合，年轻代回收过程的回收集包"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情"><meta property="og:url" content="https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="过程一：年轻代GC解释说明 JVM启动时，G1先准备好Eden区，程序在运行过程中不断创建对象到Eden区，当Eden空间耗尽时，G1会启动一次年轻代垃圾回收过程。  年轻代回收只回收Eden区和Survivor区。  YGC时，首先G1停止应用程序的执行（Stop-The-World），G1创建回收集（Collection Set），回收集是指需要被回收的内存分段的集合，年轻代回收过程的回收集包"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119170939517.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119173714047.png"><meta property="article:published_time" content="2024-01-18T03:12:45.000Z"><meta property="article:modified_time" content="2024-11-28T07:49:22.248Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="垃圾回收器"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119170939517.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/"},"headline":"JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情","image":["https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119170939517.png","https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119173714047.png"],"datePublished":"2024-01-18T03:12:45.000Z","dateModified":"2024-11-28T07:49:22.248Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"过程一：年轻代GC解释说明 JVM启动时，G1先准备好Eden区，程序在运行过程中不断创建对象到Eden区，当Eden空间耗尽时，G1会启动一次年轻代垃圾回收过程。  年轻代回收只回收Eden区和Survivor区。  YGC时，首先G1停止应用程序的执行（Stop-The-World），G1创建回收集（Collection Set），回收集是指需要被回收的内存分段的集合，年轻代回收过程的回收集包"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-01-18T03:12:45.000Z" title="2024/1/18 11:12:45">2024-01-18</time>发表</span><span class="level-item"><time dateTime="2024-11-28T07:49:22.248Z" title="2024/11/28 15:49:22">2024-11-28</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></span><span class="level-item">17 分钟读完 (大约2602个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情</h1><div class="content"><h2 id="过程一：年轻代GC"><a href="#过程一：年轻代GC" class="headerlink" title="过程一：年轻代GC"></a>过程一：年轻代GC</h2><h3 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h3><ul>
+<li><p>JVM启动时，G1先准备好Eden区，程序在运行过程中不断创建对象到Eden区，当Eden空间耗尽时，G1会启动一次年轻代垃圾回收过程。</p>
+</li>
+<li><p><strong>年轻代回收只回收Eden区和Survivor区。</strong></p>
+</li>
+<li><p>YGC时，首先G1停止应用程序的执行（Stop-The-World），G1创建回收集（Collection Set），回收集是指需要被回收的内存分段的集合，年轻代回收过程的回收集包含年轻代Eden区和Survivor区所有的内存分段。</p>
+</li>
+</ul>
+<h3 id="图示"><a href="#图示" class="headerlink" title="图示"></a>图示</h3><p><img src="/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119170939517.png"></p>
+<span id="more"></span>
+
+<p>图的大致意思就是：</p>
+<ul>
+<li><p>回收完E和S区，剩余存活的对象会复制到新的S区</p>
+</li>
+<li><p>S区达到一定的阈值可以晋升为O区</p>
+</li>
+</ul>
+<h3 id="详细步骤"><a href="#详细步骤" class="headerlink" title="详细步骤"></a>详细步骤</h3><ol>
+<li><p><code>第一阶段，扫描根(GC Roots)</code></p>
+<p>跟是包括：static变量指向的对象、正在执行的方法调用链条上的局部变量等，以及记忆集(RSet)记录的外部引用，以上这些都作为扫描存活对象的入口。</p>
+</li>
+<li><p><code>第二阶段，更新RSet</code></p>
+<p>处理Dirty Card Queue(脏卡队列)中的card，更新RSet。此阶段完成后，<strong>RSet可以准确反映被老年代所在的内存分段中对象的引用</strong></p>
+<blockquote>
+<ol>
+<li>对于应用程序的引用赋值语句 object.field&#x3D;object（field是老年代,object是新生代），JVM会在之前和之后执行特殊的操作以在dirty card queue中入队一个保存了对象引用信息的card。在年轻代回收的时候，G1会对Dirty Card Queue中所有的card进行处理，以更新RSet，保证RSet实时准确的反映引用关系。</li>
+<li>那为什么不在引用赋值语句处直接更新RSet呢？这是为了性能的需要，RSet的处理需要线程同步，开销会很大，使用队列性能会好很多。</li>
+</ol>
+</blockquote>
+</li>
+<li><p><code>第三阶段，处理RSet</code></p>
+<p>识别被老年代对象指向的Eden中的对象，这些被指向的Eden中的对象被认为是存活的对象。</p>
+</li>
+<li><p><code>第四阶段，复制对象。</code></p>
+<ul>
+<li>此阶段，对象树被遍历（GC Roots 遍历关联的所有对象），Eden区内存段中存活的对象会被复制到Survivor区中空的内存分段，年龄记为1；</li>
+<li>Survivor区内存段中存活的对象：若年龄未达阈值，也会被复制到Survivor区中空的内存分段，并且年龄会加1；若达到阀值则会被复制到老年代（Old区）中空的内存分段。</li>
+<li>如果Survivor空间不够，Eden空间的部分数据会直接晋升到老年代（Old区）空间。</li>
+</ul>
+</li>
+<li><p><code>第五阶段，处理引用</code></p>
+<p>处理Soft，Weak，Phantom，Final，JNI Weak 等引用。最终Eden空间的数据为空，GC停止工作，而目标内存中的对象都是连续存储的，没有碎片，所以复制过程可以达到内存整理的效果，减少碎片。</p>
+</li>
+</ol>
+<h2 id="过程二：并发标记过程"><a href="#过程二：并发标记过程" class="headerlink" title="过程二：并发标记过程"></a>过程二：并发标记过程</h2><ol>
+<li><p><code>初始标记阶段</code></p>
+<p>标记从根节点直接可达的对象。这个阶段是STW的，并且会触发一次年轻代GC。正是由于该阶段是STW的，所以我们只扫描根节点可达的对象，以节省时间。</p>
+</li>
+<li><p><code>根区域扫描（Root Region Scanning）</code></p>
+<p>G1 GC扫描Survivor区直接可达的老年代区域对象，并标记被引用的对象。这一过程必须在Young GC之前完成，因为Young GC会使用复制算法对Survivor区进行GC。</p>
+</li>
+<li><p><code>并发标记（Concurrent Marking）</code></p>
+<ul>
+<li><p>在整个堆中进行并发标记（和应用程序并发执行），此过程可能被Young GC中断。</p>
+</li>
+<li><p><strong>在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那这个区域会被立即回收。</strong></p>
+</li>
+<li><p>同时，并发标记过程中，会计算每个区域的对象活性（区域中存活对象的比例）。</p>
+</li>
+</ul>
+</li>
+<li><p><code>再次标记（Remark）</code></p>
+<p>由于应用程序持续进行，需要修正上一次的标记结果。是STW的。G1中采用了比CMS更快的初始快照算法：<strong>Snapshot-At-The-Beginning（SATB）</strong>。</p>
+</li>
+<li><p><code>独占清理（cleanup，STW）</code></p>
+<p>计算各个区域的存活对象和GC回收比例，并进行排序，识别可以混合回收的区域。为下阶段做铺垫。是STW的。</p>
+<ul>
+<li><strong>这个阶段并不会实际上去做垃圾的收集</strong></li>
+</ul>
+</li>
+<li><p><code>并发清理阶段</code></p>
+<p>识别并清理完全空闲的区域。</p>
+</li>
+</ol>
+<h2 id="过程三：混合回收"><a href="#过程三：混合回收" class="headerlink" title="过程三：混合回收"></a>过程三：混合回收</h2><h3 id="解释说明-1"><a href="#解释说明-1" class="headerlink" title="解释说明"></a>解释说明</h3><p>当越来越多的对象晋升到老年代Old Region时，为了避免堆内存被耗尽，虚拟机会触发一个混合的垃圾收集器，即<code>Mixed GC</code>，该算法并不是一个Old GC，除了<strong>回收整个Young Region，还会回收一部分的Old Region</strong>。这里需要注意：<strong>是一部分老年代，而不是全部老年代</strong>。可以选择哪些Old Region进行收集，从而可以对垃圾回收的耗时时间进行控制。也要注意的是<strong>Mixed GC并不是Full GC</strong>。</p>
+<h3 id="图示-1"><a href="#图示-1" class="headerlink" title="图示"></a>图示</h3><p><img src="/JVM-060-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E8%BF%87%E7%A8%8B%E8%AF%A6%E6%83%85/image-20240119173714047.png"></p>
+<h3 id="详细步骤-1"><a href="#详细步骤-1" class="headerlink" title="详细步骤"></a>详细步骤</h3><ol>
+<li>并发标记结束以后，老年代中百分百为垃圾的内存分段已经被回收了，部分为垃圾的内存分段被计算了出来。默认情况下，这些老年代的内存分段会分8次（可以通过<code>-XX:G1MixedGCCountTarget</code>设置）被回收。</li>
+<li>混合回收的回收集（Collection Set）包括八分之一的老年代内存分段，Eden区内存分段，Survivor区内存分段。混合回收的算法和年轻代回收的算法完全一样，只是回收集多了老年代的内存分段。具体过程请参考上面的年轻代回收过程。</li>
+<li>由于老年代中的内存分段默认分8次回收，G1会优先回收垃圾多的内存分段。<strong>垃圾占内存分段比例越高的，越会被先回收。</strong>并且有一个阈值会决定内存分段是否被回收。<code>-XX:G1MixedGCLiveThresholdPercent</code>，默认为65%，意思是垃圾占内存分段比例要达到65%才会被回收。如果垃圾占比太低，意味着存活的对象占比高，在复制的时候会花费更多的时间。</li>
+<li>混合回收并不一定要进行8次。因为有一个阈值<code>-XX:G1HeapWastePercent</code>，默认值为10%，意思是允许整个堆内存中有10%的空间被浪费，意味着如果发现可以回收的垃圾占堆内存的比例低于10%，则不再进行混合回收。因为GC会花费很多的时间但是回收到的内存却很少。</li>
+</ol>
+<h2 id="过程四：Full-GC"><a href="#过程四：Full-GC" class="headerlink" title="过程四：Full GC"></a>过程四：Full GC</h2><h3 id="解释说明-2"><a href="#解释说明-2" class="headerlink" title="解释说明"></a>解释说明</h3><p>G1的初衷就是要避免Full GC的出现。但是如果上述方式不能正常工作，G1会<strong>停止应用程序的执行</strong>（Stop-The-World），使用<strong>单线程</strong>的内存回收算法进行垃圾回收，性能会非常差，应用程序停顿时间会很长。</p>
+<p>所以要避免Full GC的发生，一旦发生Full GC，就需要对JVM参数进行调整。</p>
+<h3 id="触发的原因"><a href="#触发的原因" class="headerlink" title="触发的原因"></a>触发的原因</h3><p><strong>什么时候会发生Full GC呢？</strong></p>
+<p>比如堆内存太小，当G1在复制存活对象的时候没有空的内存分段可用，则会回退到Full GC，这种情况可以通过增大内存解决。</p>
+<p><strong>导致G1 Full GC的原因可能有两个：</strong></p>
+<ol>
+<li>Evacuation（回收，排空）的时候没有足够的to-space（空闲空间）来存放晋升的对象；</li>
+<li>并发处理过程完成之前空间耗尽。（并发标记的时候，造垃圾的速度比标记的还快）</li>
+<li>设置的STW时间（暂停时间）太短的话，导致每次在GC的时候可以回收的Region就比较少，释放的空间也就比较少，此时用户线程有可能制造的垃圾比释放的空间多，在内存溢出之前会来一次Full GC。</li>
+</ol>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>从Oracle官方透露出来的信息可获知，回收阶段（Evacuation）其实本也有想过设计成与用户程序一起并发执行，但这件事情做起来比较复杂，考虑到G1只是回一部分Region，停顿时间是用户可控制的，所以并不迫切去实现，<strong>而选择把这个特性放到了G1之后出现的低延迟垃圾收集器（即ZGC）中。</strong>另外，还考虑到G1不是仅仅面向低延迟，停顿用户线程能够最大幅度提高垃圾收集效率，为了保证吞吐量所以才选择了完全暂停用户线程的实现方案。</p>
+<h2 id="G1-回收器的优化建议"><a href="#G1-回收器的优化建议" class="headerlink" title="G1 回收器的优化建议"></a>G1 回收器的优化建议</h2><ol>
+<li>年轻代大小<ul>
+<li>避免使用-Xmn或-XX:NewRatio等相关选项显式设置年轻代大小</li>
+<li>因为固定年轻代的大小会覆盖可预测的暂停时间目标。年轻代GC是并行独占式的，所以最好让垃圾回收器自己去调节</li>
+</ul>
+</li>
+<li>暂停时间目标不要太过严苛<ul>
+<li>G1 GC的吞吐量目标是90%的应用程序时间和10%的垃圾回收时间</li>
+<li>评估G1 GC的吞吐量时，暂停时间目标不要太严苛。目标太过严苛表示你愿意承受更多的垃圾回收开销，而这些会直接影响到吞吐量。</li>
+</ul>
+</li>
+</ol>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情</p><p><a href="https://blog.buubiu.com/JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情/">https://blog.buubiu.com/JVM-060-垃圾回收器-G1回收器-垃圾回收过程详情/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-01-18</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-28</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8/">垃圾回收器</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-061-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E6%80%BB%E7%BB%93/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-061-垃圾回收器-垃圾回收器总结</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-059-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8-G1%E5%9B%9E%E6%94%B6%E5%99%A8-%E4%B8%BB%E8%A6%81%E5%9B%9E%E6%94%B6%E7%8E%AF%E8%8A%82/"><span class="level-item">JVM-059-垃圾回收器-G1回收器-主要回收环节</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#过程一：年轻代GC"><span class="level-left"><span class="level-item">1</span><span class="level-item">过程一：年轻代GC</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#解释说明"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">解释说明</span></span></a></li><li><a class="level is-mobile" href="#图示"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">图示</span></span></a></li><li><a class="level is-mobile" href="#详细步骤"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">详细步骤</span></span></a></li></ul></li><li><a class="level is-mobile" href="#过程二：并发标记过程"><span class="level-left"><span class="level-item">2</span><span class="level-item">过程二：并发标记过程</span></span></a></li><li><a class="level is-mobile" href="#过程三：混合回收"><span class="level-left"><span class="level-item">3</span><span class="level-item">过程三：混合回收</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#解释说明-1"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">解释说明</span></span></a></li><li><a class="level is-mobile" href="#图示-1"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">图示</span></span></a></li><li><a class="level is-mobile" href="#详细步骤-1"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">详细步骤</span></span></a></li></ul></li><li><a class="level is-mobile" href="#过程四：Full-GC"><span class="level-left"><span class="level-item">4</span><span class="level-item">过程四：Full GC</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#解释说明-2"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">解释说明</span></span></a></li><li><a class="level is-mobile" href="#触发的原因"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">触发的原因</span></span></a></li></ul></li><li><a class="level is-mobile" href="#补充"><span class="level-left"><span class="level-item">5</span><span class="level-item">补充</span></span></a></li><li><a class="level is-mobile" href="#G1-回收器的优化建议"><span class="level-left"><span class="level-item">6</span><span class="level-item">G1 回收器的优化建议</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

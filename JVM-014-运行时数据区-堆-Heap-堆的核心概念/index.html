@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-014-运行时数据区-堆(Heap)-堆的核心概念 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="介绍  一个 JVM 实例只存在一个堆内存，堆也是 Java 内存管理的核心区域。 Java 堆区在 JVM 启动的时候即被创建，其空间大小也就确定了。是 JVM 管理的最大一块内存空间。 堆内存的大小是可以调节的。   《Java虚拟机规范》规定，堆可以处于物理上不连续的内存空间中，但在逻辑上它应该被视为连续的。 所有的线程共享Java堆，在这里还可以划分线程私有的缓冲区（Thread Loca"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-014-运行时数据区-堆(Heap)-堆的核心概念"><meta property="og:url" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="介绍  一个 JVM 实例只存在一个堆内存，堆也是 Java 内存管理的核心区域。 Java 堆区在 JVM 启动的时候即被创建，其空间大小也就确定了。是 JVM 管理的最大一块内存空间。 堆内存的大小是可以调节的。   《Java虚拟机规范》规定，堆可以处于物理上不连续的内存空间中，但在逻辑上它应该被视为连续的。 所有的线程共享Java堆，在这里还可以划分线程私有的缓冲区（Thread Loca"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614140914810.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614164322346.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170210048.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170004812.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170038009.png"><meta property="article:published_time" content="2022-06-14T06:06:19.000Z"><meta property="article:modified_time" content="2024-11-28T07:49:24.328Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="堆"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614140914810.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"},"headline":"JVM-014-运行时数据区-堆(Heap)-堆的核心概念","image":["https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614140914810.png","https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614164322346.png","https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170210048.png","https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170004812.png","https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170038009.png"],"datePublished":"2022-06-14T06:06:19.000Z","dateModified":"2024-11-28T07:49:24.328Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"介绍  一个 JVM 实例只存在一个堆内存，堆也是 Java 内存管理的核心区域。 Java 堆区在 JVM 启动的时候即被创建，其空间大小也就确定了。是 JVM 管理的最大一块内存空间。 堆内存的大小是可以调节的。   《Java虚拟机规范》规定，堆可以处于物理上不连续的内存空间中，但在逻辑上它应该被视为连续的。 所有的线程共享Java堆，在这里还可以划分线程私有的缓冲区（Thread Loca"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-14T06:06:19.000Z" title="2022/6/14 14:06:19">2022-06-14</time>发表</span><span class="level-item"><time dateTime="2024-11-28T07:49:24.328Z" title="2024/11/28 15:49:24">2024-11-28</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%A0%86/">堆</a></span><span class="level-item">5 分钟读完 (大约706个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-014-运行时数据区-堆(Heap)-堆的核心概念</h1><div class="content"><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><img src="/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614140914810.png"></p>
+<ul>
+<li>一个 JVM 实例只存在一个堆内存，堆也是 Java 内存管理的核心区域。</li>
+<li>Java 堆区在 JVM 启动的时候即被创建，其空间大小也就确定了。是 JVM 管理的最大一块内存空间。<ul>
+<li>堆内存的大小是可以调节的。</li>
+</ul>
+</li>
+<li>《Java虚拟机规范》规定，堆可以处于物理上不连续的内存空间中，但在逻辑上它应该被视为连续的。</li>
+<li>所有的线程共享Java堆，在这里还可以划分线程私有的缓冲区（Thread Local Allocation Buffer，TLAB）。</li>
+</ul>
+<span id="more"></span>
+
+<p><img src="/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614164322346.png"></p>
+<ul>
+<li><p>《Java虚拟机规范》中对Java堆的描述是：<strong>所有的对象实例以及数组都应当在运行时分配在堆上</strong>。（The heap is the run-time data area from which memory for all class instances and arrays is allocated）</p>
+<ul>
+<li>从实际使用角度看：“几乎”所有的对象实例都在堆分配内存，但并非全部。因为还有一些对象是在栈上分配的（逃逸分析，标量替换）</li>
+</ul>
+</li>
+<li><p>数组和对象可能永远不会存储在栈上（不一定），因为栈帧中保存引用，这个引用指向对象或者数组在堆中的位置。</p>
+</li>
+<li><p>在方法结束后，堆中的对象不会马上被移除，仅仅在垃圾收集的时候才会被移除。</p>
+</li>
+<li><p>如果堆中对象马上被回收，那么用户线程就会受到影响，因为有stop the word<br>堆，是GC（Garbage Collection，垃圾收集器）执行垃圾回收的重点区域。</p>
+</li>
+</ul>
+<h2 id="堆内存细分"><a href="#堆内存细分" class="headerlink" title="堆内存细分"></a>堆内存细分</h2><p><strong>现代垃圾收集器大部分都基于分代收集理论设计，堆空间细分为：</strong></p>
+<ul>
+<li><p>Java7 及之前堆内存逻辑上分为三部分：<code>新生区+养老区+永久区</code></p>
+<ul>
+<li>Young&#x2F;New Generation Space 新生区 <ul>
+<li>又被划分为Eden区和Survivor区</li>
+</ul>
+</li>
+<li>Old&#x2F;Tenure generation space 养老区 </li>
+<li>Perm&#x2F;Permanent Space 永久区</li>
+</ul>
+</li>
+<li><p>Java 8及之后堆内存逻辑上分为三部分：<code>新生区+养老区+元空间</code></p>
+<ul>
+<li>Young&#x2F;New Generation Space 新生区<ul>
+<li>又被划分为Eden区和Survivor区</li>
+</ul>
+</li>
+<li>Old&#x2F;Tenure generation space 养老区</li>
+<li>Meta Space 元空间 Meta</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>新生区 &lt;–&gt; 新生代 &lt;–&gt; 年轻代 、 养老区 &lt;–&gt; 老年区 &lt;–&gt; 老年代、 永久区 &lt;–&gt; 永久代</p>
+</blockquote>
+<h2 id="堆空间内部结构"><a href="#堆空间内部结构" class="headerlink" title="堆空间内部结构"></a>堆空间内部结构</h2><p><img src="/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170210048.png"></p>
+<h3 id="JDK7以及之前"><a href="#JDK7以及之前" class="headerlink" title="JDK7以及之前"></a>JDK7以及之前</h3><p><img src="/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170004812.png"></p>
+<h3 id="JDK8以及之后"><a href="#JDK8以及之后" class="headerlink" title="JDK8以及之后"></a>JDK8以及之后</h3><p><img src="/JVM-014-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E5%A0%86%E7%9A%84%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/image-20220614170038009.png"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>JVM-014-运行时数据区-堆(Heap)-堆的核心概念</p><p><a href="https://blog.buubiu.com/JVM-014-运行时数据区-堆-Heap-堆的核心概念/">https://blog.buubiu.com/JVM-014-运行时数据区-堆-Heap-堆的核心概念/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>buubiu</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-06-14</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-28</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/JVM/">JVM</a><a class="link-muted mr-2" rel="tag" href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%A0%86/">堆</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/JVM-013-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88-Native-Method-Stack/"><span class="level-item">JVM-013-运行时数据区-本地方法栈(Native Method Stack)</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#介绍"><span class="level-left"><span class="level-item">1</span><span class="level-item">介绍</span></span></a></li><li><a class="level is-mobile" href="#堆内存细分"><span class="level-left"><span class="level-item">2</span><span class="level-item">堆内存细分</span></span></a></li><li><a class="level is-mobile" href="#堆空间内部结构"><span class="level-left"><span class="level-item">3</span><span class="level-item">堆空间内部结构</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#JDK7以及之前"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">JDK7以及之前</span></span></a></li><li><a class="level is-mobile" href="#JDK8以及之后"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">JDK8以及之后</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2024 buubiu</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-1" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-1</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
