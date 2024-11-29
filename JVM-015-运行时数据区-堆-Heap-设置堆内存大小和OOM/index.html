@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM"><meta property="og:url" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173821888.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614175451844.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614180643837.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222548399.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222658143.png"><meta property="article:published_time" content="2022-06-14T09:16:38.000Z"><meta property="article:modified_time" content="2024-11-29T07:28:18.046Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="堆"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"},"headline":"JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM","image":["https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173821888.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614175451844.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614180643837.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222548399.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222658143.png"],"datePublished":"2022-06-14T09:16:38.000Z","dateModified":"2024-11-29T07:28:18.046Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"><meta property="og:type" content="blog"><meta property="og:title" content="JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM"><meta property="og:url" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173821888.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614175451844.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614180643837.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222548399.png"><meta property="og:image" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222658143.png"><meta property="article:published_time" content="2022-06-14T09:16:38.000Z"><meta property="article:modified_time" content="2024-11-29T07:31:31.118Z"><meta property="article:author" content="buubiu"><meta property="article:tag" content="JVM"><meta property="article:tag" content="运行时数据区"><meta property="article:tag" content="堆"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"},"headline":"JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM","image":["https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173600494.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614173821888.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614175451844.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614180643837.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222548399.png","https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/image-20220614222658143.png"],"datePublished":"2022-06-14T09:16:38.000Z","dateModified":"2024-11-29T07:31:31.118Z","author":{"@type":"Person","name":"buubiu"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.buubiu.com/img/common/favicon.ico"}},"description":"设置堆内存Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”-Xms“和”-Xmx“来进行设置。  -Xms用于表示堆区的起始内存，等价于-XX:InitialHeapSize -Xmx则用于表示堆区的最大内存，等价于-XX:MaxHeapSize"}</script><link rel="canonical" href="https://blog.buubiu.com/JVM-015-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA-%E5%A0%86-Heap-%E8%AE%BE%E7%BD%AE%E5%A0%86%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F%E5%92%8COOM/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
         (function() {
             var hm = document.createElement("script");
             hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
@@ -35,7 +35,7 @@
       switchTab();
       window.addEventListener('hashchange', switchTab, false);
   })();
-  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-14T09:16:38.000Z" title="2022/6/14 17:16:38">2022-06-14</time>发表</span><span class="level-item"><time dateTime="2024-11-29T07:28:18.046Z" title="2024/11/29 15:28:18">2024-11-29</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%A0%86/">堆</a></span><span class="level-item">10 分钟读完 (大约1552个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM</h1><div class="content"><h2 id="设置堆内存"><a href="#设置堆内存" class="headerlink" title="设置堆内存"></a>设置堆内存</h2><p>Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”<code>-Xms</code>“和”<code>-Xmx</code>“来进行设置。</p>
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-14T09:16:38.000Z" title="2022/6/14 17:16:38">2022-06-14</time>发表</span><span class="level-item"><time dateTime="2024-11-29T07:31:31.118Z" title="2024/11/29 15:31:31">2024-11-29</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/JVM/">JVM</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/">运行时数据区</a><span> / </span><a class="link-muted" href="/categories/JVM/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/%E5%A0%86/">堆</a></span><span class="level-item">11 分钟读完 (大约1592个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">JVM-015-运行时数据区-堆(Heap)-设置堆内存大小和OOM</h1><div class="content"><h2 id="设置堆内存"><a href="#设置堆内存" class="headerlink" title="设置堆内存"></a>设置堆内存</h2><p>Java 堆区用于存储Java对象实例，那么堆的大小在JVM启动时就已经设定好了，可以通过选项”<code>-Xms</code>“和”<code>-Xmx</code>“来进行设置。</p>
 <ul>
 <li><strong><code>-Xms</code><strong>用于表示堆区的起始内存，等价于</strong><code>-XX:InitialHeapSize</code></strong></li>
 <li><strong><code>-Xmx</code><strong>则用于表示堆区的最大内存，等价于</strong><code>-XX:MaxHeapSize</code></strong></li>
@@ -84,7 +84,103 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ jps</span><br><span class="line">13237 HeapSpaceInitial</span><br><span class="line">13339 Jps</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>在查看内存分配情况（通过 <strong>jstat</strong> 命令）</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#SOC: 年轻代的S0区总共容量（单位：KB）25600 KB（25 MB）</span></span><br><span class="line"><span class="comment">#S1C: 年轻代的S1区总共容量（单位：KB）25600 KB（25 MB）</span></span><br><span class="line"><span class="comment">#S0U: 年轻代的S0区使用的量（单位：KB）</span></span><br><span class="line"><span class="comment">#S1U: 年轻代的S1区使用的量（单位：KB）</span></span><br><span class="line"><span class="comment">#EC: 年轻代的伊甸园区总共容量（单位：KB）153600 KB（150 MB）</span></span><br><span class="line"><span class="comment">#EU: 年轻代的伊甸园区使用的量（单位：KB）15360.5 KB（15 MB）</span></span><br><span class="line"><span class="comment">#OC: 老年代总共容量（单位：KB）409600 KB（400 MB）</span></span><br><span class="line"><span class="comment">#OU: 老年代使用的量（单位：KB）</span></span><br><span class="line"><span class="comment">#MC: 元空间（Metaspace）的总共容量（单位：KB）4480 KB（4.4 MB）</span></span><br><span class="line"><span class="comment">#MU: 元空间（Metaspace）使用的量（单位：KB）781.5 KB</span></span><br><span class="line"><span class="comment">#CCSC: 压缩类空间（Compressed Class Space）总共容量（单位：KB）384 KB</span></span><br><span class="line"><span class="comment">#CCSU: 压缩类空间（Compressed Class Space）使用的量（单位：KB）76.6 KB</span></span><br><span class="line"><span class="comment">#YGC: Young Generation 的 GC 次数，即 Minor GC 的次数。0次</span></span><br><span class="line"><span class="comment">#YGCT: Young Generation 的 GC 总时间，以秒为单位。0.000 秒</span></span><br><span class="line"><span class="comment">#FGC: Full GC 的次数，Full GC 是对整个堆（Young + Old Generation）的垃圾回收。0次</span></span><br><span class="line"><span class="comment">#FGCT: Full GC 的总时间，以秒为单位。0.000 秒</span></span><br><span class="line"><span class="comment">#GCT: 垃圾回收的总时间，包括 Minor GC 和 Full GC 的时间，单位为秒。0.000 秒</span></span><br><span class="line">$ jstat -gc 13237</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">25600.0 25600.0  0.0    0.0   153600.0 15360.5   409600.0     0.0     4480.0 781.5  384.0   76.6       0    0.000   0      0.000    0.000</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -gc 13237</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT   </span><br><span class="line">25600.0 25600.0  0.0    0.0   153600.0 15360.5   409600.0     0.0     4480.0 781.5  384.0   76.6       0    0.000   0      0.000    0.000</span><br></pre></td></tr></table></figure>
+
+<p>字段解释：</p>
+<table>
+<thead>
+<tr>
+<th><strong>字段</strong></th>
+<th><strong>含义</strong></th>
+<th><strong>示例值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>S0C</strong></td>
+<td>年轻代的 S0 区总容量（单位：KB）。</td>
+<td>25600 KB（25 MB）</td>
+</tr>
+<tr>
+<td><strong>S1C</strong></td>
+<td>年轻代的 S1 区总容量（单位：KB）。</td>
+<td>25600 KB（25 MB）</td>
+</tr>
+<tr>
+<td><strong>S0U</strong></td>
+<td>年轻代的 S0 区已使用的内存（单位：KB）。</td>
+<td>0 KB</td>
+</tr>
+<tr>
+<td><strong>S1U</strong></td>
+<td>年轻代的 S1 区已使用的内存（单位：KB）。</td>
+<td>0 KB</td>
+</tr>
+<tr>
+<td><strong>EC</strong></td>
+<td>年轻代的 Eden 区总容量（单位：KB）。</td>
+<td>153600 KB（150 MB）</td>
+</tr>
+<tr>
+<td><strong>EU</strong></td>
+<td>年轻代的 Eden 区已使用的内存（单位：KB）。</td>
+<td>15360.5 KB（15 MB）</td>
+</tr>
+<tr>
+<td><strong>OC</strong></td>
+<td>老年代（Old Generation）总容量（单位：KB）。</td>
+<td>409600 KB（400 MB）</td>
+</tr>
+<tr>
+<td><strong>OU</strong></td>
+<td>老年代（Old Generation）已使用的内存（单位：KB）。</td>
+<td>0 KB</td>
+</tr>
+<tr>
+<td><strong>MC</strong></td>
+<td>元空间（Metaspace）的总容量（单位：KB）。</td>
+<td>4480 KB（4.4 MB）</td>
+</tr>
+<tr>
+<td><strong>MU</strong></td>
+<td>元空间（Metaspace）已使用的内存（单位：KB）。</td>
+<td>781.5 KB</td>
+</tr>
+<tr>
+<td><strong>CCSC</strong></td>
+<td>压缩类空间（Compressed Class Space）的总容量（单位：KB）。</td>
+<td>384 KB</td>
+</tr>
+<tr>
+<td><strong>CCSU</strong></td>
+<td>压缩类空间（Compressed Class Space）已使用的内存（单位：KB）。</td>
+<td>76.6 KB</td>
+</tr>
+<tr>
+<td><strong>YGC</strong></td>
+<td>Young Generation 的 GC 次数，即 Minor GC 的次数。</td>
+<td>0 次</td>
+</tr>
+<tr>
+<td><strong>YGCT</strong></td>
+<td>Young Generation 的 GC 总时间，以秒为单位。</td>
+<td>0.000 秒</td>
+</tr>
+<tr>
+<td><strong>FGC</strong></td>
+<td>Full GC 的次数，即对整个堆（Young + Old Generation）的垃圾回收次数。</td>
+<td>0 次</td>
+</tr>
+<tr>
+<td><strong>FGCT</strong></td>
+<td>Full GC 的总时间，以秒为单位。</td>
+<td>0.000 秒</td>
+</tr>
+<tr>
+<td><strong>GCT</strong></td>
+<td>垃圾回收的总时间，包括 Minor GC 和 Full GC 的时间（单位：秒）。</td>
+<td>0.000 秒</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>计算年轻代和老年代（其中年轻代的S0区和S1区两个只有一个能使用，另一个用不了），所以：</p>
 <ul>
