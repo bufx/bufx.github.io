@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>设计模式-09-创建型-原型模式 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="✅ 定义：Prototype Pattern    用原型实例指定要创建的对象类型，然后通过复制这个原型来创建新对象。  🧠 它的核心就是：  不用 new，而是通过 clone() 快速复制现有对象。 适用于构造成本高或重复结构的对象。"><meta property="og:type" content="blog"><meta property="og:title" content="设计模式-09-创建型-原型模式"><meta property="og:url" content="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="✅ 定义：Prototype Pattern    用原型实例指定要创建的对象类型，然后通过复制这个原型来创建新对象。  🧠 它的核心就是：  不用 new，而是通过 clone() 快速复制现有对象。 适用于构造成本高或重复结构的对象。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.bufx.com/img/og_image.png"><meta property="article:published_time" content="2025-07-22T07:49:01.000Z"><meta property="article:modified_time" content="2025-07-22T16:45:53.641Z"><meta property="article:author" content="bufx"><meta property="article:tag" content="设计模式"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.bufx.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"},"headline":"设计模式-09-创建型-原型模式","image":["https://blog.bufx.com/img/og_image.png"],"datePublished":"2025-07-22T07:49:01.000Z","dateModified":"2025-07-22T16:45:53.641Z","author":{"@type":"Person","name":"bufx"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.bufx.com/img/common/favicon.ico"}},"description":"✅ 定义：Prototype Pattern    用原型实例指定要创建的对象类型，然后通过复制这个原型来创建新对象。  🧠 它的核心就是：  不用 new，而是通过 clone() 快速复制现有对象。 适用于构造成本高或重复结构的对象。"}</script><link rel="canonical" href="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-07-22T07:49:01.000Z" title="2025/7/22 15:49:01">2025-07-22</time>发表</span><span class="level-item"><time dateTime="2025-07-22T16:45:53.641Z" title="2025/7/23 00:45:53">2025-07-23</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B/">创建型</a></span><span class="level-item">6 分钟读完 (大约916个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">设计模式-09-创建型-原型模式</h1><div class="content"><h2 id="✅-定义："><a href="#✅-定义：" class="headerlink" title="✅ 定义："></a>✅ 定义：</h2><p>Prototype Pattern</p>
+<blockquote>
+<p>  用原型实例指定要创建的对象类型，然后通过<strong>复制这个原型</strong>来创建新对象。</p>
+</blockquote>
+<p>🧠 它的核心就是：</p>
+<ul>
+<li><strong>不用 new</strong>，而是<strong>通过 clone()</strong> 快速复制现有对象。</li>
+<li>适用于<strong>构造成本高</strong>或<strong>重复结构的对象</strong>。</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h2 id="🧃-举个生活例子（通俗易懂）"><a href="#🧃-举个生活例子（通俗易懂）" class="headerlink" title="🧃 举个生活例子（通俗易懂）"></a>🧃 举个生活例子（通俗易懂）</h2><p>你在用画图工具，画了一个红色圆，设置好了：</p>
+<ul>
+<li>半径 100</li>
+<li>颜色红色</li>
+<li>黑色边框</li>
+</ul>
+<p>你非常满意，想复制一份出来，换个大小继续用。</p>
+<p>你不会重新画，而是：</p>
+<p>👉「复制粘贴，然后改一下半径就好！」</p>
+<p>这就是原型模式的真实写照：</p>
+<blockquote>
+<p>  <strong>复制（clone）一个已有的对象原型，再按需改动即可。</strong></p>
+</blockquote>
+<hr>
+<h2 id="👨‍💻-Java-代码实现"><a href="#👨‍💻-Java-代码实现" class="headerlink" title="👨‍💻 Java 代码实现"></a>👨‍💻 Java 代码实现</h2><hr>
+<h3 id="🧩-第一步：定义原型接口"><a href="#🧩-第一步：定义原型接口" class="headerlink" title="🧩 第一步：定义原型接口"></a>🧩 第一步：定义原型接口</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Shape</span> <span class="keyword">extends</span> <span class="title class_">Cloneable</span> &#123;</span><br><span class="line">    <span class="comment">// 克隆自身的方法</span></span><br><span class="line">    Shape <span class="title function_">clone</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 图形的行为，例如画图</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>  <code>Cloneable</code> 是一个<strong>标记接口</strong>，你必须实现它，Java 才允许你合法地使用 <code>Object.clone()</code> 方法。否则就会抛出 <code>CloneNotSupportedException</code>。</p>
+</blockquote>
+<hr>
+<h3 id="🧩-第二步：实现具体原型类（圆形）"><a href="#🧩-第二步：实现具体原型类（圆形）" class="headerlink" title="🧩 第二步：实现具体原型类（圆形）"></a>🧩 第二步：实现具体原型类（圆形）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Circle</span> <span class="keyword">implements</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> radius;</span><br><span class="line">    <span class="keyword">private</span> String color;</span><br><span class="line">    <span class="keyword">private</span> String border;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Circle</span><span class="params">(<span class="type">int</span> radius, String color, String border)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.radius = radius;</span><br><span class="line">        <span class="built_in">this</span>.color = color;</span><br><span class="line">        <span class="built_in">this</span>.border = border;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;🎨 画一个&quot;</span> + color + <span class="string">&quot;的圆，半径：&quot;</span> + radius + <span class="string">&quot;，边框：&quot;</span> + border);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRadius</span><span class="params">(<span class="type">int</span> radius)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.radius = radius;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Circle <span class="title function_">clone</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 使用 Object 的浅拷贝</span></span><br><span class="line">            <span class="keyword">return</span> (Circle) <span class="built_in">super</span>.clone();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;克隆失败&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧪-第三步：客户端使用"><a href="#🧪-第三步：客户端使用" class="headerlink" title="🧪 第三步：客户端使用"></a>🧪 第三步：客户端使用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 🎯 创建原型图形</span></span><br><span class="line">        <span class="type">Circle</span> <span class="variable">original</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Circle</span>(<span class="number">100</span>, <span class="string">&quot;红色&quot;</span>, <span class="string">&quot;黑色边框&quot;</span>);</span><br><span class="line">        original.draw();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ✂️ 克隆一份副本，修改一下半径</span></span><br><span class="line">        <span class="type">Circle</span> <span class="variable">clone</span> <span class="operator">=</span> original.clone();</span><br><span class="line">        clone.setRadius(<span class="number">150</span>);</span><br><span class="line">        clone.draw();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="💡-输出结果："><a href="#💡-输出结果：" class="headerlink" title="💡 输出结果："></a>💡 输出结果：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">🎨 画一个红色的圆，半径：100，边框：黑色边框</span><br><span class="line">🎨 画一个红色的圆，半径：150，边框：黑色边框</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📌-类图结构（文字描述）"><a href="#📌-类图结构（文字描述）" class="headerlink" title="📌 类图结构（文字描述）"></a>📌 类图结构（文字描述）</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────┐</span><br><span class="line">│   Shape               │  &lt;─── 原型接口（定义 clone 方法）</span><br><span class="line">└──────▲───────┘</span><br><span class="line"><span class="code">            │</span></span><br><span class="line"><span class="code">┌──────┴───────┐</span></span><br><span class="line"><span class="code">│   Circle              │  &lt;─── 实际的可复制对象（原型）</span></span><br><span class="line"><span class="code">└──────▲───────┘</span></span><br><span class="line"><span class="code">            │</span></span><br><span class="line"><span class="code">┌──────┴───────┐</span></span><br><span class="line"><span class="code">│   Client              │  &lt;─── 使用 clone() 复制对象</span></span><br><span class="line"><span class="code">└──────────────┘</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🎯-小结："><a href="#🎯-小结：" class="headerlink" title="🎯 小结："></a>🎯 小结：</h2><table>
+<thead>
+<tr>
+<th>原型模式好处</th>
+<th>对应解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>🧠 避免重复创建逻辑</td>
+<td>不需要 new 和 set 一大堆属性</td>
+</tr>
+<tr>
+<td>⚡ 性能更高</td>
+<td>对象复杂时，复制比重新构建效率高</td>
+</tr>
+<tr>
+<td>🎯 更好地保持一致性</td>
+<td>所有副本来自一个原型，统一配置，无需担心遗漏字段</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📦-典型应用场景"><a href="#📦-典型应用场景" class="headerlink" title="📦 典型应用场景"></a>📦 典型应用场景</h2><ul>
+<li>需要频繁创建结构相似对象（如图形、订单、配置模板）</li>
+<li>对象构造非常复杂，代价高（如加载配置、读取文件等）</li>
+<li>缓存场景中复用已有对象模板进行修改（Spring Bean 原型）</li>
+</ul>
+<hr>
+<h2 id="🧠-总结一句话"><a href="#🧠-总结一句话" class="headerlink" title="🧠 总结一句话"></a>🧠 总结一句话</h2><blockquote>
+<p>  原型模式让你通过<strong>复制（clone）一个对象</strong>，而不是<strong>重新 new 出一个</strong>，用来<strong>快速得到相似对象</strong>，简单、高效、统一。</p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>设计模式-09-创建型-原型模式</p><p><a href="https://blog.bufx.com/设计模式-09-创建型-原型模式/">https://blog.bufx.com/设计模式-09-创建型-原型模式/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>bufx</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-07-22</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-07-23</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-08-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">设计模式-08-创建型-建造者模式</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-06-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/"><span class="level-item">设计模式-06-创建型-工厂方法模式</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#✅-定义："><span class="level-left"><span class="level-item">1</span><span class="level-item">✅ 定义：</span></span></a></li><li><a class="level is-mobile" href="#🧃-举个生活例子（通俗易懂）"><span class="level-left"><span class="level-item">2</span><span class="level-item">🧃 举个生活例子（通俗易懂）</span></span></a></li><li><a class="level is-mobile" href="#👨‍💻-Java-代码实现"><span class="level-left"><span class="level-item">3</span><span class="level-item">👨‍💻 Java 代码实现</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#🧩-第一步：定义原型接口"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">🧩 第一步：定义原型接口</span></span></a></li><li><a class="level is-mobile" href="#🧩-第二步：实现具体原型类（圆形）"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">🧩 第二步：实现具体原型类（圆形）</span></span></a></li><li><a class="level is-mobile" href="#🧪-第三步：客户端使用"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">🧪 第三步：客户端使用</span></span></a></li><li><a class="level is-mobile" href="#💡-输出结果："><span class="level-left"><span class="level-item">3.4</span><span class="level-item">💡 输出结果：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#📌-类图结构（文字描述）"><span class="level-left"><span class="level-item">4</span><span class="level-item">📌 类图结构（文字描述）</span></span></a></li><li><a class="level is-mobile" href="#🎯-小结："><span class="level-left"><span class="level-item">5</span><span class="level-item">🎯 小结：</span></span></a></li><li><a class="level is-mobile" href="#📦-典型应用场景"><span class="level-left"><span class="level-item">6</span><span class="level-item">📦 典型应用场景</span></span></a></li><li><a class="level is-mobile" href="#🧠-总结一句话"><span class="level-left"><span class="level-item">7</span><span class="level-item">🧠 总结一句话</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2025 bufx</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-2" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-2</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
