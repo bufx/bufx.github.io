@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>设计模式-10-结构型-适配器模式 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="✅ 定义Adapter Pattern    将一个类的接口转换成客户端期望的另一个接口，使原本不兼容的类可以一起工作。  🧠 通俗地说：  有两个东西接口对不上，但功能类似； 用一个“适配器”在中间做转换，桥接它们； 让“老接口”也能兼容“新系统”。"><meta property="og:type" content="blog"><meta property="og:title" content="设计模式-10-结构型-适配器模式"><meta property="og:url" content="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-10-%E7%BB%93%E6%9E%84%E5%9E%8B-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="✅ 定义Adapter Pattern    将一个类的接口转换成客户端期望的另一个接口，使原本不兼容的类可以一起工作。  🧠 通俗地说：  有两个东西接口对不上，但功能类似； 用一个“适配器”在中间做转换，桥接它们； 让“老接口”也能兼容“新系统”。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.bufx.com/img/og_image.png"><meta property="article:published_time" content="2025-07-22T17:08:37.000Z"><meta property="article:modified_time" content="2025-07-23T07:20:59.490Z"><meta property="article:author" content="bufx"><meta property="article:tag" content="设计模式"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.bufx.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-10-%E7%BB%93%E6%9E%84%E5%9E%8B-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"},"headline":"设计模式-10-结构型-适配器模式","image":["https://blog.bufx.com/img/og_image.png"],"datePublished":"2025-07-22T17:08:37.000Z","dateModified":"2025-07-23T07:20:59.490Z","author":{"@type":"Person","name":"bufx"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.bufx.com/img/common/favicon.ico"}},"description":"✅ 定义Adapter Pattern    将一个类的接口转换成客户端期望的另一个接口，使原本不兼容的类可以一起工作。  🧠 通俗地说：  有两个东西接口对不上，但功能类似； 用一个“适配器”在中间做转换，桥接它们； 让“老接口”也能兼容“新系统”。"}</script><link rel="canonical" href="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-10-%E7%BB%93%E6%9E%84%E5%9E%8B-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-07-22T17:08:37.000Z" title="2025/7/23 01:08:37">2025-07-23</time>发表</span><span class="level-item"><time dateTime="2025-07-23T07:20:59.490Z" title="2025/7/23 15:20:59">2025-07-23</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E7%BB%93%E6%9E%84%E5%9E%8B/">结构型</a></span><span class="level-item">7 分钟读完 (大约1006个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">设计模式-10-结构型-适配器模式</h1><div class="content"><h2 id="✅-定义"><a href="#✅-定义" class="headerlink" title="✅ 定义"></a>✅ 定义</h2><p>Adapter Pattern</p>
+<blockquote>
+<p>  将一个类的接口转换成客户端期望的另一个接口，使原本不兼容的类可以一起工作。</p>
+</blockquote>
+<p>🧠 通俗地说：</p>
+<ul>
+<li>有两个东西接口对不上，但功能类似；</li>
+<li>用一个“适配器”在中间做转换，桥接它们；</li>
+<li><strong>让“老接口”也能兼容“新系统”</strong>。</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h2 id="🧃-举个生活例子（通俗易懂）"><a href="#🧃-举个生活例子（通俗易懂）" class="headerlink" title="🧃 举个生活例子（通俗易懂）"></a>🧃 举个生活例子（通俗易懂）</h2><h3 id="场景：插头插座转换"><a href="#场景：插头插座转换" class="headerlink" title="场景：插头插座转换"></a>场景：插头插座转换</h3><p>你去欧洲旅游，带了个国标插头的电吹风（中国用的两孔插头），但是欧洲的插座是三孔圆头的。</p>
+<p>这时候你怎么办？</p>
+<p>👉 你不会换吹风机，而是用一个“插头转换器”适配一下。</p>
+<p>这个转换器就像一个 <strong>Adapter</strong>，把老接口“转换”成新接口。</p>
+<hr>
+<h2 id="👨‍💻-Java-代码实现"><a href="#👨‍💻-Java-代码实现" class="headerlink" title="👨‍💻 Java 代码实现"></a>👨‍💻 Java 代码实现</h2><p>我们来模拟这个插头转换的过程。</p>
+<hr>
+<h3 id="🧩-第一步：定义目标接口（新接口，客户端期望使用的）"><a href="#🧩-第一步：定义目标接口（新接口，客户端期望使用的）" class="headerlink" title="🧩 第一步：定义目标接口（新接口，客户端期望使用的）"></a>🧩 第一步：定义目标接口（新接口，客户端期望使用的）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 新标准插头（目标接口）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">NewPlug</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">connectToNewSocket</span><span class="params">()</span>; <span class="comment">// 插入新标准插座</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧩-第二步：已有类（老设备，接口不兼容）"><a href="#🧩-第二步：已有类（老设备，接口不兼容）" class="headerlink" title="🧩 第二步：已有类（老设备，接口不兼容）"></a>🧩 第二步：已有类（老设备，接口不兼容）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 老的中国国标插头（现有类）</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OldChinesePlug</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connectToOldSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;✅ 老插头接入老插座（国标）&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧩-第三步：适配器类（桥接中间人）"><a href="#🧩-第三步：适配器类（桥接中间人）" class="headerlink" title="🧩 第三步：适配器类（桥接中间人）"></a>🧩 第三步：适配器类（桥接中间人）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 插头适配器，让老插头适配新插座</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlugAdapter</span> <span class="keyword">implements</span> <span class="title class_">NewPlug</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> OldChinesePlug oldPlug;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">PlugAdapter</span><span class="params">(OldChinesePlug oldPlug)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.oldPlug = oldPlug;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connectToNewSocket</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;🔁 使用适配器：将老插头适配为新插头&quot;</span>);</span><br><span class="line">        oldPlug.connectToOldSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🧪-第四步：客户端使用"><a href="#🧪-第四步：客户端使用" class="headerlink" title="🧪 第四步：客户端使用"></a>🧪 第四步：客户端使用</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 老插头设备</span></span><br><span class="line">        <span class="type">OldChinesePlug</span> <span class="variable">oldPlug</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OldChinesePlug</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 用适配器转成新接口</span></span><br><span class="line">        <span class="type">NewPlug</span> <span class="variable">adapter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlugAdapter</span>(oldPlug);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当成“新接口”使用，实则内部还是老接口逻辑</span></span><br><span class="line">        adapter.connectToNewSocket();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="💡-输出结果："><a href="#💡-输出结果：" class="headerlink" title="💡 输出结果："></a>💡 输出结果：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">🔁 使用适配器：将老插头适配为新插头  </span><br><span class="line">✅ 老插头接入老插座（国标）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📌-类图结构（文字版）"><a href="#📌-类图结构（文字版）" class="headerlink" title="📌 类图结构（文字版）"></a>📌 类图结构（文字版）</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──────────────┐</span><br><span class="line">│   NewPlug             │  &lt;─── 目标接口（新标准）</span><br><span class="line">└──────▲───────┘</span><br><span class="line"><span class="code">            │ implements</span></span><br><span class="line"><span class="code">┌──────┴───────┐</span></span><br><span class="line"><span class="code">│ PlugAdapter           │  &lt;─── 适配器（中间人）</span></span><br><span class="line"><span class="code">└──────▲───────┘</span></span><br><span class="line"><span class="code">            │组合（has a）</span></span><br><span class="line"><span class="code">┌──────┴────────┐</span></span><br><span class="line"><span class="code">│ OldChinesePlug          │  &lt;─── 被适配类（老接口）</span></span><br><span class="line"><span class="code">└───────────────┘</span></span><br><span class="line"><span class="code">            ▲</span></span><br><span class="line"><span class="code">┌──────┴───────┐</span></span><br><span class="line"><span class="code">│   Client              │  &lt;─── 客户端只认新接口</span></span><br><span class="line"><span class="code">└──────────────┘</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🧠-总结一句话"><a href="#🧠-总结一句话" class="headerlink" title="🧠 总结一句话"></a>🧠 总结一句话</h2><blockquote>
+<p>  适配器模式就是“接口转换器”：让<strong>老接口兼容新系统</strong>，而不用修改原代码。</p>
+</blockquote>
+<hr>
+<h2 id="🧰-应用场景举例（非常实用）"><a href="#🧰-应用场景举例（非常实用）" class="headerlink" title="🧰 应用场景举例（非常实用）"></a>🧰 应用场景举例（非常实用）</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>老系统接入新接口</td>
+<td>你有个旧库接口，需要在新业务中使用</td>
+</tr>
+<tr>
+<td>第三方接口格式不同</td>
+<td>微信支付回调、支付宝回调格式不一致时，用适配器统一处理</td>
+</tr>
+<tr>
+<td>Spring 中 <code>HandlerAdapter</code></td>
+<td>就是一个经典适配器，用来适配不同 controller 处理方式</td>
+</tr>
+<tr>
+<td>日志系统兼容不同日志框架</td>
+<td>用适配器适配 slf4j、log4j、logback 等</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="✅-总结小卡片"><a href="#✅-总结小卡片" class="headerlink" title="✅ 总结小卡片"></a>✅ 总结小卡片</h2><table>
+<thead>
+<tr>
+<th>模式名</th>
+<th>适配器模式 Adapter Pattern</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用途</td>
+<td>把一个接口转换成另一个接口，兼容新旧接口</td>
+</tr>
+<tr>
+<td>关键角色</td>
+<td>Target（目标接口）、Adaptee（被适配类）、Adapter（适配器）</td>
+</tr>
+<tr>
+<td>常见场景</td>
+<td>老代码兼容新接口，三方接口统一，SDK 接入</td>
+</tr>
+</tbody></table>
+</div><div class="article-licensing box"><div class="licensing-title"><p>设计模式-10-结构型-适配器模式</p><p><a href="https://blog.bufx.com/设计模式-10-结构型-适配器模式/">https://blog.bufx.com/设计模式-10-结构型-适配器模式/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>bufx</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-07-23</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-07-23</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-08-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/"><span class="level-item">设计模式-08-创建型-建造者模式</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#✅-定义"><span class="level-left"><span class="level-item">1</span><span class="level-item">✅ 定义</span></span></a></li><li><a class="level is-mobile" href="#🧃-举个生活例子（通俗易懂）"><span class="level-left"><span class="level-item">2</span><span class="level-item">🧃 举个生活例子（通俗易懂）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#场景：插头插座转换"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">场景：插头插座转换</span></span></a></li></ul></li><li><a class="level is-mobile" href="#👨‍💻-Java-代码实现"><span class="level-left"><span class="level-item">3</span><span class="level-item">👨‍💻 Java 代码实现</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#🧩-第一步：定义目标接口（新接口，客户端期望使用的）"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">🧩 第一步：定义目标接口（新接口，客户端期望使用的）</span></span></a></li><li><a class="level is-mobile" href="#🧩-第二步：已有类（老设备，接口不兼容）"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">🧩 第二步：已有类（老设备，接口不兼容）</span></span></a></li><li><a class="level is-mobile" href="#🧩-第三步：适配器类（桥接中间人）"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">🧩 第三步：适配器类（桥接中间人）</span></span></a></li><li><a class="level is-mobile" href="#🧪-第四步：客户端使用"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">🧪 第四步：客户端使用</span></span></a></li><li><a class="level is-mobile" href="#💡-输出结果："><span class="level-left"><span class="level-item">3.5</span><span class="level-item">💡 输出结果：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#📌-类图结构（文字版）"><span class="level-left"><span class="level-item">4</span><span class="level-item">📌 类图结构（文字版）</span></span></a></li><li><a class="level is-mobile" href="#🧠-总结一句话"><span class="level-left"><span class="level-item">5</span><span class="level-item">🧠 总结一句话</span></span></a></li><li><a class="level is-mobile" href="#🧰-应用场景举例（非常实用）"><span class="level-left"><span class="level-item">6</span><span class="level-item">🧰 应用场景举例（非常实用）</span></span></a></li><li><a class="level is-mobile" href="#✅-总结小卡片"><span class="level-left"><span class="level-item">7</span><span class="level-item">✅ 总结小卡片</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2025 bufx</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-2" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-2</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
