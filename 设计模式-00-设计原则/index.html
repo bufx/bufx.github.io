@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>设计模式-01-设计原则 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="🔑 设计原则🚀 什么是设计原则？设计原则就像是 写好代码的“潜规则”或“习惯”，是你写程序时脑子里要时刻记住的准则。 这些原则不是强制的，但如果你违背它，代码可能会：  很难扩展  一改就崩  到处耦合（缠在一起）  谁也看不懂"><meta property="og:type" content="blog"><meta property="og:title" content="设计模式-01-设计原则"><meta property="og:url" content="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-00-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="🔑 设计原则🚀 什么是设计原则？设计原则就像是 写好代码的“潜规则”或“习惯”，是你写程序时脑子里要时刻记住的准则。 这些原则不是强制的，但如果你违背它，代码可能会：  很难扩展  一改就崩  到处耦合（缠在一起）  谁也看不懂"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.bufx.com/img/og_image.png"><meta property="article:published_time" content="2024-12-31T13:40:29.000Z"><meta property="article:modified_time" content="2025-07-23T10:44:51.601Z"><meta property="article:author" content="bufx"><meta property="article:tag" content="设计模式"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.bufx.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-00-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"},"headline":"设计模式-01-设计原则","image":["https://blog.bufx.com/img/og_image.png"],"datePublished":"2024-12-31T13:40:29.000Z","dateModified":"2025-07-23T10:44:51.601Z","author":{"@type":"Person","name":"bufx"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.bufx.com/img/common/favicon.ico"}},"description":"🔑 设计原则🚀 什么是设计原则？设计原则就像是 写好代码的“潜规则”或“习惯”，是你写程序时脑子里要时刻记住的准则。 这些原则不是强制的，但如果你违背它，代码可能会：  很难扩展  一改就崩  到处耦合（缠在一起）  谁也看不懂"}</script><link rel="canonical" href="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-00-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-12-31T13:40:29.000Z" title="2024/12/31 21:40:29">2024-12-31</time>发表</span><span class="level-item"><time dateTime="2025-07-23T10:44:51.601Z" title="2025/7/23 18:44:51">2025-07-23</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">设计原则</a></span><span class="level-item">9 分钟读完 (大约1418个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">设计模式-01-设计原则</h1><div class="content"><h1 id="🔑-设计原则"><a href="#🔑-设计原则" class="headerlink" title="🔑 设计原则"></a>🔑 设计原则</h1><h2 id="🚀-什么是设计原则？"><a href="#🚀-什么是设计原则？" class="headerlink" title="🚀 什么是设计原则？"></a>🚀 什么是设计原则？</h2><p>设计原则就像是 <strong>写好代码的“潜规则”或“习惯”</strong>，是你写程序时脑子里要时刻记住的准则。</p>
+<p>这些原则不是强制的，但如果你违背它，代码可能会：</p>
+<ul>
+<li><p>很难扩展</p>
+</li>
+<li><p>一改就崩</p>
+</li>
+<li><p>到处耦合（缠在一起）</p>
+</li>
+<li><p>谁也看不懂</p>
+</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h2 id="✅-一、单一职责原则（SRP）"><a href="#✅-一、单一职责原则（SRP）" class="headerlink" title="✅ 一、单一职责原则（SRP）"></a>✅ 一、单一职责原则（SRP）</h2><p>Single Responsibility Principle</p>
+<h3 id="📖-含义：一个类-方法，只做一件事。"><a href="#📖-含义：一个类-方法，只做一件事。" class="headerlink" title="📖 含义：一个类&#x2F;方法，只做一件事。"></a>📖 含义：一个类&#x2F;方法，只做一件事。</h3><p>就像你请一个人做事，他只能干一件事情，不要让他又修电脑、又炒菜、还带孩子。</p>
+<h3 id="🧠-举例："><a href="#🧠-举例：" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">registerUser</span><span class="params">()</span> &#123; &#125;     <span class="comment">// 注册用户</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sendEmail</span><span class="params">()</span> &#123; &#125;        <span class="comment">// ❌ 发邮件？</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就错了！UserService 应该<strong>只管用户业务</strong>，发邮件应该放到 <code>EmailService</code> 去。</p>
+<hr>
+<h2 id="✅-二、开闭原则（OCP）"><a href="#✅-二、开闭原则（OCP）" class="headerlink" title="✅ 二、开闭原则（OCP）"></a>✅ 二、开闭原则（OCP）</h2><p>Open Closed Principle</p>
+<h3 id="📖-含义：对扩展开放，对修改关闭。"><a href="#📖-含义：对扩展开放，对修改关闭。" class="headerlink" title="📖 含义：对扩展开放，对修改关闭。"></a>📖 含义：对扩展开放，对修改关闭。</h3><p>也就是说，当有新需求时，应该<strong>增加代码而不是改老代码</strong>，不然容易出 bug。</p>
+<h3 id="🧠-举例：-1"><a href="#🧠-举例：-1" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p>你做了一个支付功能，原来只支持微信，后来要支持支付宝、银行卡：</p>
+<p><strong>❌ 错误写法：改老代码增加 if-else</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="string">&quot;wechat&quot;</span>.equals(payType)) &#123;</span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">&quot;alipay&quot;</span>.equals(payType)) &#123;</span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>✅ 正确写法：新增一个支付策略类，不改老代码</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">PayStrategy</span> &#123; <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">()</span>; &#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WeChatPay</span> <span class="keyword">implements</span> <span class="title class_">PayStrategy</span> &#123; <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">()</span> &#123; ... &#125; &#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AlipayPay</span> <span class="keyword">implements</span> <span class="title class_">PayStrategy</span> &#123; <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">()</span> &#123; ... &#125; &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="✅-三、里氏替换原则（LSP）"><a href="#✅-三、里氏替换原则（LSP）" class="headerlink" title="✅ 三、里氏替换原则（LSP）"></a>✅ 三、里氏替换原则（LSP）</h2><p>Liskov Substitution Principle</p>
+<h3 id="📖-含义：子类必须能替换父类，且行为不出问题。"><a href="#📖-含义：子类必须能替换父类，且行为不出问题。" class="headerlink" title="📖 含义：子类必须能替换父类，且行为不出问题。"></a>📖 含义：子类必须能替换父类，且行为不出问题。</h3><h3 id="🧠-举例：-2"><a href="#🧠-举例：-2" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p>你写了一个<code>Bird</code>类有个<code>fly()</code>方法，后来你写了<code>Penguin extends Bird</code>，但企鹅不能飞！</p>
+<p>这是错误设计，企鹅 <strong>不应该继承会飞的鸟类</strong>。否则如果代码中用到了 <code>Bird.fly()</code>，企鹅对象就会出问题。</p>
+<blockquote>
+<p>✅ 解决：拆分接口，把会飞的鸟放到 <code>FlyingBird</code> 类中。</p>
+</blockquote>
+<h3 id="❌-错误案例："><a href="#❌-错误案例：" class="headerlink" title="❌ 错误案例："></a>❌ 错误案例：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Bird</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">fly</span><span class="params">()</span> &#123; System.out.println(<span class="string">&quot;我会飞&quot;</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Penguin</span> <span class="keyword">extends</span> <span class="title class_">Bird</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">fly</span><span class="params">()</span> &#123; <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UnsupportedOperationException</span>(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>企鹅不会飞，但继承了鸟类的 <code>fly()</code>，这违反了里氏替换：你以为是鸟，结果崩了。</p>
+<h3 id="✅-正确做法："><a href="#✅-正确做法：" class="headerlink" title="✅ 正确做法："></a>✅ 正确做法：</h3><p>拆分类层级，不要让不会飞的类继承飞行鸟类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Bird</span> &#123; <span class="keyword">void</span> <span class="title function_">layEggs</span><span class="params">()</span>; &#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">FlyingBird</span> <span class="keyword">extends</span> <span class="title class_">Bird</span> &#123; <span class="keyword">void</span> <span class="title function_">fly</span><span class="params">()</span>; &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="✅-四、依赖倒置原则（DIP）"><a href="#✅-四、依赖倒置原则（DIP）" class="headerlink" title="✅ 四、依赖倒置原则（DIP）"></a>✅ 四、依赖倒置原则（DIP）</h2><p>Dependency Inversion Principle</p>
+<h3 id="📖-含义：高层代码不要依赖底层实现，要依赖接口（抽象）。"><a href="#📖-含义：高层代码不要依赖底层实现，要依赖接口（抽象）。" class="headerlink" title="📖 含义：高层代码不要依赖底层实现，要依赖接口（抽象）。"></a>📖 含义：高层代码不要依赖底层实现，要依赖接口（抽象）。</h3><p>也就是说，不要直接 new 实现类，要用接口去约定行为。</p>
+<h3 id="🧠-举例：-3"><a href="#🧠-举例：-3" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p><strong>❌ 错误写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Alipay</span> <span class="variable">alipay</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Alipay</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就死死绑定了支付宝。将来换微信支付，全系统都得改！</p>
+<p><strong>✅ 正确写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">IPay</span> &#123; <span class="keyword">void</span> <span class="title function_">pay</span><span class="params">()</span>; &#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Alipay</span> <span class="keyword">implements</span> <span class="title class_">IPay</span> &#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> IPay pay;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">OrderService</span><span class="params">(IPay pay)</span> &#123; <span class="built_in">this</span>.pay = pay; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引出了支付功能的实战例子：</p>
+<p>既然用接口去支付，那么如何知道用户使用支付宝或者微信支付呢，从哪里来判断？</p>
+<hr>
+<h2 id="✅-五、接口隔离原则（ISP）"><a href="#✅-五、接口隔离原则（ISP）" class="headerlink" title="✅ 五、接口隔离原则（ISP）"></a>✅ 五、接口隔离原则（ISP）</h2><p>Interface Segregation Principle</p>
+<h3 id="📖-含义：接口不要太大，只暴露“需要”的方法。"><a href="#📖-含义：接口不要太大，只暴露“需要”的方法。" class="headerlink" title="📖 含义：接口不要太大，只暴露“需要”的方法。"></a>📖 含义：接口不要太大，只暴露“需要”的方法。</h3><h3 id="🧠-举例：-4"><a href="#🧠-举例：-4" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p><strong>❌ 错误接口：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">fly</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>让猪也实现 <code>fly()</code>？太离谱了！</p>
+<p><strong>✅ 正确接口：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Runnable</span> &#123; <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>; &#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Flyable</span> &#123; <span class="keyword">void</span> <span class="title function_">fly</span><span class="params">()</span>; &#125;</span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Swimmable</span> &#123; <span class="keyword">void</span> <span class="title function_">swim</span><span class="params">()</span>; &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="✅-六、迪米特法则（LOD）"><a href="#✅-六、迪米特法则（LOD）" class="headerlink" title="✅ 六、迪米特法则（LOD）"></a>✅ 六、迪米特法则（LOD）</h2><p>Law of Demeter</p>
+<h3 id="📛-命名背景："><a href="#📛-命名背景：" class="headerlink" title="📛 命名背景："></a>📛 命名背景：</h3><p>又叫“最少知识原则(Least Knowledge Principle，LKP)”，1987 年提出。Demeter 是一个项目名。这个原则强调：对象之间<strong>不要知道太多别人的信息</strong>，以避免耦合。</p>
+<h3 id="📖-含义：只和你认识的对象打交道，不要深层次访问别人的对象。"><a href="#📖-含义：只和你认识的对象打交道，不要深层次访问别人的对象。" class="headerlink" title="📖 含义：只和你认识的对象打交道，不要深层次访问别人的对象。"></a>📖 含义：只和你认识的对象打交道，不要深层次访问别人的对象。</h3><p>也就是说，一个对象应该只与它“直接的朋友”通信，<strong>避免链式调用或内部暴露</strong>。</p>
+<h3 id="🧠-举例：-5"><a href="#🧠-举例：-5" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p><strong>❌ 错误写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">school.getTeacher().getStudent().getName() <span class="comment">// 多层访问</span></span><br></pre></td></tr></table></figure>
+
+<p>你只认识 <code>school</code>，就去找 <code>teacher</code> 的 <code>student</code>，这样代码耦合太深，改动一个地方就全挂。</p>
+<p><strong>✅ 正确写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">school.getStudentName()  <span class="comment">// 让 School 内部去封装实现细节</span></span><br></pre></td></tr></table></figure>
+
+<p>让 School 提供你需要的信息，不暴露内部结构。</p>
+<hr>
+<h2 id="✅-七、组合-聚合复用原则（CARP）"><a href="#✅-七、组合-聚合复用原则（CARP）" class="headerlink" title="✅ 七、组合&#x2F;聚合复用原则（CARP）"></a>✅ 七、组合&#x2F;聚合复用原则（CARP）</h2><p>Composite&#x2F;Aggregate Reuse Principle</p>
+<h3 id="📖-含义：优先使用组合（“有一个”），而不是继承（“是一个”）。"><a href="#📖-含义：优先使用组合（“有一个”），而不是继承（“是一个”）。" class="headerlink" title="📖 含义：优先使用组合（“有一个”），而不是继承（“是一个”）。"></a>📖 含义：优先使用<strong>组合</strong>（“有一个”），而不是<strong>继承</strong>（“是一个”）。</h3><p>继承太强，子类太容易被牵连。该原则强调：<strong>优先使用对象组合，而不是类继承</strong>。</p>
+<p>继承是一种强耦合的方式，尽量通过<strong>组合已有类</strong>来实现功能，而不是继承。</p>
+<h3 id="🧠-举例：-6"><a href="#🧠-举例：-6" class="headerlink" title="🧠 举例："></a>🧠 举例：</h3><p><strong>❌ 错误写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ElectricCar</span> <span class="keyword">extends</span> <span class="title class_">Car</span> &#123;</span><br><span class="line">    <span class="comment">// 如果 Car 改了，ElectricCar 就挂了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>✅ 正确写法：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ElectricCar</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Car car;</span><br><span class="line">    <span class="comment">// 组合 Car 的行为，而不是继承它</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🧠-总结口诀（记忆辅助）："><a href="#🧠-总结口诀（记忆辅助）：" class="headerlink" title="🧠 总结口诀（记忆辅助）："></a>🧠 总结口诀（记忆辅助）：</h2><table>
+<thead>
+<tr>
+<th>原则名</th>
+<th>口诀</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单一职责</td>
+<td>一类一事，不要多管闲事</td>
+</tr>
+<tr>
+<td>开闭原则</td>
+<td>增加功能，不动旧代码</td>
+</tr>
+<tr>
+<td>里氏替换</td>
+<td>子类能替代，父类不出事</td>
+</tr>
+<tr>
+<td>依赖倒置</td>
+<td>面向接口，不 new 实现</td>
+</tr>
+<tr>
+<td>接口隔离</td>
+<td>接口要小，不要大杂烩</td>
+</tr>
+<tr>
+<td>迪米特法则</td>
+<td>不串门，封装好边界</td>
+</tr>
+<tr>
+<td>组合复用</td>
+<td>多组合，少继承</td>
+</tr>
+</tbody></table>
+</div><div class="article-licensing box"><div class="licensing-title"><p>设计模式-01-设计原则</p><p><a href="https://blog.bufx.com/设计模式-00-设计原则/">https://blog.bufx.com/设计模式-00-设计原则/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>bufx</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-12-31</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-07-23</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-01-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99-%E6%94%AF%E4%BB%98%E5%8A%9F%E8%83%BD%E5%AE%9E%E6%88%98%E4%B8%BE%E4%BE%8B/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">设计模式-02-设计原则-支付功能实战举例</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E5%8D%87%E7%BA%A7Hexo%E4%BB%A5%E5%8F%8A%E4%B8%BB%E9%A2%98%E6%AD%A5%E9%AA%A4/"><span class="level-item">升级Hexo以及主题步骤</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#🔑-设计原则"><span class="level-left"><span class="level-item">1</span><span class="level-item">🔑 设计原则</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#🚀-什么是设计原则？"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">🚀 什么是设计原则？</span></span></a></li><li><a class="level is-mobile" href="#✅-一、单一职责原则（SRP）"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">✅ 一、单一职责原则（SRP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：一个类-方法，只做一件事。"><span class="level-left"><span class="level-item">1.2.1</span><span class="level-item">📖 含义：一个类/方法，只做一件事。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例："><span class="level-left"><span class="level-item">1.2.2</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-二、开闭原则（OCP）"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">✅ 二、开闭原则（OCP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：对扩展开放，对修改关闭。"><span class="level-left"><span class="level-item">1.3.1</span><span class="level-item">📖 含义：对扩展开放，对修改关闭。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-1"><span class="level-left"><span class="level-item">1.3.2</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-三、里氏替换原则（LSP）"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">✅ 三、里氏替换原则（LSP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：子类必须能替换父类，且行为不出问题。"><span class="level-left"><span class="level-item">1.4.1</span><span class="level-item">📖 含义：子类必须能替换父类，且行为不出问题。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-2"><span class="level-left"><span class="level-item">1.4.2</span><span class="level-item">🧠 举例：</span></span></a></li><li><a class="level is-mobile" href="#❌-错误案例："><span class="level-left"><span class="level-item">1.4.3</span><span class="level-item">❌ 错误案例：</span></span></a></li><li><a class="level is-mobile" href="#✅-正确做法："><span class="level-left"><span class="level-item">1.4.4</span><span class="level-item">✅ 正确做法：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-四、依赖倒置原则（DIP）"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">✅ 四、依赖倒置原则（DIP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：高层代码不要依赖底层实现，要依赖接口（抽象）。"><span class="level-left"><span class="level-item">1.5.1</span><span class="level-item">📖 含义：高层代码不要依赖底层实现，要依赖接口（抽象）。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-3"><span class="level-left"><span class="level-item">1.5.2</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-五、接口隔离原则（ISP）"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">✅ 五、接口隔离原则（ISP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：接口不要太大，只暴露“需要”的方法。"><span class="level-left"><span class="level-item">1.6.1</span><span class="level-item">📖 含义：接口不要太大，只暴露“需要”的方法。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-4"><span class="level-left"><span class="level-item">1.6.2</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-六、迪米特法则（LOD）"><span class="level-left"><span class="level-item">1.7</span><span class="level-item">✅ 六、迪米特法则（LOD）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📛-命名背景："><span class="level-left"><span class="level-item">1.7.1</span><span class="level-item">📛 命名背景：</span></span></a></li><li><a class="level is-mobile" href="#📖-含义：只和你认识的对象打交道，不要深层次访问别人的对象。"><span class="level-left"><span class="level-item">1.7.2</span><span class="level-item">📖 含义：只和你认识的对象打交道，不要深层次访问别人的对象。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-5"><span class="level-left"><span class="level-item">1.7.3</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#✅-七、组合-聚合复用原则（CARP）"><span class="level-left"><span class="level-item">1.8</span><span class="level-item">✅ 七、组合/聚合复用原则（CARP）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#📖-含义：优先使用组合（“有一个”），而不是继承（“是一个”）。"><span class="level-left"><span class="level-item">1.8.1</span><span class="level-item">📖 含义：优先使用组合（“有一个”），而不是继承（“是一个”）。</span></span></a></li><li><a class="level is-mobile" href="#🧠-举例：-6"><span class="level-left"><span class="level-item">1.8.2</span><span class="level-item">🧠 举例：</span></span></a></li></ul></li><li><a class="level is-mobile" href="#🧠-总结口诀（记忆辅助）："><span class="level-left"><span class="level-item">1.9</span><span class="level-item">🧠 总结口诀（记忆辅助）：</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2025 bufx</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-2" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-2</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

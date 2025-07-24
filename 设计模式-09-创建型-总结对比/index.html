@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>设计模式-09-创建型-总结对比 - 技术分享主页</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="技术分享主页"><meta name="msapplication-TileImage" content="/img/common/favicon.ico"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="技术分享主页"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="🏗️ 创建型设计模式 总结与对比创建型模式关注的是：    如何创建对象，以及何时创建、创建谁、由谁来创建、创建后如何使用，以提高灵活性和可维护性。"><meta property="og:type" content="blog"><meta property="og:title" content="设计模式-09-创建型-总结对比"><meta property="og:url" content="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94/"><meta property="og:site_name" content="技术分享主页"><meta property="og:description" content="🏗️ 创建型设计模式 总结与对比创建型模式关注的是：    如何创建对象，以及何时创建、创建谁、由谁来创建、创建后如何使用，以提高灵活性和可维护性。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://blog.bufx.com/img/og_image.png"><meta property="article:published_time" content="2025-07-24T13:47:49.000Z"><meta property="article:modified_time" content="2025-07-24T13:50:29.149Z"><meta property="article:author" content="bufx"><meta property="article:tag" content="设计模式"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://blog.bufx.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94/"},"headline":"设计模式-09-创建型-总结对比","image":["https://blog.bufx.com/img/og_image.png"],"datePublished":"2025-07-24T13:47:49.000Z","dateModified":"2025-07-24T13:50:29.149Z","author":{"@type":"Person","name":"bufx"},"publisher":{"@type":"Organization","name":"技术分享主页","logo":{"@type":"ImageObject","url":"https://blog.bufx.com/img/common/favicon.ico"}},"description":"🏗️ 创建型设计模式 总结与对比创建型模式关注的是：    如何创建对象，以及何时创建、创建谁、由谁来创建、创建后如何使用，以提高灵活性和可维护性。"}</script><link rel="canonical" href="https://blog.bufx.com/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-09-%E5%88%9B%E5%BB%BA%E5%9E%8B-%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94/"><link rel="icon" href="/img/common/favicon.ico"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link data-pjax rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><!--!--><script>var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?3c3ec636275df73c9383cb68964ee62a";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-07-24T13:47:49.000Z" title="2025/7/24 21:47:49">2025-07-24</time>发表</span><span class="level-item"><time dateTime="2025-07-24T13:50:29.149Z" title="2025/7/24 21:50:29">2025-07-24</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a><span> / </span><a class="link-muted" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%88%9B%E5%BB%BA%E5%9E%8B/">创建型</a></span><span class="level-item">8 分钟读完 (大约1173个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">设计模式-09-创建型-总结对比</h1><div class="content"><h1 id="🏗️-创建型设计模式-总结与对比"><a href="#🏗️-创建型设计模式-总结与对比" class="headerlink" title="🏗️ 创建型设计模式 总结与对比"></a>🏗️ 创建型设计模式 总结与对比</h1><p>创建型模式关注的是：</p>
+<blockquote>
+<p>  <strong>如何创建对象</strong>，以及<strong>何时创建、创建谁、由谁来创建、创建后如何使用</strong>，以提高灵活性和可维护性。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="🧱-一张总览表"><a href="#🧱-一张总览表" class="headerlink" title="🧱 一张总览表"></a>🧱 一张总览表</h2><table>
+<thead>
+<tr>
+<th>模式名</th>
+<th>作用</th>
+<th>是否抽象产品？</th>
+<th>是否抽象创建？</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>单例模式</strong></td>
+<td>确保一个类只有一个实例</td>
+<td>❌</td>
+<td>❌</td>
+<td>配置中心、线程池、缓存、全局管理器</td>
+</tr>
+<tr>
+<td><strong>简单工厂模式</strong></td>
+<td>根据传参返回不同产品（由工厂判断创建）</td>
+<td>✅</td>
+<td>❌（逻辑集中）</td>
+<td>创建不同支付对象、消息对象等</td>
+</tr>
+<tr>
+<td><strong>工厂方法模式</strong></td>
+<td>每个产品一个工厂，创建逻辑分散</td>
+<td>✅</td>
+<td>✅</td>
+<td>日志框架（Log4j）、数据库连接等</td>
+</tr>
+<tr>
+<td><strong>抽象工厂模式</strong></td>
+<td>一组产品族的工厂</td>
+<td>✅</td>
+<td>✅</td>
+<td>跨平台 UI 工厂、支付系统不同渠道下创建组件组合</td>
+</tr>
+<tr>
+<td><strong>建造者模式</strong></td>
+<td>按步骤构建复杂对象，过程与构造分离</td>
+<td>✅</td>
+<td>✅</td>
+<td>构造复杂订单、Http 请求、Burger 套餐等</td>
+</tr>
+<tr>
+<td><strong>原型模式</strong></td>
+<td>通过克隆创建对象</td>
+<td>✅</td>
+<td>❌（靠 clone）</td>
+<td>创建类似对象但仅改动少量字段，性能敏感场景</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🧠-使用时重点考虑的问题"><a href="#🧠-使用时重点考虑的问题" class="headerlink" title="🧠 使用时重点考虑的问题"></a>🧠 使用时重点考虑的问题</h2><table>
+<thead>
+<tr>
+<th>你关心的问题</th>
+<th>推荐模式</th>
+<th>原因说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>只允许创建一个实例？</td>
+<td>✅ 单例模式</td>
+<td>控制资源使用，全局共享</td>
+</tr>
+<tr>
+<td>想屏蔽 <code>new</code> 操作？</td>
+<td>✅ 工厂模式（简单工厂、工厂方法）</td>
+<td>将对象创建封装在工厂中，调用者无需关系具体实现</td>
+</tr>
+<tr>
+<td>创建的对象构造过程复杂？</td>
+<td>✅ 建造者模式</td>
+<td>按步骤构造，链式调用清晰，避免构造器参数过多问题</td>
+</tr>
+<tr>
+<td>创建的是“产品族”？</td>
+<td>✅ 抽象工厂模式</td>
+<td>一整套相互关联的产品，且产品种类&#x2F;平台变动频繁</td>
+</tr>
+<tr>
+<td>创建的对象几乎一样？</td>
+<td>✅ 原型模式</td>
+<td>直接克隆已有对象，比重新 new 更高效</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🎨-举个统一支付场景串起来："><a href="#🎨-举个统一支付场景串起来：" class="headerlink" title="🎨 举个统一支付场景串起来："></a>🎨 举个统一支付场景串起来：</h2><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>在支付系统中的应用举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单例模式</td>
+<td>支付配置中心（如支付宝&#x2F;微信配置，全局唯一）</td>
+</tr>
+<tr>
+<td>简单工厂模式</td>
+<td>根据参数返回不同支付方式（AliPay、WeChatPay）</td>
+</tr>
+<tr>
+<td>工厂方法模式</td>
+<td>每种支付方式对应一个工厂（AliPayFactory、WeChatPayFactory）</td>
+</tr>
+<tr>
+<td>抽象工厂模式</td>
+<td>不同支付渠道（如国内支付、国际支付）下，每个渠道下生产一组组件（配置、签名器、处理器）</td>
+</tr>
+<tr>
+<td>建造者模式</td>
+<td>构建一笔复杂支付订单（设置支付人、金额、渠道、附加参数等）</td>
+</tr>
+<tr>
+<td>原型模式</td>
+<td>复制一笔订单对象，快速改个金额或时间重发</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="✅-总结小卡片（记忆口诀）"><a href="#✅-总结小卡片（记忆口诀）" class="headerlink" title="✅ 总结小卡片（记忆口诀）"></a>✅ 总结小卡片（记忆口诀）</h2><table>
+<thead>
+<tr>
+<th>模式名</th>
+<th>一句话总结</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单例模式</td>
+<td>整个系统只要我一个（全局唯一）</td>
+</tr>
+<tr>
+<td>简单工厂模式</td>
+<td>交给我，我帮你判断该创建谁（集中创建逻辑）</td>
+</tr>
+<tr>
+<td>工厂方法模式</td>
+<td>每个产品自己有个工厂（创建细化、符合开闭）</td>
+</tr>
+<tr>
+<td>抽象工厂模式</td>
+<td>一次造一整套（产品族）东西（如手机 + 配件 + UI）</td>
+</tr>
+<tr>
+<td>建造者模式</td>
+<td>按步骤一步步造，参数清晰流程稳（构建复杂对象）</td>
+</tr>
+<tr>
+<td>原型模式</td>
+<td>拿现成的复制，改一点再用（高性能克隆）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔍-创建型模式之间的对比图"><a href="#🔍-创建型模式之间的对比图" class="headerlink" title="🔍 创建型模式之间的对比图"></a>🔍 创建型模式之间的对比图</h2><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>是否抽象产品</th>
+<th>是否抽象创建逻辑</th>
+<th>是否封装构建过程</th>
+<th>是否共享实例</th>
+<th>关键目的</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单例</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+<td>控制实例数量</td>
+</tr>
+<tr>
+<td>简单工厂</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>用参数选择创建谁</td>
+</tr>
+<tr>
+<td>工厂方法</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>多个产品多个工厂</td>
+</tr>
+<tr>
+<td>抽象工厂</td>
+<td>✅（产品族）</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>创建一组相关对象</td>
+</tr>
+<tr>
+<td>建造者</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+<td>❌</td>
+<td>构建步骤复杂的对象</td>
+</tr>
+<tr>
+<td>原型</td>
+<td>✅</td>
+<td>❌（靠 clone）</td>
+<td>✅（复制）</td>
+<td>❌</td>
+<td>快速复制已有对象</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🧠-实战建议"><a href="#🧠-实战建议" class="headerlink" title="🧠 实战建议"></a>🧠 实战建议</h2><ul>
+<li>优先从简单工厂 → 工厂方法 → 抽象工厂演进（复杂度升级）</li>
+<li>构造复杂对象时考虑建造者；克隆对象考虑原型；</li>
+<li>需要控制资源实例唯一性则选择单例；</li>
+<li>工厂类多了，记得结合配置 + 反射 + 依赖注入（Spring 框架天然支持工厂注册）</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>设计模式-09-创建型-总结对比</p><p><a href="https://blog.bufx.com/设计模式-09-创建型-总结对比/">https://blog.bufx.com/设计模式-09-创建型-总结对比/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>bufx</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-07-24</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-07-24</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-18-%E8%A1%8C%E4%B8%BA%E5%9E%8B-%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">设计模式-18-行为型-责任链模式</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-17-%E7%BB%93%E6%9E%84%E5%9E%8B-%E6%80%BB%E7%BB%93%E5%AF%B9%E6%AF%94/"><span class="level-item">设计模式-17-结构型-总结对比</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-4-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#🏗️-创建型设计模式-总结与对比"><span class="level-left"><span class="level-item">1</span><span class="level-item">🏗️ 创建型设计模式 总结与对比</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#🧱-一张总览表"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">🧱 一张总览表</span></span></a></li><li><a class="level is-mobile" href="#🧠-使用时重点考虑的问题"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">🧠 使用时重点考虑的问题</span></span></a></li><li><a class="level is-mobile" href="#🎨-举个统一支付场景串起来："><span class="level-left"><span class="level-item">1.3</span><span class="level-item">🎨 举个统一支付场景串起来：</span></span></a></li><li><a class="level is-mobile" href="#✅-总结小卡片（记忆口诀）"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">✅ 总结小卡片（记忆口诀）</span></span></a></li><li><a class="level is-mobile" href="#🔍-创建型模式之间的对比图"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">🔍 创建型模式之间的对比图</span></span></a></li><li><a class="level is-mobile" href="#🧠-实战建议"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">🧠 实战建议</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/common/favicon.ico" alt="技术分享主页" height="28"></a><p class="is-size-7"><span>&copy; 2025 bufx</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><span>  <img src="/img/common/foot-ga.png">  <a title="苏公网安备 32059002005248" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=32032102000187" target="_blank" rel="noopener">苏公网安备 32059002005248</a></span><span>  <img src="/img/common/foot-icp.png">  <a title="苏ICP备2021016911号-2" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">苏ICP备2021016911号-2</a></span><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/bufx"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/cookieconsent/3.1.1/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/javascript" id="MathJax-script" async>MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      chtml: {
+        matchFontHeight: false
+      }
+    };</script><script src="https://cdnjs.loli.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
